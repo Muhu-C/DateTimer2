@@ -58,7 +58,7 @@ jobs:
       run: |
         curl -o net472.exe https://download.microsoft.com/download/7/1/7/71795fde-1cca-41b0-b495-00b1ab656994/NDP472-DevPack-ENU.exe
 
-    - name: Install.NET Framework 4.7.2
+    - name: Install.NET Framework 4.7
       run: |
          $myprocss = Start-Process .\net472.exe -PassThru "-s"
          $myprocss.WaitForExit()
