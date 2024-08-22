@@ -63,4 +63,4 @@ jobs:
          $myprocss = Start-Process .\net472.exe -PassThru "-s"
          $myprocss.WaitForExit()
     - name: Build project
-      run: msbuild DateTimer.sln
+      run: C:\Windows\Microsoft.NET\Framework\v4.0.30319\msbuild DateTimer.sln
