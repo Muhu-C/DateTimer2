@@ -55,9 +55,11 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Setup.NET Framework 4.7.2
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 4.7.2
+      run: |
+        curl -o net472.exe https://download.microsoft.com/download/7/1/7/71795fde-1cca-41b0-b495-00b1ab656994/NDP472-DevPack-ENU.exe
 
+    - name: Install.NET Framework 4.7.2
+      run: |
+        start /wait dotnet472.exe /q /norestart
     - name: Build project
-      run: dotnet build <your_project_name>.csproj
+      run: dotnet build DateTimer.WPF\DateTimer.WPF.csproj
