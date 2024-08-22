@@ -1,3 +1,0 @@
-name: .NET Core Desktop
-on:
-  push: "awd"
