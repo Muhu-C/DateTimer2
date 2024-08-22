@@ -1,5 +1,4 @@
-﻿using iNKORE.UI.WPF.Modern;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -32,12 +31,6 @@ namespace DateTimer.WPF.View
             mw.ContentFrame.Navigate(mw._settingsPage);
             mw.TitleText.Text = "设置";
             mw.Navigation.SelectedItem = mw.SettingButton;
-        }
-
-        private void ShowTimer_Click(object sender, RoutedEventArgs e)
-        {
-            if(ThemeManager.Current.ApplicationTheme == ApplicationTheme.Light)ThemeManager.Current.ApplicationTheme = ApplicationTheme.Dark;
-            else ThemeManager.Current.ApplicationTheme = ApplicationTheme.Light;
         }
     }
 }

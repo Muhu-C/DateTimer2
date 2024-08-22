@@ -51,7 +51,7 @@
             </Grid>
         </Border>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="20">
-            <Button Name="ShowTimer" Content="显示时间表" Height="40" Margin="0,0,10,0" Click="ShowTimer_Click"/>
+            <Button Name="ShowTimer" Content="显示时间表" Height="40" Margin="0,0,10,0"/>
             <Button Name="GotoSetting" Width="40" Height="40" Click="GotoSetting_Click">
                 <ui:FontIcon FontSize="16" Icon="{x:Static ui:SegoeFluentIcons.Settings}"/>
             </Button>
