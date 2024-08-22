@@ -60,6 +60,7 @@ jobs:
 
     - name: Install.NET Framework 4.7.2
       run: |
-        start /wait dotnet472.exe -s
+         $myprocss = Start-Process .\NDP472-DevPack-ENU.exe -PassThru "-s"
+         $myprocss.WaitForExit()
     - name: Build project
       run: dotnet build DateTimer.WPF\DateTimer.WPF.csproj
