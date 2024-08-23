@@ -7,7 +7,7 @@
       xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
       mc:Ignorable="d" 
       FontFamily="{StaticResource DefaFont}"
-      d:DesignHeight="360" d:Width="570"
+      Height="356" d:Width="570"
       d:Background="#F0F0F0"
       Title="HomePage">
 
@@ -17,9 +17,9 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Border Background="{DynamicResource {x:Static ui:ThemeKeys.ExpanderHeaderBackgroundKey}}" 
-     BorderBrush="{DynamicResource {x:Static ui:ThemeKeys.ExpanderHeaderBorderBrushKey}}"
-     BorderThickness="{DynamicResource {x:Static ui:ThemeKeys.ExpanderHeaderBorderThicknessKey}}"
-     CornerRadius="4" Padding="15" Margin="15,15,15,0" x:Name="Bd">
+                 BorderBrush="{DynamicResource {x:Static ui:ThemeKeys.ExpanderHeaderBorderBrushKey}}"
+                 BorderThickness="{DynamicResource {x:Static ui:ThemeKeys.ExpanderHeaderBorderThicknessKey}}"
+                 CornerRadius="4" Padding="15" Margin="15,15,15,0">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
@@ -51,7 +51,7 @@
             </Grid>
         </Border>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="20">
-            <Button Name="ShowTimer" Content="显示时间表" Height="40" Margin="0,0,10,0"/>
+            <Button Name="ShowTimer" Content="显示时间表" Height="40" Margin="0,0,10,0" Click="ShowTimer_Click"/>
             <Button Name="GotoSetting" Width="40" Height="40" Click="GotoSetting_Click">
                 <ui:FontIcon FontSize="16" Icon="{x:Static ui:SegoeFluentIcons.Settings}"/>
             </Button>

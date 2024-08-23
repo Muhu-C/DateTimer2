@@ -1,8 +1,13 @@
 {
-  "Theme": "Dark",
-  "TargetDate": "20240901",
+  "Theme": "Auto",
+
+  "EnableTarget": true,
+  "TargetDate": "2024/09/01",
   "TargetName": null,
+
   "BackDrop": "Mica",
-  "TimeTablePath": "DEFAULT",
+  "TimeTablePath": null,
+
+  "EnableAdvancedNotice": true,
   "AdvancedMinutes": 15
 }

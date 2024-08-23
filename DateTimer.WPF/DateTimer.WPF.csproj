@@ -75,6 +75,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Utils.cs" />
     <Compile Include="View\EditPage.xaml.cs">
       <DependentUpon>EditPage.xaml</DependentUpon>
     </Compile>
@@ -134,7 +135,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="Data\Config\Settings.json" />
+    <None Include="Data\Config\Settings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Resource Include="Data\Fonts\Segoe UI.ttf" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -147,7 +150,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\Media\" />
-    <Folder Include="NewFolder1\" />
     <Folder Include="View\CustomComponents\" />
   </ItemGroup>
   <ItemGroup>
@@ -155,6 +157,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Data\icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Data\gpl3.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

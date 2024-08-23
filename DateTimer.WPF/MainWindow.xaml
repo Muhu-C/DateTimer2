@@ -12,7 +12,7 @@
         FontFamily="{StaticResource DefaFont}"
         ui:WindowHelper.UseModernWindowStyle="True"
         ui:WindowHelper.SystemBackdropType="Mica"
-        Title="DateTimer 2" Height="450" Width="700">
+        Title="DateTimer 2" MinHeight="450" MinWidth="700" MaxHeight="450" MaxWidth="700">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
@@ -26,7 +26,11 @@
             </Grid.ColumnDefinitions>
             <Image Width="20" Height="20" Margin="8,0,0,0" Grid.Column="0" RenderOptions.BitmapScalingMode="HighQuality"
                      Source="Data/icon.png" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <TextBlock Grid.Column="1" Text="DateTimer 2" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <TextBlock Text="DateTimer 2" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                <TextBlock Text="Beta" Foreground="Orange" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                <TextBlock Text="控制台" Foreground="#00DDAA" VerticalAlignment="Center"/>
+            </StackPanel>
         </Grid>
         
         <ui:NavigationView Name="Navigation" ItemInvoked="NavigationItemChanged" Grid.Row="1" IsPaneOpen="False" IsBackButtonVisible="Collapsed">
@@ -60,7 +64,9 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <TextBlock Text="标题" Name="TitleText" FontSize="22" FontWeight="Bold" Margin="15,15,15,0"/>
-                <ui:Frame Grid.Row="1" Name="ContentFrame" x:FieldModifier="public"/>
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Visible">
+                    <ui:Frame Name="ContentFrame" x:FieldModifier="public"/>
+                </ScrollViewer>
             </Grid>
         </ui:NavigationView>
     </Grid>

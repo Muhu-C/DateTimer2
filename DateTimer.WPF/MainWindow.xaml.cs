@@ -24,6 +24,27 @@ namespace DateTimer.WPF
             InitializeComponent();
             ContentFrame.Navigate(_homePage);
             TitleText.Text = "主页";
+
+            // 设置背景样式
+            switch (SettingsPage._appSetting.BackDrop)
+            {
+                case "Mica":
+                    iNKORE.UI.WPF.Modern.Controls.Helpers.
+                    WindowHelper.SetSystemBackdropType(this, iNKORE.UI.WPF.Modern.Helpers.Styles.BackdropType.Mica);
+                    break;
+                case "MicaAlt":
+                    iNKORE.UI.WPF.Modern.Controls.Helpers.
+                    WindowHelper.SetSystemBackdropType(this, iNKORE.UI.WPF.Modern.Helpers.Styles.BackdropType.Tabbed);
+                    break;
+                case "Acrylic":
+                    iNKORE.UI.WPF.Modern.Controls.Helpers.
+                    WindowHelper.SetSystemBackdropType(this, iNKORE.UI.WPF.Modern.Helpers.Styles.BackdropType.Acrylic11);
+                    break;
+                case "None":
+                    iNKORE.UI.WPF.Modern.Controls.Helpers.
+                    WindowHelper.SetSystemBackdropType(this, iNKORE.UI.WPF.Modern.Helpers.Styles.BackdropType.None);
+                    break;
+            }
         }
 
         private void NavigationItemChanged(NavigationView s, NavigationViewItemInvokedEventArgs e)
