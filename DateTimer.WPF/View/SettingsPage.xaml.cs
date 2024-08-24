@@ -51,7 +51,8 @@ namespace DateTimer.WPF.View
             }
 
             ETToggle.IsOn = _appSetting.EnableTarget;
-            TargetPick.SelectedDate = DateTime.Parse(_appSetting.TargetDate);
+            TWToggle.IsOn = _appSetting.EnableTargetWeekday;
+            TargetPick.SelectedDate = _appSetting.TargetDate == null ? null : DateTime.Parse(_appSetting.TargetDate);
             TargetNameTb.Text = _appSetting.TargetName;
             ANToggle.IsOn = _appSetting.EnableAdvancedNotice;
             AdvanceNb.Value = _appSetting.AdvancedMinutes;
@@ -84,6 +85,16 @@ namespace DateTimer.WPF.View
                 JsonConvert.DeserializeObject<AppSetting>(Utils.FileProcess.ReadFile(App.AppSettingPath));
         #endregion
 
+
+        private void TWToggle_Toggled(object sender, RoutedEventArgs e)
+        {
+            if (isInit) return;
+            _appSetting.EnableTargetWeekday = TWToggle.IsOn;
+            var mw = Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow;
+            WriteCurSetting();
+            mw._homePage.ReloadSettings();
+        }
+
         // 更改时间表位置
         private void ChangeTableButton_Click(object sender, RoutedEventArgs e)
         {
@@ -96,6 +107,13 @@ namespace DateTimer.WPF.View
             if ((bool)openFileDialog.ShowDialog())
             {
                 string FileName;
+                if (openFileDialog.FileName == App.DefTimetablePath)
+                {
+                    _appSetting.TimeTablePath = null;
+                    WriteCurSetting();
+                    ReloadPage();
+                    return;
+                }
                 if (openFileDialog.FileName.Contains(AppDomain.CurrentDomain.BaseDirectory))
                     FileName = openFileDialog.FileName.Substring
                         (AppDomain.CurrentDomain.BaseDirectory.Length - 1, 
@@ -126,7 +144,9 @@ namespace DateTimer.WPF.View
                 TargetExpanderGrid.IsEnabled = false;
                 TargetExpander.IsExpanded = false;
             }
+            var mw = Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow;
             WriteCurSetting();
+            mw._homePage.ReloadSettings();
         }
 
         private void TargetNameTb_TextChanged(object sender, TextChangedEventArgs e)
@@ -134,14 +154,18 @@ namespace DateTimer.WPF.View
             if (isInit) return;
             if (TargetNameTb.Text == string.Empty) _appSetting.TargetName = null;
             else _appSetting.TargetName = TargetNameTb.Text;
+            var mw = Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow;
             WriteCurSetting();
+            mw._homePage.ReloadSettings();
         }
 
         private void TargetPick_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
             if (isInit) return;
             _appSetting.TargetDate = TargetPick.SelectedDate?.ToString("yyyy/MM/dd");
+            var mw = Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow;
             WriteCurSetting();
+            mw._homePage.ReloadSettings();
         }
 
         private void ANToggle_Toggled(object sender, RoutedEventArgs e)
@@ -181,7 +205,8 @@ namespace DateTimer.WPF.View
             if (isInit || ThemeSelector.SelectedIndex < 0) return;
             if (ThemeSelector.SelectedIndex == 0)
             {
-                RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize");
+                RegistryKey key = 
+                    Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize");
                 if (key == null)
                 {
                     MsgBox.Show("当前系统不支持亮暗色，将自动设置为亮色。", "注意");

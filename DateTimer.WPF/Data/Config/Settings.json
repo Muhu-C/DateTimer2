@@ -2,8 +2,9 @@
   "Theme": "Auto",
 
   "EnableTarget": true,
-  "TargetDate": "2024/09/01",
+  "TargetDate": null,
   "TargetName": null,
+  "EnableTargetWeekday": false,
 
   "BackDrop": "Mica",
   "TimeTablePath": null,

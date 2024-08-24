@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using DateTimer.WPF.View;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -38,6 +39,54 @@ namespace DateTimer.WPF
                     content = sr.ReadToEnd();
                     return content;
                 }
+            }
+        }
+
+        public class TimeConverter
+        {
+            /// <summary> 时间转为字符串 </summary>
+            /// <param name="time">TimeSpan</param>
+            /// <returns>HH:mm</returns>
+            public static string Time2Str(TimeSpan time)
+            {
+                return $"{time.Hours:00}:{time.Minutes:00}";
+            }
+
+            public static string NumToWeekday(string num)
+            {
+                string numStr = "12345670";
+                string chineseStr = "一二三四五六日日";
+                int numIndex = numStr.IndexOf(num);
+                if (numIndex > -1)
+                    return chineseStr.Substring(numIndex, 1);
+                return string.Empty;
+            }
+        }
+
+        public class TimerShow
+        {
+            /// <summary> 获取目标距离时间 </summary>
+            /// <param name="target"></param>
+            /// <returns></returns>
+            public static string GetTargetTime(DateTime target)
+            {
+                DateTime nextMon = DateTime.Now.AddDays(8 - Convert.ToInt16(DateTime.Now.DayOfWeek));
+                DateTime nextSun = DateTime.Now.AddDays(14 - Convert.ToInt16(DateTime.Now.DayOfWeek));
+
+                if (target < DateTime.Now)
+                    return "已到达";
+                else if (target < nextMon)
+                    return SettingsPage._appSetting.EnableTargetWeekday ?
+                        $"本周{TimeConverter.NumToWeekday(Convert.ToInt32(target.DayOfWeek).ToString())}"
+                        : $"{(target - DateTime.Today).TotalDays} 天后";
+                else if (target >= nextMon && target <= nextSun)
+                    return SettingsPage._appSetting.EnableTargetWeekday ?
+                        $"下周{TimeConverter.NumToWeekday(Convert.ToInt32(target.DayOfWeek).ToString())}"
+                        : $"{(target - DateTime.Today).TotalDays} 天后";
+                else
+                    return SettingsPage._appSetting.EnableTargetWeekday ?
+                        $"{(target - DateTime.Today).TotalDays} 天后 周{TimeConverter.NumToWeekday(Convert.ToInt32(target.DayOfWeek).ToString())}"
+                        : $"{(target - DateTime.Today).TotalDays} 天后";
             }
         }
     }
@@ -130,8 +179,9 @@ namespace DateTimer.WPF
     {
         public string Theme { get; set; } // 主题
         public bool EnableTarget { get; set; } // 目标时间
-        public string TargetDate { get; set; }
+        public bool EnableTargetWeekday { get; set; }
         #nullable enable
+        public string? TargetDate { get; set; }
         public string? TargetName { get; set; }
         public string? TimeTablePath { get; set; } // 时间表路径
         #nullable restore

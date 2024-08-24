@@ -16,7 +16,7 @@ namespace DateTimer.WPF
     {
         #region 定义变量和常量
 
-        public Mutex _mutex;
+        public static Mutex _mutex;
         public readonly static string AppSettingPath = System.IO.Path.
             Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Config", "Settings.json");
         public readonly static string DefTimetablePath = System.IO.Path.

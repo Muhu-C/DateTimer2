@@ -34,7 +34,7 @@
                     <TextBlock Text="公告" FontSize="16" Margin="0,0,0,10"/>
                     <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
                         <TextBlock TextWrapping="Wrap" Name="NoticeText" Margin="10,0,0,0" 
-                                   Text="新版 DateTimer 程序即将在 2025 年制作完成! 
+                                   Text="新版 DateTimer 程序&#13;即将在 2025 年制作完成! 
                                    &#13;&#13;Lorem ipsum dolor sit amet,
                                    &#13;consectetur adipisicing elit,
                                    &#13;sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
@@ -45,7 +45,7 @@
                 <StackPanel Grid.Column="1" Margin="10,0,0,0">
                     <TextBlock Text="当前时间" FontWeight="Bold"/>
                     <TextBlock Margin="10,5,0,10" Name="CurTimeText" Text="2024/08/31"/>
-                    <TextBlock Text="目标时间" FontWeight="Bold"/>
+                    <TextBlock Name="TarNameText" Text="目标时间" FontWeight="Bold"/>
                     <TextBlock Margin="10,5,0,0" Name="TarTimeText" Text="2024/09/01"/>
                 </StackPanel>
             </Grid>
