@@ -1,0 +1,58 @@
+﻿<Page x:Class="DateTimer.WPF.View.TodoPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:DateTimer.WPF.View"
+      mc:Ignorable="d" 
+      xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
+      Height="356" d:Width="560"
+      d:Background="#F0F0F0"
+      FontFamily="{StaticResource DefaFont}"
+      Title="TodoPage">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="64"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="4*"/>
+        </Grid.ColumnDefinitions>
+        <ui:ListView Grid.Row="0" Grid.Column="0" Margin="15">
+            <ui:ListView.Items>
+                <ui:ListViewItem Content="a"/>
+                <ui:ListViewItem Content="b"/>
+                <ui:ListViewItem Content="c"/>
+                <ui:ListViewItem Content="d"/>
+                <ui:ListViewItem Content="e"/>
+                <ui:ListViewItem Content="f"/>
+                <ui:ListViewItem Content="g"/>
+                <ui:ListViewItem Content="h"/>
+                <ui:ListViewItem Content="i"/>
+            </ui:ListView.Items>
+        </ui:ListView>
+        <Grid Grid.Row="0" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="42"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <TextBlock HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Center" Text="今日待办"/>
+            <ui:ListView Grid.Row="1" Margin="0,0,15,0">
+                <ui:ListView.Items>
+                    <ui:ListViewItem/>
+                    <ui:ListViewItem/>
+                    <ui:ListViewItem/>
+                    <ui:ListViewItem/>
+                    <ui:ListViewItem/>
+                </ui:ListView.Items>
+            </ui:ListView>
+        </Grid>
+        <Button Grid.Row="1" Grid.Column="1" Height="35" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,20,0">
+            <Button.Content>
+                <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Add}" FontSize="16"/>
+            </Button.Content>
+        </Button>
+    </Grid>
+</Page>
