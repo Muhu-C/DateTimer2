@@ -2,18 +2,21 @@
 using Microsoft.Win32;
 using Newtonsoft.Json;
 using System;
+using System.Management;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using MsgBox = iNKORE.UI.WPF.Modern.Controls.MessageBox;
+using iNKORE.UI.WPF.Modern.Controls;
+using System.Threading.Tasks;
 
 namespace DateTimer.WPF.View
 {
     /// <summary>
     /// SettingsPage.xaml 的交互逻辑
     /// </summary>
-    public partial class SettingsPage : Page
+    public partial class SettingsPage : iNKORE.UI.WPF.Modern.Controls.Page
     {
         public static AppSetting _appSetting;
         public static bool isInit = false;
@@ -251,6 +254,34 @@ namespace DateTimer.WPF.View
             }
             _appSetting.BackDrop = NewBackdrop;
             WriteCurSetting();
+        }
+
+        private async void Button_Click(object sender, RoutedEventArgs e)
+        {
+            string ReportStr = string.Empty;
+            await Task.Run(() =>
+            {
+                ReportStr =
+                    $"生成时间: {DateTime.Now:yyyy/MM/dd HH:mm:ss}" +
+                    $"\n系统版本: {SystemInfo.GetWinVer()}" +
+                    $"\n系统位数: {SystemInfo.GetBit()}" +
+                    $"\n处理器: {SystemInfo.GetCPUName()}" +
+                    $"\n程序内存占用: {SystemInfo.GetRAMSize()} MB" +
+                    $"\n系统总内存: {SystemInfo.GetTotalRAM()} MB" +
+                    $"\n环境: {SystemInfo.GetEnvVer()}";
+            });
+            ContentDialog contentDialog = new ContentDialog
+            {
+                Title = "系统报告",
+                Content = ReportStr,
+                PrimaryButtonText = "复制",
+                SecondaryButtonText = "取消"
+            };
+            var a = await contentDialog.ShowAsync();
+            if (a == ContentDialogResult.Primary)
+            {
+                Clipboard.SetText(ReportStr);
+            }
         }
     }
 }

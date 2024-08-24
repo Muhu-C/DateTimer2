@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using DateTimer.WPF.View;
+using Microsoft.Win32;
+using iNKORE.UI.WPF.Modern;
 
 namespace DateTimer.WPF
 {
@@ -24,7 +26,7 @@ namespace DateTimer.WPF
             InitializeComponent();
             ContentFrame.Navigate(_homePage);
             TitleText.Text = "主页";
-
+            SystemEvents.UserPreferenceChanged += UserPreferenceChanged;
             // 设置背景样式
             switch (SettingsPage._appSetting.BackDrop)
             {
@@ -45,6 +47,13 @@ namespace DateTimer.WPF
                     WindowHelper.SetSystemBackdropType(this, iNKORE.UI.WPF.Modern.Helpers.Styles.BackdropType.None);
                     break;
             }
+        }
+
+        // 设置主题色
+        private void UserPreferenceChanged(object sender, UserPreferenceChangedEventArgs e)
+        {
+            if (e.Category == UserPreferenceCategory.Color)
+                ThemeManager.Current.AccentColor = SystemParameters.WindowGlassColor;
         }
 
         private void NavigationItemChanged(NavigationView s, NavigationViewItemInvokedEventArgs e)

@@ -1,4 +1,4 @@
-﻿<Page x:Class="DateTimer.WPF.View.SettingsPage"
+﻿<ui:Page x:Class="DateTimer.WPF.View.SettingsPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -255,7 +255,7 @@
                     <TextBlock FontSize="16" Text="系统报告"/>
                     <TextBlock FontSize="12" Text="查看并复制系统报告"/>
                 </StackPanel>
-                <Button Grid.Column="2">
+                <Button Grid.Column="2" Click="Button_Click">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="查看" Margin="0,0,3,0"/>
                         <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Copy}"/>
@@ -264,4 +264,4 @@
             </Grid>
         </Border>
     </StackPanel>
-</Page>
+</ui:Page>

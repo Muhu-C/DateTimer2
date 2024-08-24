@@ -1,7 +1,11 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Management;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -35,6 +39,90 @@ namespace DateTimer.WPF
                     return content;
                 }
             }
+        }
+    }
+
+    public class SystemInfo
+    {
+        /// <summary>
+        /// 获取 Windows 版本
+        /// </summary>
+        /// <returns>Windows 版本字符串</returns>
+        public static string GetWinVer()
+        {
+            using (RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion")) // 获取注册表目录
+            {
+                string productName = key.GetValue("ProductName") as string; // 系统名称（Win11不适用）
+                try
+                {
+                    int majorVersion = (int)key.GetValue("CurrentMajorVersionNumber"); // 系统版本
+                    var buildNumber = int.Parse(key.GetValue("CurrentBuildNumber").ToString()); // 构建(大于22000为Win11)
+
+                    if (!string.IsNullOrEmpty(productName) && productName.ToLower().Contains("windows"))
+                    {
+                        if (majorVersion > 10 || majorVersion == 10 && buildNumber >= 22000)
+                        {
+                            if (majorVersion > 10) return "Windows " + majorVersion + " Build " + buildNumber;
+                            else return "Windows 11 Build " + buildNumber;
+                        }
+                        else if (majorVersion == 10 && buildNumber < 22000) return "Windows 10 Build " + buildNumber;
+                        else return productName;
+                    }
+                    else return "错误";
+                }
+                catch
+                {
+                    return productName;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 获取运行时版本
+        /// </summary>
+        /// <returns>.NET 版本</returns>
+        public static string GetEnvVer()
+        {
+            try { return RuntimeInformation.FrameworkDescription; }
+            catch (Exception e) { throw e; }
+        }
+
+        /// <summary>
+        /// 获取系统位数
+        /// </summary>
+        /// <returns>64 或 32</returns>
+        public static int GetBit()
+        {
+            if (Environment.Is64BitOperatingSystem) return 64;
+            else return 32;
+        }
+
+        public static string GetCPUName()
+        {
+            string Name = string.Empty;
+            using (ManagementObjectCollection moc = new ManagementClass("Win32_Processor").GetInstances())
+            {
+                foreach (ManagementObject mo in moc)
+                    Name = mo["Name"].ToString();
+            }
+            return Name;
+        }
+
+        public static double GetRAMSize()
+        {
+            Process process = Process.GetCurrentProcess();
+            return 1.0000*process.PrivateMemorySize64 / 1024 / 1024;
+        }
+
+        public static int GetTotalRAM()
+        {
+            long Size = -1;
+            using (ManagementObjectCollection moc = new ManagementClass("Win32_PhysicalMemory").GetInstances())
+            {
+                foreach (ManagementObject mo in moc)
+                    Size += Int64.Parse(mo.Properties["Capacity"].Value.ToString());
+            }
+            return (int)Math.Round(1.0000 * Size / 1024 / 1024, 0);
         }
     }
 
