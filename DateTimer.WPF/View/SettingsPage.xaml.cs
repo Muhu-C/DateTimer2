@@ -271,6 +271,9 @@ namespace DateTimer.WPF.View
                 iNKORE.UI.WPF.Modern.Controls.Helpers.
                     WindowHelper.SetSystemBackdropType(App._timerWindow, 
                     iNKORE.UI.WPF.Modern.Helpers.Styles.BackdropType.None);
+                iNKORE.UI.WPF.Modern.Controls.Helpers.
+                    WindowHelper.SetSystemBackdropType(App._noticeWindow,
+                    iNKORE.UI.WPF.Modern.Helpers.Styles.BackdropType.None);
             }
             else if (BackdropSelector.SelectedIndex == 1)
             {
@@ -279,6 +282,9 @@ namespace DateTimer.WPF.View
                     WindowHelper.SetSystemBackdropType(mw, iNKORE.UI.WPF.Modern.Helpers.Styles.BackdropType.Mica);
                 iNKORE.UI.WPF.Modern.Controls.Helpers.
                     WindowHelper.SetSystemBackdropType(App._timerWindow,
+                    iNKORE.UI.WPF.Modern.Helpers.Styles.BackdropType.Mica);
+                iNKORE.UI.WPF.Modern.Controls.Helpers.
+                    WindowHelper.SetSystemBackdropType(App._noticeWindow,
                     iNKORE.UI.WPF.Modern.Helpers.Styles.BackdropType.Mica);
             }
             else if (BackdropSelector.SelectedIndex == 2)
@@ -289,6 +295,9 @@ namespace DateTimer.WPF.View
                 iNKORE.UI.WPF.Modern.Controls.Helpers.
                     WindowHelper.SetSystemBackdropType(App._timerWindow,
                     iNKORE.UI.WPF.Modern.Helpers.Styles.BackdropType.Acrylic11);
+                iNKORE.UI.WPF.Modern.Controls.Helpers.
+                    WindowHelper.SetSystemBackdropType(App._noticeWindow,
+                    iNKORE.UI.WPF.Modern.Helpers.Styles.BackdropType.Acrylic11);
             }
             else
             {
@@ -297,6 +306,9 @@ namespace DateTimer.WPF.View
                     WindowHelper.SetSystemBackdropType(mw, iNKORE.UI.WPF.Modern.Helpers.Styles.BackdropType.Tabbed);
                 iNKORE.UI.WPF.Modern.Controls.Helpers.
                     WindowHelper.SetSystemBackdropType(App._timerWindow,
+                    iNKORE.UI.WPF.Modern.Helpers.Styles.BackdropType.Tabbed);
+                iNKORE.UI.WPF.Modern.Controls.Helpers.
+                    WindowHelper.SetSystemBackdropType(App._noticeWindow,
                     iNKORE.UI.WPF.Modern.Helpers.Styles.BackdropType.Tabbed);
             }
             _appSetting.BackDrop = NewBackdrop;
@@ -326,9 +338,7 @@ namespace DateTimer.WPF.View
             };
             var a = await contentDialog.ShowAsync();
             if (a == ContentDialogResult.Primary)
-            {
                 Clipboard.SetText(ReportStr);
-            }
         }
     }
 }

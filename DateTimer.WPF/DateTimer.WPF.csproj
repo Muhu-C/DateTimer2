@@ -81,6 +81,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Utils.cs" />
+    <Compile Include="View\CustomComponents\CustomNotice.xaml.cs">
+      <DependentUpon>CustomNotice.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\EditPage.xaml.cs">
       <DependentUpon>EditPage.xaml</DependentUpon>
     </Compile>
@@ -108,6 +111,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\CustomComponents\CustomNotice.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\EditPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -163,9 +170,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="View\CustomComponents\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="Data\icon.ico" />
   </ItemGroup>
@@ -176,8 +181,12 @@
     <Resource Include="Data\gpl3.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Data\Media\alarm.wav" />
-    <Content Include="Data\Media\notice.wav" />
+    <Content Include="Data\Media\alarm.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Media\notice.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

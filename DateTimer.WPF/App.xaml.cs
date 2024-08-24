@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Drawing.Imaging;
 using System.Windows.Media;
 using System.Linq;
+using DateTimer.WPF.View.CustomComponents;
 
 namespace DateTimer.WPF
 {
@@ -20,7 +21,7 @@ namespace DateTimer.WPF
     public partial class App : Application
     {
         #region 定义变量和常量
-
+        public static CustomNotice _noticeWindow;
         public static TaskbarIcon _taskbaricon;
         public static Mutex _mutex;
         public static TimerWindow _timerWindow;
@@ -68,6 +69,7 @@ namespace DateTimer.WPF
             // 窗口初始化
             _timerWindow = new TimerWindow();
             _taskbaricon = (TaskbarIcon)FindResource("Taskbar");
+            _noticeWindow = new CustomNotice();
 
             MainWindow mw = new MainWindow();
             Current.MainWindow = mw;
