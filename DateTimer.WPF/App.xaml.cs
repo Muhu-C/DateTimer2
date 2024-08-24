@@ -6,6 +6,11 @@ using System.Windows;
 using MsgBox = iNKORE.UI.WPF.Modern.Controls.MessageBox;
 using DateTimer.WPF.View;
 using iNKORE.UI.WPF.Modern;
+using Hardcodet.Wpf.TaskbarNotification;
+using System.Windows.Input;
+using System.Drawing.Imaging;
+using System.Windows.Media;
+using System.Linq;
 
 namespace DateTimer.WPF
 {
@@ -16,6 +21,7 @@ namespace DateTimer.WPF
     {
         #region 定义变量和常量
 
+        public static TaskbarIcon _taskbaricon;
         public static Mutex _mutex;
         public static TimerWindow _timerWindow;
         public readonly static string AppSettingPath = System.IO.Path.
@@ -61,18 +67,120 @@ namespace DateTimer.WPF
                 ThemeManager.Current.ApplicationTheme = ApplicationTheme.Light;
             // 窗口初始化
             _timerWindow = new TimerWindow();
+            _taskbaricon = (TaskbarIcon)FindResource("Taskbar");
 
             MainWindow mw = new MainWindow();
             Current.MainWindow = mw;
             if (SettingsPage._appSetting.EnableMainWindowShow)
                 MainWindow.Show();
-            else _timerWindow.Show();
+            else
+            {
+                _timerWindow.Show();
+                _taskbaricon.ShowBalloonTip("控制台已隐藏", "可通过系统托盘图标显示", BalloonIcon.Info);
+            }
         }
 
         protected override void OnExit(ExitEventArgs e)
         {
             _mutex?.ReleaseMutex();
             base.OnExit(e);
+        }
+    }
+
+    /// <summary> 托盘图标命令 </summary>
+    public class NotifyIconViewModel
+    {
+        public ICommand ShowMWindowCommand
+        {
+            get
+            {
+                return new DelegateCommand
+                {
+                    CanExecuteFunc = () => Application.Current.MainWindow != null && Application.Current.MainWindow.Visibility != Visibility.Visible,
+                    CommandAction = () => Application.Current.MainWindow.Show()
+                };
+            }
+        }
+        public ICommand HideMWindowCommand
+        {
+            get
+            {
+                return new DelegateCommand
+                {
+                    CommandAction = () => Application.Current.MainWindow.Hide(),
+                    CanExecuteFunc = () => Application.Current.MainWindow != null && Application.Current.MainWindow.Visibility == Visibility.Visible,
+                };
+            }
+        }
+        public ICommand ShowTWindowCommand
+        {
+            get
+            {
+                return new DelegateCommand
+                {
+                    CanExecuteFunc = () => App._timerWindow != null && App._timerWindow.Visibility != Visibility.Visible,
+                    CommandAction = () =>
+                    {
+                        App._timerWindow.Show();
+                        try
+                        {
+                            (Application.Current.Windows.Cast<Window>().
+                            FirstOrDefault(window => window is MainWindow) as MainWindow).
+                            _homePage.ShowTimer.Content = "隐藏时间表";
+                        }
+                        catch { }
+                    }
+                };
+            }
+        }
+        public ICommand HideTWindowCommand
+        {
+            get
+            {
+                return new DelegateCommand
+                {
+                    CommandAction = () => 
+                    {
+                        App._timerWindow.Hide();
+                        try
+                        {
+                            (Application.Current.Windows.Cast<Window>().
+                            FirstOrDefault(window => window is MainWindow) as MainWindow).
+                            _homePage.ShowTimer.Content = "显示时间表";
+                        }
+                        catch { }
+                    },
+                    CanExecuteFunc = () => App._timerWindow != null && App._timerWindow.Visibility == Visibility.Visible,
+                };
+            }
+        }
+        public ICommand ExitApplicationCommand
+        {
+            get
+            {
+                return new DelegateCommand { CommandAction = () => Application.Current.Shutdown() };
+            }
+        }
+    }
+    public class DelegateCommand : ICommand
+    {
+        public Action CommandAction { get; set; }
+        public Func<bool> CanExecuteFunc { get; set; }
+
+        public void Execute(object parameter)
+        {
+            CommandAction();
+        }
+
+        public bool CanExecute(object parameter)
+        {
+            return CanExecuteFunc == null || CanExecuteFunc();
+        }
+
+        public event EventHandler CanExecuteChanged
+        {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
         }
     }
 }

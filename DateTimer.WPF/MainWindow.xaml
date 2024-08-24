@@ -32,7 +32,7 @@
                 <TextBlock Text="控制台" Foreground="#00DDAA" VerticalAlignment="Center"/>
             </StackPanel>
         </Grid>
-        
+
         <ui:NavigationView Name="Navigation" ItemInvoked="NavigationItemChanged" Grid.Row="1" IsPaneOpen="False" IsBackButtonVisible="Collapsed">
             <ui:NavigationView.MenuItems>
                 <ui:NavigationViewItem Tag="DateTimer.WPF.View.HomePage" Content="主页" IsSelected="True">
@@ -49,6 +49,9 @@
                     <ui:NavigationViewItem.Icon>
                         <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.PageSolid}" FontSize="16"/>
                     </ui:NavigationViewItem.Icon>
+                    <ui:NavigationViewItem.InfoBadge>
+                        <ui:InfoBadge Name="TodoCount" Value="0"/>
+                    </ui:NavigationViewItem.InfoBadge>
                 </ui:NavigationViewItem>
             </ui:NavigationView.MenuItems>
             <ui:NavigationView.FooterMenuItems>

@@ -13,6 +13,7 @@
       Title="SettingsPage">
 
     <StackPanel Margin="15">
+        <TextBlock Margin="0,0,0,5" FontSize="16" Text="时间表设置"/>
         <Border Background="{DynamicResource {x:Static ui:ThemeKeys.ExpanderHeaderBackgroundKey}}" 
          BorderBrush="{DynamicResource {x:Static ui:ThemeKeys.ExpanderHeaderBorderBrushKey}}"
          BorderThickness="{DynamicResource {x:Static ui:ThemeKeys.ExpanderHeaderBorderThicknessKey}}"
@@ -110,6 +111,25 @@
                 <ui:NumberBox ValueChanged="AdvanceNb_ValueChanged" Name="AdvanceNb" PlaceholderText="分钟数 1~60" SpinButtonPlacementMode="Inline" Grid.Column="1" HorizontalAlignment="Right" Width="200"/>
             </Grid>
         </Expander>
+        <TextBlock Margin="0,20,0,5" FontSize="16" Text="程序设置"/>
+        <Border Background="{DynamicResource {x:Static ui:ThemeKeys.ExpanderHeaderBackgroundKey}}" 
+ BorderBrush="{DynamicResource {x:Static ui:ThemeKeys.ExpanderHeaderBorderBrushKey}}"
+ BorderThickness="{DynamicResource {x:Static ui:ThemeKeys.ExpanderHeaderBorderThicknessKey}}"
+ CornerRadius="4" Padding="15" Height="72">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="80"/>
+                </Grid.ColumnDefinitions>
+                <ui:FontIcon Margin="0,0,10,0" Icon="{x:Static ui:SegoeFluentIcons.PowerButton}"/>
+                <StackPanel Grid.Column="1">
+                    <TextBlock FontSize="16" Text="控制台显示"/>
+                    <TextBlock FontSize="12" Text="程序开启时，是否显示控制台窗口"/>
+                </StackPanel>
+                <ui:ToggleSwitch Grid.Column="2" Name="EMToggle" Toggled="EMToggle_Toggled"/>
+            </Grid>
+        </Border>
         
         <Border Background="{DynamicResource {x:Static ui:ThemeKeys.ExpanderHeaderBackgroundKey}}" 
          BorderBrush="{DynamicResource {x:Static ui:ThemeKeys.ExpanderHeaderBorderBrushKey}}"

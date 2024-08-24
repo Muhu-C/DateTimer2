@@ -52,7 +52,9 @@ namespace DateTimer.WPF.View
 
             ETToggle.IsOn = _appSetting.EnableTarget;
             TWToggle.IsOn = _appSetting.EnableTargetWeekday;
+            EMToggle.IsOn = _appSetting.EnableMainWindowShow;
             TargetPick.SelectedDate = _appSetting.TargetDate == null ? null : DateTime.Parse(_appSetting.TargetDate);
+
             TargetNameTb.Text = _appSetting.TargetName;
             ANToggle.IsOn = _appSetting.EnableAdvancedNotice;
             AdvanceNb.Value = _appSetting.AdvancedMinutes;
@@ -93,6 +95,14 @@ namespace DateTimer.WPF.View
             var mw = Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow;
             WriteCurSetting();
             mw._homePage.ReloadSettings();
+        }
+
+
+        private void EMToggle_Toggled(object sender, RoutedEventArgs e)
+        {
+            if (isInit) return;
+            _appSetting.EnableMainWindowShow = EMToggle.IsOn;
+            WriteCurSetting();
         }
 
         // 更改时间表位置
