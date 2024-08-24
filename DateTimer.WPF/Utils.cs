@@ -180,6 +180,7 @@ namespace DateTimer.WPF
         public string Theme { get; set; } // 主题
         public bool EnableTarget { get; set; } // 目标时间
         public bool EnableTargetWeekday { get; set; }
+        public bool EnableMainWindowShow { get; set; }
         #nullable enable
         public string? TargetDate { get; set; }
         public string? TargetName { get; set; }

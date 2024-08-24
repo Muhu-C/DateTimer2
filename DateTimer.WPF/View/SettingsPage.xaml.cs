@@ -258,24 +258,36 @@ namespace DateTimer.WPF.View
                 NewBackdrop = "None";
                 iNKORE.UI.WPF.Modern.Controls.Helpers.
                     WindowHelper.SetSystemBackdropType(mw, iNKORE.UI.WPF.Modern.Helpers.Styles.BackdropType.None);
+                iNKORE.UI.WPF.Modern.Controls.Helpers.
+                    WindowHelper.SetSystemBackdropType(App._timerWindow, 
+                    iNKORE.UI.WPF.Modern.Helpers.Styles.BackdropType.None);
             }
             else if (BackdropSelector.SelectedIndex == 1)
             {
                 NewBackdrop = "Mica";
                 iNKORE.UI.WPF.Modern.Controls.Helpers.
                     WindowHelper.SetSystemBackdropType(mw, iNKORE.UI.WPF.Modern.Helpers.Styles.BackdropType.Mica);
+                iNKORE.UI.WPF.Modern.Controls.Helpers.
+                    WindowHelper.SetSystemBackdropType(App._timerWindow,
+                    iNKORE.UI.WPF.Modern.Helpers.Styles.BackdropType.Mica);
             }
             else if (BackdropSelector.SelectedIndex == 2)
             {
                 NewBackdrop = "Acrylic";
                 iNKORE.UI.WPF.Modern.Controls.Helpers.
                     WindowHelper.SetSystemBackdropType(mw, iNKORE.UI.WPF.Modern.Helpers.Styles.BackdropType.Acrylic11);
+                iNKORE.UI.WPF.Modern.Controls.Helpers.
+                    WindowHelper.SetSystemBackdropType(App._timerWindow,
+                    iNKORE.UI.WPF.Modern.Helpers.Styles.BackdropType.Acrylic11);
             }
             else
             {
                 NewBackdrop = "MicaAlt";
                 iNKORE.UI.WPF.Modern.Controls.Helpers.
                     WindowHelper.SetSystemBackdropType(mw, iNKORE.UI.WPF.Modern.Helpers.Styles.BackdropType.Tabbed);
+                iNKORE.UI.WPF.Modern.Controls.Helpers.
+                    WindowHelper.SetSystemBackdropType(App._timerWindow,
+                    iNKORE.UI.WPF.Modern.Helpers.Styles.BackdropType.Tabbed);
             }
             _appSetting.BackDrop = NewBackdrop;
             WriteCurSetting();

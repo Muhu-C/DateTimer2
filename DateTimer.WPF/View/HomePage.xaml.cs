@@ -64,9 +64,16 @@ namespace DateTimer.WPF.View
 
         private void ShowTimer_Click(object sender, RoutedEventArgs e)
         {
-            if (ThemeManager.Current.ApplicationTheme == ApplicationTheme.Dark)
-                ThemeManager.Current.ApplicationTheme = ApplicationTheme.Light;
-            else ThemeManager.Current.ApplicationTheme = ApplicationTheme.Dark;
+            if (App._timerWindow.IsVisible)
+            {
+                App._timerWindow.Hide();
+                ShowTimer.Content = "显示时间表";
+            }
+            else
+            {
+                App._timerWindow.Show();
+                ShowTimer.Content = "隐藏时间表";
+            }
         }
     }
 }
