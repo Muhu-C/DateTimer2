@@ -1,12 +1,12 @@
 {
-  "Theme": "Auto",
-  "EnableTarget": true,
+  "Theme": "Dark",
+  "EnableTarget": false,
   "TargetDate": null,
   "TargetName": null,
   "EnableTargetWeekday": false,
-  "EnableMainWindowShow": false,
+  "EnableMainWindowShow": true,
   "BackDrop": "Mica",
   "TimeTablePath": null,
-  "EnableAdvancedNotice": true,
-  "AdvancedMinutes": 15
+  "EnableAdvancedNotice": false,
+  "AdvancedMinutes": 10
 }

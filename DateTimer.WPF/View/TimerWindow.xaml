@@ -7,9 +7,53 @@
         xmlns:local="clr-namespace:DateTimer.WPF.View"
         ui:WindowHelper.UseModernWindowStyle="True"
         mc:Ignorable="d"
+        FontFamily="{StaticResource DefaFont}"
+        ui:TitleBar.ExtendViewIntoTitleBar="True"
+        ui:TitleBar.Height="40"
         Closing="Window_Closing"
-        Title="TimerWindow" Height="518" Width="381">
+        Title="TimerWindow" Height="520" Width="400" MinWidth="360" MinHeight="350">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
 
+        <Grid Grid.Row="0" Height="40" VerticalAlignment="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Image Width="20" Height="20" Margin="8,0,0,0" Grid.Column="0" RenderOptions.BitmapScalingMode="HighQuality"
+                 Source="/DateTimer.WPF;Component/Data/icon.png" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <TextBlock Text="DateTimer" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                <TextBlock Text="时间表" Foreground="#00DDAA" VerticalAlignment="Center"/>
+            </StackPanel>
+        </Grid>
+
+        <TextBlock Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="16" FontWeight="Bold" Margin="20,0,0,0" Name="InfoText" />
+
+        <Border Background="{DynamicResource {x:Static ui:ThemeKeys.ExpanderHeaderBackgroundKey}}" 
+         BorderBrush="{DynamicResource {x:Static ui:ThemeKeys.ExpanderHeaderBorderBrushKey}}"
+         BorderThickness="{DynamicResource {x:Static ui:ThemeKeys.ExpanderHeaderBorderThicknessKey}}"
+         CornerRadius="4" Padding="5" Margin="10" Grid.Row="2">
+            <ListView x:Name="TimetableView">
+                <ListView.ItemTemplate>
+                    <DataTemplate DataType="local:TableSource">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="{Binding Time}"/>
+                            <TextBlock Grid.Column="1" Text="{Binding Title}"/>
+                            <TextBlock Grid.Column="2" Text="{Binding Notice}"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Border>
     </Grid>
 </Window>

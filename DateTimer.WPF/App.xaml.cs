@@ -1,5 +1,4 @@
 ﻿using System;
-using Newtonsoft.Json;
 using System.Reflection;
 using System.Threading;
 using System.Windows;
@@ -8,8 +7,6 @@ using DateTimer.WPF.View;
 using iNKORE.UI.WPF.Modern;
 using Hardcodet.Wpf.TaskbarNotification;
 using System.Windows.Input;
-using System.Drawing.Imaging;
-using System.Windows.Media;
 using System.Linq;
 using DateTimer.WPF.View.CustomComponents;
 
@@ -21,30 +18,32 @@ namespace DateTimer.WPF
     public partial class App : Application
     {
         #region 定义变量和常量
-        public static CustomNotice _noticeWindow;
-        public static TaskbarIcon _taskbaricon;
-        public static Mutex _mutex;
-        public static TimerWindow _timerWindow;
+        public static CustomNotice _noticeWindow; // 时间表提示
+        public static TaskbarIcon _taskbaricon;   // 托盘图标
+        public static Mutex _mutex;               // 程序启动监测
+        public static TimerWindow _timerWindow;   // 时间表窗口
         public readonly static string AppSettingPath = System.IO.Path.
-            Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Config", "Settings.json");
+            Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Config", "Settings.json");          // 设置文件
         public readonly static string DefTimetablePath = System.IO.Path.
-            Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Config", "Timetable_Default.json");
+            Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Config", "Timetable_Default.json"); // 默认时间表文件
         public readonly static string CopiedTimetablePath = System.IO.Path.
-            Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Config", "Timetable_Copied.json");
+            Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Config", "Timetable_Copied.json");  // 外部复制时间表文件
+
+        #endregion
+
+        // 软件初始化函数
         public App()
         {
             Startup += AppStartUp;
             DispatcherUnhandledException += (_, e) =>
             {
-                Clipboard.SetText(e.Exception.ToString());
-                MessageBox.Show($"错误文本已复制到剪贴板。\n\n{e.Exception}", "发生了未知错误", MessageBoxButton.OK);
                 e.Handled = true;
+                Clipboard.SetText(e.Exception.ToString());
+                MsgBox.Show($"错误文本已复制到剪贴板。\n\n{e.Exception}", "发生了未知错误", MessageBoxButton.OK);
             };
         }
 
-        #endregion
-
-        // 当程序启动时
+        // 当软件启动时
         protected override void OnStartup(StartupEventArgs e)
         {
             // Mutex 初始化
@@ -67,12 +66,13 @@ namespace DateTimer.WPF
             else if (SettingsPage._appSetting.Theme == "Light")
                 ThemeManager.Current.ApplicationTheme = ApplicationTheme.Light;
             // 窗口初始化
-            _timerWindow = new TimerWindow();
             _taskbaricon = (TaskbarIcon)FindResource("Taskbar");
             _noticeWindow = new CustomNotice();
-
-            MainWindow mw = new MainWindow();
+            _timerWindow = new TimerWindow();
+            MainWindow mw = new();
             Current.MainWindow = mw;
+
+            // 窗口设置应用
             if (SettingsPage._appSetting.EnableMainWindowShow)
                 MainWindow.Show();
             else

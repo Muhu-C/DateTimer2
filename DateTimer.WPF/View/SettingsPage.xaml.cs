@@ -2,7 +2,6 @@
 using Microsoft.Win32;
 using Newtonsoft.Json;
 using System;
-using System.Management;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -131,7 +130,7 @@ namespace DateTimer.WPF.View
                 else
                 {
                     File.Copy(openFileDialog.FileName, App.CopiedTimetablePath, true);
-                    FileName = "\\Data\\Config\\Timetable_Copied.json";
+                    FileName = App.CopiedTimetablePath;
                 }
                 _appSetting.TimeTablePath = FileName;
                 WriteCurSetting();

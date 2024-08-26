@@ -1,18 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace DateTimer.WPF.View.CustomComponents
 {
@@ -37,7 +28,7 @@ namespace DateTimer.WPF.View.CustomComponents
             Top = SystemParameters.WorkArea.Bottom;
         }
 
-
+        // 弹出提示
         public async void Init(string Title = "", string Text = "", string uri = "Data/Media/notice.wav")
         {
             Show();
