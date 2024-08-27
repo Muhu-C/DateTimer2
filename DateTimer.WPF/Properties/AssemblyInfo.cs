@@ -7,13 +7,13 @@ using System.Windows;
 // 有关程序集的一般信息由以下
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("DateTimer 2")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("木沪时间表")]
+[assembly: AssemblyDescription("计划时间、制定待办")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("MC118CN")]
 [assembly: AssemblyProduct("DateTimer 2")]
 [assembly: AssemblyCopyright("Copyright © MC118CN 2024 ~ 2025")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyTrademark("MC118CN")]
 [assembly: AssemblyCulture("")]
 
 // 将 ComVisible 设置为 false 会使此程序集中的类型
@@ -44,5 +44,6 @@ using System.Windows;
 // 程序集的版本信息由下列四个值组成: 
 //      主版本. 次版本. 生成号. 修订号
 //
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("2.0.0.0")]
+[assembly: AssemblyFileVersion("2.0.0.0")]
+[assembly: NeutralResourcesLanguage("zh-CN")]
