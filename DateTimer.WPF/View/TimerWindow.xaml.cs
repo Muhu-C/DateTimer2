@@ -56,17 +56,24 @@ namespace DateTimer.WPF.View
         public async void ReloadTable()
         {
             current_timetable_path = SettingsPage._appSetting.TimeTablePath;
+            try { GetTimetables(current_timetable_path); }
+            catch { App._taskbaricon.ShowBalloonTip("无法配置时间表", "请检查 json 结构是否正确", Hardcodet.Wpf.TaskbarNotification.BalloonIcon.Error); return; }
             List<Timetables> File = GetTimetables(current_timetable_path).Timetables;
             _timetables = GetTodayList(File);
             if (_timetables == null)
             {
                 _source.Clear();
-                _source.Add(new TableSource { Title = "今日无时间计划" });
+                _source.Add(new TableSource { Title = "今日无时间计划", Time = "0:00 ~ 23:59" });
             }
             else
             {
                 _source.Clear();
-                foreach (Utils.TimeTable.Table table in _timetables.Tables)
+                if (_timetables.Tables.Count == 0)
+                {
+                    _source.Add(new TableSource { Title = "未配置今日时间", Time = "0:00 ~ 23:59" });
+                    return;
+                }
+                foreach (Table table in _timetables.Tables)
                 {
                     _source.Add(Utils.TimerShow.Table2Entry(table));
                     await Task.Delay(50);
@@ -76,10 +83,15 @@ namespace DateTimer.WPF.View
 
         public void Check()
         {
-            if (_timetables == null) return;
+            if (_timetables == null)
+            {
+                GetTime(false);
+                return;
+            }
             if (!isTableShowable(_timetables.Tables))
             {
                 App._taskbaricon.ShowBalloonTip("无法配置时间表", "请检查时间段配置是否正确", Hardcodet.Wpf.TaskbarNotification.BalloonIcon.Error);
+                GetTime(false);
                 return;
             }
             if (_isRunning)
@@ -89,10 +101,10 @@ namespace DateTimer.WPF.View
             }
 
             undone = GetTodayUndone(_timetables.Tables); // 未完成项目
-            GetTime();
+            GetTime(true);
         }
 
-        public async void GetTime()
+        public async void GetTime(bool ShowTable)
         {
             _isRunning = true;
             await Task.Run(async () =>
@@ -100,10 +112,7 @@ namespace DateTimer.WPF.View
                 int SpanSeconds = 0;
                 while (true)
                 {
-                    if (current_timetable_path != SettingsPage._appSetting.TimeTablePath) break;
-                    List<int> CurZone = GetCurZone(_timetables.Tables);
-                    if (CurZone.Count == 0) continue;
-                    await Dispatcher.InvokeAsync(() => TimetableView.SelectedIndex = CurZone[0]);
+                    // 目标时间
                     string str = "目标";
                     if (SettingsPage._appSetting.EnableTarget)
                     {
@@ -118,6 +127,13 @@ namespace DateTimer.WPF.View
                         InfoText.Text = $"今天是 {DateTime.Today.Month}月{DateTime.Today.Day}日 " +
                         $"星期{Utils.TimeConverter.NumToWeekday(Convert.ToInt16(DateTime.Today.DayOfWeek).ToString())}");
                     }
+
+                    // 当前时间
+                    if (!ShowTable) continue;
+                    if (current_timetable_path != SettingsPage._appSetting.TimeTablePath) break;
+                    List<int> CurZone = GetCurZone(_timetables.Tables);
+                    if (CurZone.Count == 0) continue;
+                    await Dispatcher.InvokeAsync(() => TimetableView.SelectedIndex = CurZone[0]);
 
                     int nowind = IsStart(_timetables.Tables, TimeSpan.Zero);
                     if (nowind != -1 && undone[nowind] > 0)

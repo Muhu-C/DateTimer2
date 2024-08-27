@@ -1,21 +1,9 @@
 {
   "Timetables": [
     {
-      "Date": "2024/08/25",
+      "Date": null,
       "Weekday": "1/2/3/4/5/6/7",
       "Tables": [
-        {
-          "Name": "Time to awdawd",
-          "Start": "12:23",
-          "End": "22:30",
-          "Notice": "NoticeText"
-        },
-        {
-          "Name": "赤石",
-          "Start": "12:40",
-          "End": "22:30",
-          "Notice": "NoticeText"
-        }
       ]
     }
   ]

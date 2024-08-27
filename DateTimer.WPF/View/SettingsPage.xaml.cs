@@ -328,14 +328,14 @@ namespace DateTimer.WPF.View
                     $"\n系统总内存: {SystemInfo.GetTotalRAM()} MB" +
                     $"\n环境: {SystemInfo.GetEnvVer()}";
             });
-            ContentDialog contentDialog = new ContentDialog
+            ContentDialog contentDialog = new()
             {
                 Title = "系统报告",
                 Content = ReportStr,
                 PrimaryButtonText = "复制",
                 SecondaryButtonText = "取消"
             };
-            var a = await contentDialog.ShowAsync();
+            ContentDialogResult a = await contentDialog.ShowAsync();
             if (a == ContentDialogResult.Primary)
                 Clipboard.SetText(ReportStr);
         }
