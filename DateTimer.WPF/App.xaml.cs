@@ -9,6 +9,8 @@ using Hardcodet.Wpf.TaskbarNotification;
 using System.Windows.Input;
 using System.Linq;
 using DateTimer.WPF.View.CustomComponents;
+using iNKORE.UI.WPF.Modern.Common.IconKeys;
+using iNKORE.UI.WPF.Modern.Common;
 
 namespace DateTimer.WPF
 {
@@ -18,10 +20,10 @@ namespace DateTimer.WPF
     public partial class App : Application
     {
         #region 定义变量和常量
-        public static CustomNotice _noticeWindow; // 时间表提示
-        public static TaskbarIcon _taskbaricon;   // 托盘图标
-        public static Mutex _mutex;               // 程序启动监测
-        public static TimerWindow _timerWindow;   // 时间表窗口
+        public static CustomNotice _noticeWindow;                                                       // 时间表提示
+        public static TaskbarIcon _taskbaricon;                                                         // 托盘图标
+        public static Mutex _mutex;                                                                     // 程序启动监测
+        public static TimerWindow _timerWindow;                                                         // 时间表窗口
         public readonly static string AppSettingPath = System.IO.Path.
             Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Config", "Settings.json");          // 设置文件
         public readonly static string DefTimetablePath = System.IO.Path.

@@ -129,10 +129,19 @@ namespace DateTimer.WPF.View
                     }
 
                     // 当前时间
-                    if (!ShowTable) continue;
+                    if (!ShowTable)
+                    {
+                        await Task.Delay(1000);
+                        continue;
+                    }
+
                     if (current_timetable_path != SettingsPage._appSetting.TimeTablePath) break;
                     List<int> CurZone = GetCurZone(_timetables.Tables);
-                    if (CurZone.Count == 0) continue;
+                    if (CurZone.Count == 0)
+                    {
+                        await Task.Delay(1000);
+                        continue;
+                    }
                     await Dispatcher.InvokeAsync(() => TimetableView.SelectedIndex = CurZone[0]);
 
                     int nowind = IsStart(_timetables.Tables, TimeSpan.Zero);
@@ -185,9 +194,7 @@ namespace DateTimer.WPF.View
         {
             e.Cancel = true;
             Hide();
-            var mw = Application.Current.Windows.Cast<Window>().
-                FirstOrDefault(window => window is MainWindow) as MainWindow;
-            mw._homePage.ShowTimer.Content = "显示时间表";
+            (Application.Current.MainWindow as MainWindow)._homePage.ShowTimer.Content = "显示时间表";
         }
         #endregion
     }

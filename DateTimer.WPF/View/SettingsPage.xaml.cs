@@ -8,6 +8,8 @@ using System.Windows;
 using System.Windows.Controls;
 using MsgBox = iNKORE.UI.WPF.Modern.Controls.MessageBox;
 using iNKORE.UI.WPF.Modern.Controls;
+using iNKORE.UI.WPF.Modern.Controls.Helpers;
+using iNKORE.UI.WPF.Modern.Helpers.Styles;
 using System.Threading.Tasks;
 
 namespace DateTimer.WPF.View
@@ -91,9 +93,8 @@ namespace DateTimer.WPF.View
         {
             if (isInit) return;
             _appSetting.EnableTargetWeekday = TWToggle.IsOn;
-            var mw = Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow;
             WriteCurSetting();
-            mw._homePage.ReloadSettings();
+            (Application.Current.MainWindow as MainWindow)._homePage.ReloadSettings();
         }
 
 
@@ -153,9 +154,8 @@ namespace DateTimer.WPF.View
                 TargetExpanderGrid.IsEnabled = false;
                 TargetExpander.IsExpanded = false;
             }
-            var mw = Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow;
             WriteCurSetting();
-            mw._homePage.ReloadSettings();
+            (Application.Current.MainWindow as MainWindow)._homePage.ReloadSettings();
         }
 
         private void TargetNameTb_TextChanged(object sender, TextChangedEventArgs e)
@@ -163,18 +163,16 @@ namespace DateTimer.WPF.View
             if (isInit) return;
             if (TargetNameTb.Text == string.Empty) _appSetting.TargetName = null;
             else _appSetting.TargetName = TargetNameTb.Text;
-            var mw = Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow;
             WriteCurSetting();
-            mw._homePage.ReloadSettings();
+            (Application.Current.MainWindow as MainWindow)._homePage.ReloadSettings();
         }
 
         private void TargetPick_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
             if (isInit) return;
             _appSetting.TargetDate = TargetPick.SelectedDate?.ToString("yyyy/MM/dd");
-            var mw = Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow;
             WriteCurSetting();
-            mw._homePage.ReloadSettings();
+            (Application.Current.MainWindow as MainWindow)._homePage.ReloadSettings();
         }
 
         private void ANToggle_Toggled(object sender, RoutedEventArgs e)
@@ -195,7 +193,7 @@ namespace DateTimer.WPF.View
             WriteCurSetting();
         }
 
-        private void AdvanceNb_ValueChanged(iNKORE.UI.WPF.Modern.Controls.NumberBox sender, iNKORE.UI.WPF.Modern.Controls.NumberBoxValueChangedEventArgs args)
+        private void AdvanceNb_ValueChanged(NumberBox sender, NumberBoxValueChangedEventArgs args)
         {
             if (isInit) return;
             int value = (int)args.NewValue;
@@ -260,55 +258,34 @@ namespace DateTimer.WPF.View
         private void BackdropSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (isInit || BackdropSelector.SelectedIndex < 0) return;
-            var mw = Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow;
             string NewBackdrop = "None";
             if (BackdropSelector.SelectedIndex == 0)
             {
                 NewBackdrop = "None";
-                iNKORE.UI.WPF.Modern.Controls.Helpers.
-                    WindowHelper.SetSystemBackdropType(mw, iNKORE.UI.WPF.Modern.Helpers.Styles.BackdropType.None);
-                iNKORE.UI.WPF.Modern.Controls.Helpers.
-                    WindowHelper.SetSystemBackdropType(App._timerWindow, 
-                    iNKORE.UI.WPF.Modern.Helpers.Styles.BackdropType.None);
-                iNKORE.UI.WPF.Modern.Controls.Helpers.
-                    WindowHelper.SetSystemBackdropType(App._noticeWindow,
-                    iNKORE.UI.WPF.Modern.Helpers.Styles.BackdropType.None);
+                WindowHelper.SetSystemBackdropType(Application.Current.MainWindow, BackdropType.None);
+                WindowHelper.SetSystemBackdropType(App._timerWindow, BackdropType.None);
+                WindowHelper.SetSystemBackdropType(App._noticeWindow, BackdropType.None);
             }
             else if (BackdropSelector.SelectedIndex == 1)
             {
                 NewBackdrop = "Mica";
-                iNKORE.UI.WPF.Modern.Controls.Helpers.
-                    WindowHelper.SetSystemBackdropType(mw, iNKORE.UI.WPF.Modern.Helpers.Styles.BackdropType.Mica);
-                iNKORE.UI.WPF.Modern.Controls.Helpers.
-                    WindowHelper.SetSystemBackdropType(App._timerWindow,
-                    iNKORE.UI.WPF.Modern.Helpers.Styles.BackdropType.Mica);
-                iNKORE.UI.WPF.Modern.Controls.Helpers.
-                    WindowHelper.SetSystemBackdropType(App._noticeWindow,
-                    iNKORE.UI.WPF.Modern.Helpers.Styles.BackdropType.Mica);
+                WindowHelper.SetSystemBackdropType(Application.Current.MainWindow, BackdropType.Mica);
+                WindowHelper.SetSystemBackdropType(App._timerWindow, BackdropType.Mica);
+                WindowHelper.SetSystemBackdropType(App._noticeWindow, BackdropType.Mica);
             }
             else if (BackdropSelector.SelectedIndex == 2)
             {
                 NewBackdrop = "Acrylic";
-                iNKORE.UI.WPF.Modern.Controls.Helpers.
-                    WindowHelper.SetSystemBackdropType(mw, iNKORE.UI.WPF.Modern.Helpers.Styles.BackdropType.Acrylic11);
-                iNKORE.UI.WPF.Modern.Controls.Helpers.
-                    WindowHelper.SetSystemBackdropType(App._timerWindow,
-                    iNKORE.UI.WPF.Modern.Helpers.Styles.BackdropType.Acrylic11);
-                iNKORE.UI.WPF.Modern.Controls.Helpers.
-                    WindowHelper.SetSystemBackdropType(App._noticeWindow,
-                    iNKORE.UI.WPF.Modern.Helpers.Styles.BackdropType.Acrylic11);
+                WindowHelper.SetSystemBackdropType(Application.Current.MainWindow, BackdropType.Acrylic11);
+                WindowHelper.SetSystemBackdropType(App._timerWindow, BackdropType.Acrylic11);
+                WindowHelper.SetSystemBackdropType(App._noticeWindow, BackdropType.Acrylic11);
             }
             else
             {
                 NewBackdrop = "MicaAlt";
-                iNKORE.UI.WPF.Modern.Controls.Helpers.
-                    WindowHelper.SetSystemBackdropType(mw, iNKORE.UI.WPF.Modern.Helpers.Styles.BackdropType.Tabbed);
-                iNKORE.UI.WPF.Modern.Controls.Helpers.
-                    WindowHelper.SetSystemBackdropType(App._timerWindow,
-                    iNKORE.UI.WPF.Modern.Helpers.Styles.BackdropType.Tabbed);
-                iNKORE.UI.WPF.Modern.Controls.Helpers.
-                    WindowHelper.SetSystemBackdropType(App._noticeWindow,
-                    iNKORE.UI.WPF.Modern.Helpers.Styles.BackdropType.Tabbed);
+                WindowHelper.SetSystemBackdropType(Application.Current.MainWindow, BackdropType.Tabbed);
+                WindowHelper.SetSystemBackdropType(App._timerWindow, BackdropType.Tabbed);
+                WindowHelper.SetSystemBackdropType(App._noticeWindow, BackdropType.Tabbed);
             }
             _appSetting.BackDrop = NewBackdrop;
             WriteCurSetting();

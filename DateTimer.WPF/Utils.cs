@@ -4,7 +4,9 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.Eventing.Reader;
 using System.IO;
+using System.Linq;
 using System.Management;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -22,9 +24,7 @@ namespace DateTimer.WPF
             public static void WriteFile(string Text, string Path)
             {
                 using (StreamWriter sw = new StreamWriter(Path, false, Encoding.UTF8))
-                {
                     sw.Write(Text);
-                }
             }
 
             /// <summary> 用流读取文件 </summary>
@@ -33,11 +33,7 @@ namespace DateTimer.WPF
             public static string ReadFile(string Path)
             {
                 using (StreamReader sr = new StreamReader(Path))
-                {
-                    string content;
-                    content = sr.ReadToEnd();
-                    return content;
-                }
+                    return sr.ReadToEnd();
             }
 
             /// <summary> 将 json 字符串格式化 </summary>
@@ -50,18 +46,16 @@ namespace DateTimer.WPF
                 string newjson = string.Empty;
                 foreach (char c in oldjson)
                 {
-                    if (c == '\"') { if (!isInString) isInString = true; else isInString = false; }
+                    if (c == '\"') isInString = !isInString;
                     newjson += c;
                     if (c == '{' && !isInString)
                     {
-                        l++;
-                        newjson += '\n';
+                        l++; newjson += '\n';
                         for (int i = 1; i <= l; i++) newjson += "    ";
                     }
                     else if (oldjson.Length > k + 1 && oldjson[k + 1] == '}' && !isInString)
                     {
-                        l--;
-                        newjson += '\n';
+                        l--; newjson += '\n';
                         for (int i = 1; i <= l; i++) newjson += "    ";
                     }
                     else if (c == ',' && !isInString)
@@ -100,14 +94,9 @@ namespace DateTimer.WPF
             /// <returns>周一为1,周日为0</returns>
             public static string TWeekdays2DWeekdays(string tweekday)
             {
-                List<string> res = new List<string>();
-                string[] wdays = tweekday.Split('/');
-                foreach (string wday in wdays)
-                {
-                    int wd = Convert.ToInt32(wday);
-                    res.Add((wd % 7).ToString());
-                }
-
+                List<string> res = new();
+                foreach (string wday in tweekday.Split('/'))
+                    res.Add((Convert.ToInt32(wday) % 7).ToString());
                 return string.Join("/", res);
             }
 
@@ -116,21 +105,16 @@ namespace DateTimer.WPF
             /// <returns>周一为1,周日为7</returns>
             public static string DWeekdays2TWeekdays(string dweekday)
             {
-                List<string> res = new List<string>();
-                string[] wdays = dweekday.Split('/');
-                foreach (string wday in wdays)
-                {
-                    int wd = Convert.ToInt32(wday);
-                    res.Add(wd == 0 ? "7" : wd.ToString());
-                }
-
+                List<string> res = new();
+                foreach (string wday in dweekday.Split('/'))
+                    res.Add(Convert.ToInt32(wday) == 0 ? "7" : Convert.ToInt32(wday).ToString());
                 return string.Join("/", res);
             }
         }
         /// <summary> 时间表处理 </summary>
         public class TimeTable
         {
-            #region timetable-JSON
+            #region 时间表结构
 
             /// <summary> json 反序列化的类 </summary>
             public class TimeTableFile // json第一层
@@ -160,8 +144,6 @@ namespace DateTimer.WPF
             }
             #endregion
 
-
-
             #region 处理
             /// <summary> 反序列化时间表 json 文件 </summary>
             /// <param name="Path">json 位置</param>
@@ -178,8 +160,7 @@ namespace DateTimer.WPF
                 {
                     TimeSpan start = TimeSpan.Parse(table.Start);
                     TimeSpan end = TimeSpan.Parse(table.End);
-                    if (start >= end)
-                        return false;
+                    if (start >= end) return false;
                 }
                 return true;
             }
@@ -189,7 +170,7 @@ namespace DateTimer.WPF
             /// <returns>当前时间在时间段的下标</returns>
             public static List<int> GetCurZone(List<Table> tables)
             {
-                List<int> indexes = new List<int>();
+                List<int> indexes = new();
                 int i = 0;
                 foreach (Table table in tables)
                 {
@@ -240,22 +221,13 @@ namespace DateTimer.WPF
             /// <returns>索引</returns>
             public static Timetables GetTodayList(List<Timetables> timetables)
             {
-                if (timetables == null) return null;
-                if (timetables.Count == 0) return null;
+                if (timetables == null || timetables.Count == 0) return null;
                 int weekday = Convert.ToInt16(DateTime.Today.DayOfWeek); // 0 为周日
 
                 foreach (Timetables t in timetables)
-                {
-                    if (t.Date != null)
-                    {
-                        if (DateTime.Parse(t.Date) == DateTime.Today) return t;
-                    }
-                    else if (t.Date == null && t.Weekday != null)
-                    {
-                        if (TimeConverter.TWeekdays2DWeekdays(t.Weekday).Contains(weekday.ToString())) return t;
-                    }
-                    else return null;
-                }
+                    if ((t.Date != null && DateTime.Parse(t.Date) == DateTime.Today) ||
+                        (t.Date == null && t.Weekday != null && TimeConverter.TWeekdays2DWeekdays(t.Weekday).Contains(weekday.ToString())))
+                        return t;
                 return null;
             }
             #endregion
@@ -317,30 +289,27 @@ namespace DateTimer.WPF
                         $" {(target - DateTime.Now).Minutes}分 {(target - DateTime.Now).Seconds}秒";
             }
 
+
+            private readonly static List<string> _verbs = new() // 动词表
+            {
+                "考", "看", "有", "听", "到",
+                "写", "去", "存", "取", "读",
+                "吃", "喝", "编", "找", "跳",
+                "跑", "走", "肝", "退", "进",
+                "赶", "放", "开", "关", "能",
+                "会", "拿", "丢", "做", "说",
+                "开始", "结束", "停止", "复习", "预习", "到达"
+            };
+
             /// <summary> 部分词语判断动词 </summary>
             /// <param name="str"></param>
             /// <returns></returns>
             public static string Str2Verb(string str)
             {
-                if (str.Contains("考") || str.Contains("看") ||
-                    str.Contains("有") || str.Contains("听") ||
-                    str.Contains("到") || str.Contains("写") ||
-                    str.Contains("去") || str.Contains("存") ||
-                    str.Contains("开始") || str.Contains("读") ||
-                    str.Contains("结束") || str.Contains("编") ||
-                    str.Contains("复习") || str.Contains("喝") ||
-                    str.Contains("预习") || str.Contains("吃") ||
-                    str.Contains("找") || str.Contains("跳") ||
-                    str.Contains("退") || str.Contains("赶") ||
-                    str.Contains("进") || str.Contains("上") ||
-                    str.Contains("跑") || str.Contains("下") ||
-                    str.Contains("取") || str.Contains("放") ||
-                    str.Contains("开") || str.Contains("关") ||
-                    str.Contains("能") || str.Contains("会") ||
-                    str.Contains("拿") || str.Contains("做") ||
-                    str.Contains("说") || str.Contains("到达"))
-                    return str;
-                else return $"到达{str}";
+                foreach (string verb in _verbs)
+                    if (str.Contains(verb) && !str.EndsWith("时间"))
+                        return str;
+                return $"到达{str}";
             }
 
             public static TableSource Table2Entry(TimeTable.Table table)
@@ -363,31 +332,26 @@ namespace DateTimer.WPF
         /// <returns>Windows 版本字符串</returns>
         public static string GetWinVer()
         {
-            using (RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion")) // 获取注册表目录
+            string Version = $"{Environment.OSVersion.Version.Major}.{Environment.OSVersion.Version.Minor}";
+            string WinVer;
+            switch (Version)
             {
-                string productName = key.GetValue("ProductName") as string; // 系统名称（Win11不适用）
-                try
-                {
-                    int majorVersion = (int)key.GetValue("CurrentMajorVersionNumber"); // 系统版本
-                    var buildNumber = int.Parse(key.GetValue("CurrentBuildNumber").ToString()); // 构建(大于22000为Win11)
-
-                    if (!string.IsNullOrEmpty(productName) && productName.ToLower().Contains("windows"))
-                    {
-                        if (majorVersion > 10 || majorVersion == 10 && buildNumber >= 22000)
-                        {
-                            if (majorVersion > 10) return "Windows " + majorVersion + " Build " + buildNumber;
-                            else return "Windows 11 Build " + buildNumber;
-                        }
-                        else if (majorVersion == 10 && buildNumber < 22000) return "Windows 10 Build " + buildNumber;
-                        else return productName;
-                    }
-                    else return "错误";
-                }
-                catch
-                {
-                    return productName;
-                }
+                case "6.0":
+                    WinVer = $"Windows Vista Build {Environment.OSVersion.Version.Build}"; break;
+                case "6.1":
+                    WinVer = $"Windows 7 Build {Environment.OSVersion.Version.Build}"; break;
+                case "6.2":
+                    WinVer = $"Windows 8 Build {Environment.OSVersion.Version.Build}"; break;
+                case "6.3":
+                    WinVer = $"Windows 8.1 Build {Environment.OSVersion.Version.Build}"; break;
+                case "10.0":
+                    if (Environment.OSVersion.Version.Build >= 22000) WinVer = $"Windows 11 Build {Environment.OSVersion.Version.Build}";
+                    else WinVer = $"Windows 10 Build {Environment.OSVersion.Version.Build}"; 
+                    break;
+                default:
+                    WinVer = $"Windows NT {Version} Build {Environment.OSVersion.Version.Build}"; break;
             }
+            return WinVer;
         }
 
         /// <summary>
@@ -396,8 +360,7 @@ namespace DateTimer.WPF
         /// <returns>.NET 版本</returns>
         public static string GetEnvVer()
         {
-            try { return RuntimeInformation.FrameworkDescription; }
-            catch (Exception e) { throw e; }
+            return RuntimeInformation.FrameworkDescription;
         }
 
         /// <summary>
@@ -414,10 +377,8 @@ namespace DateTimer.WPF
         {
             string Name = string.Empty;
             using (ManagementObjectCollection moc = new ManagementClass("Win32_Processor").GetInstances())
-            {
-                foreach (ManagementObject mo in moc)
+                foreach (ManagementObject mo in moc.Cast<ManagementObject>())
                     Name = mo["Name"].ToString();
-            }
             return Name;
         }
 
@@ -431,10 +392,8 @@ namespace DateTimer.WPF
         {
             long Size = -1;
             using (ManagementObjectCollection moc = new ManagementClass("Win32_PhysicalMemory").GetInstances())
-            {
-                foreach (ManagementObject mo in moc)
-                    Size += Int64.Parse(mo.Properties["Capacity"].Value.ToString());
-            }
+                foreach (ManagementObject mo in moc.Cast<ManagementObject>())
+                    Size += Convert.ToInt64(mo.Properties["Capacity"].Value.ToString());
             return (int)Math.Round(1.0000 * Size / 1024 / 1024, 0);
         }
     }

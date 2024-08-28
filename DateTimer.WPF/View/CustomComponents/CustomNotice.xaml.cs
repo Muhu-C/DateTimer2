@@ -19,6 +19,25 @@ namespace DateTimer.WPF.View.CustomComponents
             // 初始化弹出窗口
             InitializeComponent();
             DataContext = Ctt;
+            switch (SettingsPage._appSetting.BackDrop)
+            {
+                case "Mica":
+                    iNKORE.UI.WPF.Modern.Controls.Helpers.
+                    WindowHelper.SetSystemBackdropType(this, iNKORE.UI.WPF.Modern.Helpers.Styles.BackdropType.Mica);
+                    break;
+                case "MicaAlt":
+                    iNKORE.UI.WPF.Modern.Controls.Helpers.
+                    WindowHelper.SetSystemBackdropType(this, iNKORE.UI.WPF.Modern.Helpers.Styles.BackdropType.Tabbed);
+                    break;
+                case "Acrylic":
+                    iNKORE.UI.WPF.Modern.Controls.Helpers.
+                    WindowHelper.SetSystemBackdropType(this, iNKORE.UI.WPF.Modern.Helpers.Styles.BackdropType.Acrylic11);
+                    break;
+                case "None":
+                    iNKORE.UI.WPF.Modern.Controls.Helpers.
+                    WindowHelper.SetSystemBackdropType(this, iNKORE.UI.WPF.Modern.Helpers.Styles.BackdropType.None);
+                    break;
+            }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

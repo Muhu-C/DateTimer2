@@ -1,6 +1,4 @@
-﻿using iNKORE.UI.WPF.Modern;
-using System;
-using System.Linq;
+﻿using System;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -55,11 +53,9 @@ namespace DateTimer.WPF.View
 
         private void GotoSetting_Click(object sender, RoutedEventArgs e)
         {
-            var mw = Application.Current.Windows.Cast<Window>().
-                FirstOrDefault(window => window is MainWindow) as MainWindow;
-            mw.ContentFrame.Navigate(mw._settingsPage);
-            mw.TitleText.Text = "设置";
-            mw.Navigation.SelectedItem = mw.SettingButton;
+            (Application.Current.MainWindow as MainWindow).ContentFrame.Navigate((Application.Current.MainWindow as MainWindow)._settingsPage);
+            (Application.Current.MainWindow as MainWindow).TitleText.Text = "设置";
+            (Application.Current.MainWindow as MainWindow).Navigation.SelectedItem = (Application.Current.MainWindow as MainWindow).SettingButton;
         }
 
         private void ShowTimer_Click(object sender, RoutedEventArgs e)
