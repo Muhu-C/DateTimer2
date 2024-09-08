@@ -13,7 +13,7 @@ using System.Windows;
 [assembly: AssemblyCompany("MC118CN")]
 [assembly: AssemblyProduct("DateTimer 2")]
 [assembly: AssemblyCopyright("Copyright © MC118CN 2024 ~ 2025")]
-[assembly: AssemblyTrademark("MC118CN")]
+[assembly: AssemblyTrademark("DateTimer")]
 [assembly: AssemblyCulture("")]
 
 // 将 ComVisible 设置为 false 会使此程序集中的类型
