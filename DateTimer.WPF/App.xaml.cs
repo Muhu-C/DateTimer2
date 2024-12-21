@@ -9,8 +9,6 @@ using Hardcodet.Wpf.TaskbarNotification;
 using System.Windows.Input;
 using System.Linq;
 using DateTimer.WPF.View.CustomComponents;
-using iNKORE.UI.WPF.Modern.Common.IconKeys;
-using iNKORE.UI.WPF.Modern.Common;
 
 namespace DateTimer.WPF
 {
@@ -20,6 +18,7 @@ namespace DateTimer.WPF
     public partial class App : Application
     {
         #region 定义变量和常量
+        public readonly static string BetaVersion = "Alpha 00002";
         public static CustomNotice _noticeWindow;                                                       // 时间表提示
         public static TaskbarIcon _taskbaricon;                                                         // 托盘图标
         public static Mutex _mutex;                                                                     // 程序启动监测
@@ -37,7 +36,7 @@ namespace DateTimer.WPF
         public App()
         {
             Startup += AppStartUp;
-            DispatcherUnhandledException += (_, e) =>
+            DispatcherUnhandledException += (o, e) =>
             {
                 e.Handled = true;
                 Clipboard.SetText(e.Exception.ToString());
@@ -52,7 +51,7 @@ namespace DateTimer.WPF
             _mutex = new Mutex(true, Assembly.GetExecutingAssembly().GetName().Name, out var createNew);
             if (!createNew)
             {
-                MsgBox.Show("已有此程序在运行！", "提示", MessageBoxButton.OK);
+                MsgBox.Show("已有此应用在运行！", "提示", MessageBoxButton.OK);
                 Current.Shutdown();
             }
             base.OnStartup(e);
@@ -75,8 +74,7 @@ namespace DateTimer.WPF
             Current.MainWindow = mw;
 
             // 窗口设置应用
-            if (SettingsPage._appSetting.EnableMainWindowShow)
-                MainWindow.Show();
+            if (SettingsPage._appSetting.EnableMainWindowShow) MainWindow.Show();
             else
             {
                 _timerWindow.Show();
@@ -132,7 +130,7 @@ namespace DateTimer.WPF
                             FirstOrDefault(window => window is MainWindow) as MainWindow).
                             _homePage.ShowTimer.Content = "隐藏时间表";
                         }
-                        catch { }
+                        catch { ; }
                     }
                 };
             }
@@ -171,10 +169,7 @@ namespace DateTimer.WPF
         public Action CommandAction { get; set; }
         public Func<bool> CanExecuteFunc { get; set; }
 
-        public void Execute(object parameter)
-        {
-            CommandAction();
-        }
+        public void Execute(object parameter) => CommandAction();
 
         public bool CanExecute(object parameter)
         {

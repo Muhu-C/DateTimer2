@@ -3,7 +3,6 @@ using Microsoft.Win32;
 using Newtonsoft.Json;
 using System;
 using System.IO;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using MsgBox = iNKORE.UI.WPF.Modern.Controls.MessageBox;
@@ -11,6 +10,7 @@ using iNKORE.UI.WPF.Modern.Controls;
 using iNKORE.UI.WPF.Modern.Controls.Helpers;
 using iNKORE.UI.WPF.Modern.Helpers.Styles;
 using System.Threading.Tasks;
+using System.Reflection;
 
 namespace DateTimer.WPF.View
 {
@@ -20,7 +20,7 @@ namespace DateTimer.WPF.View
     public partial class SettingsPage : iNKORE.UI.WPF.Modern.Controls.Page
     {
         public static AppSetting _appSetting;
-        public static bool isInit = false;
+        private static bool isInit = false;    // 是否正在加载（执行 ReloadPage()）
 
         public SettingsPage()
         {
@@ -30,10 +30,18 @@ namespace DateTimer.WPF.View
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             ReloadPage();
+            VersionText.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            BetaText.Text = App.BetaVersion;
         }
 
         #region 基础操作
-        // 加载 _appSetting 中的内容到 UI
+        // 加载 _appSetting 中的内容到 UI, 读取设置
+        /*
+         ETToggle: 倒计时显示
+         EMToggle: 控制台显示
+         TWToggle: (ETToggle is ON)显示 2 周内目标星期日
+         ANToggle: 提前提醒
+         */
         private void ReloadPage()
         {
             isInit = true;
@@ -78,8 +86,7 @@ namespace DateTimer.WPF.View
         // 写入当前设置
         public static void WriteCurSetting()
         {
-            string SettingJsonStr = JsonConvert.SerializeObject(_appSetting, Formatting.Indented);
-            Utils.FileProcess.WriteFile(SettingJsonStr, App.AppSettingPath);
+            Utils.FileProcess.WriteFile(JsonConvert.SerializeObject(_appSetting, Formatting.Indented), App.AppSettingPath);
         }
 
         // 加载设置
@@ -88,16 +95,7 @@ namespace DateTimer.WPF.View
                 JsonConvert.DeserializeObject<AppSetting>(Utils.FileProcess.ReadFile(App.AppSettingPath));
         #endregion
 
-
-        private void TWToggle_Toggled(object sender, RoutedEventArgs e)
-        {
-            if (isInit) return;
-            _appSetting.EnableTargetWeekday = TWToggle.IsOn;
-            WriteCurSetting();
-            (Application.Current.MainWindow as MainWindow)._homePage.ReloadSettings();
-        }
-
-
+        // 启动时显示控制台
         private void EMToggle_Toggled(object sender, RoutedEventArgs e)
         {
             if (isInit) return;
@@ -139,80 +137,14 @@ namespace DateTimer.WPF.View
             }
         }
 
-        private void ETToggle_Toggled(object sender, RoutedEventArgs e)
-        {
-            if (isInit) return;
-            if (ETToggle.IsOn)
-            {
-                _appSetting.EnableTarget = true;
-                TargetExpanderGrid.IsEnabled = true;
-                TargetExpander.IsExpanded = true;
-            }
-            else
-            {
-                _appSetting.EnableTarget = false;
-                TargetExpanderGrid.IsEnabled = false;
-                TargetExpander.IsExpanded = false;
-            }
-            WriteCurSetting();
-            (Application.Current.MainWindow as MainWindow)._homePage.ReloadSettings();
-        }
-
-        private void TargetNameTb_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (isInit) return;
-            if (TargetNameTb.Text == string.Empty) _appSetting.TargetName = null;
-            else _appSetting.TargetName = TargetNameTb.Text;
-            WriteCurSetting();
-            (Application.Current.MainWindow as MainWindow)._homePage.ReloadSettings();
-        }
-
-        private void TargetPick_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (isInit) return;
-            _appSetting.TargetDate = TargetPick.SelectedDate?.ToString("yyyy/MM/dd");
-            WriteCurSetting();
-            (Application.Current.MainWindow as MainWindow)._homePage.ReloadSettings();
-        }
-
-        private void ANToggle_Toggled(object sender, RoutedEventArgs e)
-        {
-            if (isInit) return;
-            if (ANToggle.IsOn)
-            {
-                _appSetting.EnableAdvancedNotice = true;
-                NoticeExpanderGrid.IsEnabled = true;
-                NoticeExpander.IsExpanded = true;
-            }
-            else
-            {
-                _appSetting.EnableAdvancedNotice = false;
-                NoticeExpanderGrid.IsEnabled = false;
-                NoticeExpander.IsExpanded = false;
-            }
-            WriteCurSetting();
-        }
-
-        private void AdvanceNb_ValueChanged(NumberBox sender, NumberBoxValueChangedEventArgs args)
-        {
-            if (isInit) return;
-            int value = (int)args.NewValue;
-            if (value <= 0)
-                value = 1;
-            else if (value > 60)
-                value = 60;
-            _appSetting.AdvancedMinutes = value;
-            AdvanceNb.Value = value;
-            WriteCurSetting();
-        }
-
+        // 亮暗色
         private void ThemeSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            string NewTheme = "Light";
+            string NewTheme;
             if (isInit || ThemeSelector.SelectedIndex < 0) return;
             if (ThemeSelector.SelectedIndex == 0)
             {
-                RegistryKey key = 
+                RegistryKey key =
                     Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize");
                 if (key == null)
                 {
@@ -255,42 +187,40 @@ namespace DateTimer.WPF.View
             WriteCurSetting();
         }
 
+        // 设置窗口主题
         private void BackdropSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (isInit || BackdropSelector.SelectedIndex < 0) return;
-            string NewBackdrop = "None";
-            if (BackdropSelector.SelectedIndex == 0)
-            {
-                NewBackdrop = "None";
-                WindowHelper.SetSystemBackdropType(Application.Current.MainWindow, BackdropType.None);
-                WindowHelper.SetSystemBackdropType(App._timerWindow, BackdropType.None);
-                WindowHelper.SetSystemBackdropType(App._noticeWindow, BackdropType.None);
-            }
-            else if (BackdropSelector.SelectedIndex == 1)
+            string NewBackdrop;
+            if (BackdropSelector.SelectedIndex == 1) // 云母
             {
                 NewBackdrop = "Mica";
                 WindowHelper.SetSystemBackdropType(Application.Current.MainWindow, BackdropType.Mica);
                 WindowHelper.SetSystemBackdropType(App._timerWindow, BackdropType.Mica);
-                WindowHelper.SetSystemBackdropType(App._noticeWindow, BackdropType.Mica);
             }
-            else if (BackdropSelector.SelectedIndex == 2)
+            else if (BackdropSelector.SelectedIndex == 2) // 亚克力
             {
                 NewBackdrop = "Acrylic";
                 WindowHelper.SetSystemBackdropType(Application.Current.MainWindow, BackdropType.Acrylic11);
                 WindowHelper.SetSystemBackdropType(App._timerWindow, BackdropType.Acrylic11);
-                WindowHelper.SetSystemBackdropType(App._noticeWindow, BackdropType.Acrylic11);
             }
-            else
+            else if (BackdropSelector.SelectedIndex == 3) // 云母 Alt
             {
                 NewBackdrop = "MicaAlt";
                 WindowHelper.SetSystemBackdropType(Application.Current.MainWindow, BackdropType.Tabbed);
                 WindowHelper.SetSystemBackdropType(App._timerWindow, BackdropType.Tabbed);
-                WindowHelper.SetSystemBackdropType(App._noticeWindow, BackdropType.Tabbed);
+            }
+            else // 无
+            {
+                NewBackdrop = "None";
+                WindowHelper.SetSystemBackdropType(Application.Current.MainWindow, BackdropType.None);
+                WindowHelper.SetSystemBackdropType(App._timerWindow, BackdropType.None);
             }
             _appSetting.BackDrop = NewBackdrop;
             WriteCurSetting();
         }
 
+        // 生成报告
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
             string ReportStr = string.Empty;
@@ -301,8 +231,7 @@ namespace DateTimer.WPF.View
                     $"\n系统版本: {SystemInfo.GetWinVer()}" +
                     $"\n系统位数: {SystemInfo.GetBit()}" +
                     $"\n处理器: {SystemInfo.GetCPUName()}" +
-                    $"\n程序内存占用: {SystemInfo.GetRAMSize()} MB" +
-                    $"\n系统总内存: {SystemInfo.GetTotalRAM()} MB" +
+                    $"\n应用内存占用: {SystemInfo.GetRAMSize()} MB / {SystemInfo.GetTotalRAM()} MB" +
                     $"\n环境: {SystemInfo.GetEnvVer()}";
             });
             ContentDialog contentDialog = new()
@@ -312,9 +241,92 @@ namespace DateTimer.WPF.View
                 PrimaryButtonText = "复制",
                 SecondaryButtonText = "取消"
             };
-            ContentDialogResult a = await contentDialog.ShowAsync();
-            if (a == ContentDialogResult.Primary)
-                Clipboard.SetText(ReportStr);
+            if (await contentDialog.ShowAsync() == ContentDialogResult.Primary) Clipboard.SetText(ReportStr);
+            ReportStr = string.Empty;
+            contentDialog = null;
+        }
+
+
+        // 倒计时显示
+        private void ETToggle_Toggled(object sender, RoutedEventArgs e)
+        {
+            if (isInit) return;
+            if (ETToggle.IsOn)
+            {
+                _appSetting.EnableTarget = true;
+                TargetExpanderGrid.IsEnabled = true;
+                TargetExpander.IsExpanded = true;
+            }
+            else
+            {
+                _appSetting.EnableTarget = false;
+                TargetExpanderGrid.IsEnabled = false;
+                TargetExpander.IsExpanded = false;
+            }
+            WriteCurSetting();
+            (Application.Current.MainWindow as MainWindow)._homePage.ReloadSettings();
+        }
+
+        // 倒计时目标名称
+        private void TargetNameTb_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (isInit) return;
+            if (TargetNameTb.Text == string.Empty) _appSetting.TargetName = null;
+            else _appSetting.TargetName = TargetNameTb.Text;
+            WriteCurSetting();
+            (Application.Current.MainWindow as MainWindow)._homePage.ReloadSettings();
+        }
+
+        // 倒计时目标日期
+        private void TargetPick_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (isInit) return;
+            _appSetting.TargetDate = TargetPick.SelectedDate?.ToString("yyyy/MM/dd");
+            WriteCurSetting();
+            (Application.Current.MainWindow as MainWindow)._homePage.ReloadSettings();
+        }
+
+        // 显示 2 周内目标星期日
+        private void TWToggle_Toggled(object sender, RoutedEventArgs e)
+        {
+            if (isInit) return;
+            _appSetting.EnableTargetWeekday = TWToggle.IsOn;
+            WriteCurSetting();
+            (Application.Current.MainWindow as MainWindow)._homePage.ReloadSettings();
+        }
+
+
+        // 提前提醒
+        private void ANToggle_Toggled(object sender, RoutedEventArgs e)
+        {
+            if (isInit) return;
+            if (ANToggle.IsOn)
+            {
+                _appSetting.EnableAdvancedNotice = true;
+                NoticeExpanderGrid.IsEnabled = true;
+                NoticeExpander.IsExpanded = true;
+            }
+            else
+            {
+                _appSetting.EnableAdvancedNotice = false;
+                NoticeExpanderGrid.IsEnabled = false;
+                NoticeExpander.IsExpanded = false;
+            }
+            WriteCurSetting();
+        }
+
+        // 提前提醒分钟数
+        private void AdvanceNb_ValueChanged(NumberBox sender, NumberBoxValueChangedEventArgs args)
+        {
+            if (isInit) return;
+            int value = (int)args.NewValue;
+            if (value <= 0)
+                value = 1;
+            else if (value > 60)
+                value = 60;
+            _appSetting.AdvancedMinutes = value;
+            AdvanceNb.Value = value;
+            WriteCurSetting();
         }
     }
 }

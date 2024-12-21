@@ -11,20 +11,23 @@
                 <ui:XamlControlsResources/>
             </ResourceDictionary.MergedDictionaries>
             <FontFamily x:Key="DefaFont">/DateTimer.WPF;Component/Data/Fonts/#Segoe UI</FontFamily>
-
             <tb:TaskbarIcon x:Key="Taskbar" IconSource="/DateTimer.WPF;Component/Data/icon.ico">
                 <tb:TaskbarIcon.DataContext>
                     <local:NotifyIconViewModel />
                 </tb:TaskbarIcon.DataContext>
                 <tb:TaskbarIcon.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="显示主窗口" Command="{Binding ShowMWindowCommand}" />
+                        <MenuItem Header="显示主窗口" Command="{Binding ShowMWindowCommand}"/>
                         <MenuItem Header="隐藏主窗口" Command="{Binding HideMWindowCommand}" />
                         <Separator />
                         <MenuItem Header="显示时间表" Command="{Binding ShowTWindowCommand}" />
                         <MenuItem Header="隐藏时间表" Command="{Binding HideTWindowCommand}" />
                         <Separator />
-                        <MenuItem Header="退出" Command="{Binding ExitApplicationCommand}" />
+                        <MenuItem Header="退出" Command="{Binding ExitApplicationCommand}">
+                            <MenuItem.Icon>
+                                <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Clear}"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
                     </ContextMenu>
                 </tb:TaskbarIcon.ContextMenu>
             </tb:TaskbarIcon>

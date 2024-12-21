@@ -2,7 +2,7 @@
   "Timetables": [
     {
       "Date": null,
-      "Weekday": "1/2/3/4/5/6/7",
+      "Weekday": null,
       "Tables": [
         {
           "Name": "时间表样式",

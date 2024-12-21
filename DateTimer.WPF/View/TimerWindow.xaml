@@ -37,7 +37,7 @@
         <Border Background="{DynamicResource {x:Static ui:ThemeKeys.ExpanderHeaderBackgroundKey}}" 
          BorderBrush="{DynamicResource {x:Static ui:ThemeKeys.ExpanderHeaderBorderBrushKey}}"
          BorderThickness="{DynamicResource {x:Static ui:ThemeKeys.ExpanderHeaderBorderThicknessKey}}"
-         CornerRadius="4" Padding="5" Margin="10" Grid.Row="2">
+         CornerRadius="4" Padding="0" Margin="8" Grid.Row="2">
             <ListView x:Name="TimetableView">
                 <ListView.ItemTemplate>
                     <DataTemplate DataType="local:TableSource">

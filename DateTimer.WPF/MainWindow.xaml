@@ -27,7 +27,7 @@
             <Image Width="20" Height="20" Margin="8,0,0,0" Grid.Column="0" RenderOptions.BitmapScalingMode="HighQuality"
                      Source="Data/icon.png" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <StackPanel Grid.Column="1" Orientation="Horizontal">
-                <TextBlock Text="DateTimer 2" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                <TextBlock Text="木沪时间表 2" VerticalAlignment="Center" Margin="0,0,10,0"/>
                 <TextBlock Text="Beta" Foreground="Orange" VerticalAlignment="Center" Margin="0,0,10,0"/>
                 <TextBlock Text="控制台" Foreground="#00DDAA" VerticalAlignment="Center"/>
             </StackPanel>
@@ -45,7 +45,7 @@
                         <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.CalendarSolid}" FontSize="16"/>
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
-                <ui:NavigationViewItem Tag="DateTimer.WPF.View.TodoPage" Content="待办">
+                <ui:NavigationViewItem IsEnabled="False" Tag="DateTimer.WPF.View.TodoPage" Content="待办">
                     <ui:NavigationViewItem.Icon>
                         <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.PageSolid}" FontSize="16"/>
                     </ui:NavigationViewItem.Icon>

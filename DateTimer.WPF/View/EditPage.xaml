@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:DateTimer.WPF.View"
       mc:Ignorable="d" 
       xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
-      Height="356" d:Width="560"
+      Height="356" d:Width="650"
       d:Background="#F0F0F0"
       FontFamily="{StaticResource DefaFont}"
       Title="EditPage">
@@ -15,7 +15,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="42"/>
             <RowDefinition/>
-            <RowDefinition Height="64"/>
+            <RowDefinition Height="54"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" >
             <Grid.ColumnDefinitions>
@@ -34,7 +34,7 @@
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="4*"/>
             </Grid.ColumnDefinitions>
-            <ui:ListView Margin="10" Grid.Column="0">
+            <ui:ListView Margin="6" Grid.Column="0">
                 <ui:ListView.Items>
                     <ui:ListViewItem FontSize="12" Content="ListViewItem"/>
                     <ui:ListViewItem FontSize="12" Content="ListViewItem"/>
@@ -48,9 +48,10 @@
             </ui:ListView>
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="85"/>
-                    <RowDefinition Height="160"/>
+                    <RowDefinition Height="80"/>
+                    <RowDefinition Height="180"/>
                 </Grid.RowDefinitions>
+                <!--日期控制板-->
                 <Border Background="{DynamicResource {x:Static ui:ThemeKeys.ExpanderHeaderBackgroundKey}}" 
                  BorderBrush="{DynamicResource {x:Static ui:ThemeKeys.ExpanderHeaderBorderBrushKey}}"
                  BorderThickness="{DynamicResource {x:Static ui:ThemeKeys.ExpanderHeaderBorderThicknessKey}}"
@@ -75,6 +76,7 @@
                         </StackPanel>
                     </Grid>
                 </Border>
+                <!--单元时间控制板-->
                 <Border Grid.Row="1" Background="{DynamicResource {x:Static ui:ThemeKeys.ExpanderHeaderBackgroundKey}}" 
                  BorderBrush="{DynamicResource {x:Static ui:ThemeKeys.ExpanderHeaderBorderBrushKey}}"
                  BorderThickness="{DynamicResource {x:Static ui:ThemeKeys.ExpanderHeaderBorderThicknessKey}}"
@@ -86,19 +88,27 @@
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="36"/>
-                                <RowDefinition Height="36"/>
-                                <RowDefinition Height="36"/>
-                                <RowDefinition Height="36"/>
+                                <RowDefinition Height="38"/>
+                                <RowDefinition Height="38"/>
+                                <RowDefinition Height="38"/>
+                                <RowDefinition Height="38"/>
                             </Grid.RowDefinitions>
-                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="开始" Grid.Row="0" Grid.Column="0"/>
-                            <ui:TimePicker Name="TPStart" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1" Width="160"/>
-                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="结束" Grid.Row="1" Grid.Column="0"/>
-                            <ui:TimePicker Name="TPEnd" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1" Width="160" SelectedTimeFormat="Short" />
-                            <TextBlock Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Text="事件"/>
-                            <TextBlock Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" Text="提醒"/>
-                            <TextBox Grid.Column="1" Grid.Row="2"  HorizontalAlignment="Stretch" VerticalAlignment="Center" Name="ElementTb" d:Text="114514"/>
-                            <TextBox Grid.Column="1" Grid.Row="3"  HorizontalAlignment="Stretch" VerticalAlignment="Center" Name="NoticeTb" d:Text="1919810"/>
+                            <Grid Grid.Row="0" Grid.ColumnSpan="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="38"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="38"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="开始" Grid.Column="0"/>
+                                <TextBox Name="TPStart" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Column="1" Width="90"/>
+                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="结束" Grid.Column="2"/>
+                                <TextBox Name="TPEnd" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Column="3" Width="90"/>
+                            </Grid>
+                            <TextBlock Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="事件"/>
+                            <TextBlock Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Text="提醒"/>
+                            <TextBox Grid.Column="1" Grid.Row="1"  HorizontalAlignment="Stretch" VerticalAlignment="Center" Name="ElementTb" d:Text="114514"/>
+                            <TextBox Grid.Column="1" Grid.Row="2"  HorizontalAlignment="Stretch" VerticalAlignment="Center" Name="NoticeTb" d:Text="1919810"/>
                         </Grid>
                     </StackPanel>
                 </Border>

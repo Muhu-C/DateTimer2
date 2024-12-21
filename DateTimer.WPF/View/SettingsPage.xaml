@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:DateTimer.WPF.View"
       mc:Ignorable="d" 
       xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
-      d:DesignHeight="1360" d:Width="600"
+      d:DesignHeight="1660" d:Width="600"
       d:Background="#F0F0F0"
       Loaded="Page_Loaded"
       FontFamily="{StaticResource DefaFont}"
@@ -71,7 +71,7 @@
                 </Grid.RowDefinitions>
                 <TextBlock Margin="0,0,0,10" Grid.Row="0" Grid.Column="0" FontSize="15" Text="目标时间" VerticalAlignment="Center"/>
                 <DatePicker SelectedDateChanged="TargetPick_SelectedDateChanged" Name="TargetPick" Margin="0,0,0,10" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="1" Grid.Column="0" FontSize="15" Text="目标名称(请控制好字数，否则会出现排版问题)" Margin="0,0,0,10" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="1" Grid.Column="0" FontSize="15" Text="目标名称(请控制字数，否则会出现排版问题)" Margin="0,0,0,10" VerticalAlignment="Center"/>
                 <TextBox TextChanged="TargetNameTb_TextChanged" Name="TargetNameTb" Grid.Row="1" Grid.Column="1" Margin="0,0,0,10" VerticalAlignment="Center" HorizontalAlignment="Right" Width="140"/>
                 <TextBlock Grid.Row="2" Grid.Column="0" FontSize="15" VerticalAlignment="Center" Text="显示 2 周内目标星期日"/>
                 <Grid Grid.Row="2" Grid.Column="1">
@@ -97,7 +97,7 @@
                     <ui:FontIcon Margin="0,0,10,0" Icon="{x:Static ui:SegoeFluentIcons.Ringer}"/>
                     <StackPanel VerticalAlignment="Center" Grid.Column="1">
                         <TextBlock FontSize="16" Text="提前提醒"/>
-                        <TextBlock FontSize="12" Text="到点前指定时间提醒"/>
+                        <TextBlock FontSize="12" Text="某一时段开始前指定时间提醒"/>
                     </StackPanel>
                     <ui:ToggleSwitch Toggled="ANToggle_Toggled" Name="ANToggle" Grid.Column="2"/>
                 </Grid>
@@ -111,7 +111,7 @@
                 <ui:NumberBox ValueChanged="AdvanceNb_ValueChanged" Name="AdvanceNb" PlaceholderText="分钟数 1~60" SpinButtonPlacementMode="Inline" Grid.Column="1" HorizontalAlignment="Right" Width="200"/>
             </Grid>
         </Expander>
-        <TextBlock Margin="0,20,0,5" FontSize="16" Text="程序设置"/>
+        <TextBlock Margin="0,20,0,5" FontSize="16" Text="应用设置"/>
         <Border Background="{DynamicResource {x:Static ui:ThemeKeys.ExpanderHeaderBackgroundKey}}" 
  BorderBrush="{DynamicResource {x:Static ui:ThemeKeys.ExpanderHeaderBorderBrushKey}}"
  BorderThickness="{DynamicResource {x:Static ui:ThemeKeys.ExpanderHeaderBorderThicknessKey}}"
@@ -125,7 +125,7 @@
                 <ui:FontIcon Margin="0,0,10,0" Icon="{x:Static ui:SegoeFluentIcons.PowerButton}"/>
                 <StackPanel Grid.Column="1">
                     <TextBlock FontSize="16" Text="控制台显示"/>
-                    <TextBlock FontSize="12" Text="程序开启时，是否显示控制台窗口"/>
+                    <TextBlock FontSize="12" Text="应用开启时，是否显示控制台窗口"/>
                 </StackPanel>
                 <ui:ToggleSwitch Grid.Column="2" Name="EMToggle" Toggled="EMToggle_Toggled"/>
             </Grid>
@@ -188,7 +188,7 @@
                     </Grid.ColumnDefinitions>
                     <ui:FontIcon Margin="0,0,10,0" Icon="{x:Static ui:SegoeFluentIcons.Info}"/>
                     <StackPanel VerticalAlignment="Center" Grid.Column="1">
-                        <TextBlock FontSize="16" Text="关于本程序"/>
+                        <TextBlock FontSize="16" Text="关于本应用"/>
                         <TextBlock FontSize="12" Text="DateTimer 2"/>
                     </StackPanel>
                 </Grid>
@@ -241,8 +241,8 @@
                         <ui:HyperlinkButton Grid.Column="1" NavigateUri="https://space.bilibili.com/1469137723" Content="MC118CN"/>
                         <TextBlock TextWrapping="Wrap" Grid.Column="2" VerticalAlignment="Center" Text="2024 ~ 2025 All Rights Reserved."/>
                     </Grid>
-                    <TextBlock TextWrapping="Wrap" Text="本程序为开源程序，代码托管于 Github , 转载请标明出处！" />
-                    <TextBlock TextWrapping="Wrap" Text="禁止倒卖本程序，未经授权而擅自复制或传播本程序者必究！"/>
+                    <TextBlock TextWrapping="Wrap" Text="本应用为开源程序，代码托管于 Github , 转载请标明出处！" />
+                    <TextBlock TextWrapping="Wrap" Text="禁止倒卖本应用，未经授权而擅自复制或传播本程序者必究！"/>
                     <TextBlock Margin="0,0,0,10" TextWrapping="Wrap" Text="若出现此现象，请告知 E-mail: muhu-c@outlook.com"/>
                     <TextBlock Margin="0,0,0,10" Text="用到的开源项目"/>
                     <Grid>

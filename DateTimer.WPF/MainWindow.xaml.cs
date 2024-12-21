@@ -4,6 +4,8 @@ using System.Windows;
 using DateTimer.WPF.View;
 using Microsoft.Win32;
 using iNKORE.UI.WPF.Modern;
+using iNKORE.UI.WPF.Modern.Helpers.Styles;
+using iNKORE.UI.WPF.Modern.Controls.Helpers;
 
 namespace DateTimer.WPF
 {
@@ -12,10 +14,10 @@ namespace DateTimer.WPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        public HomePage _homePage = new HomePage();
-        public SettingsPage _settingsPage = new SettingsPage();
-        public TodoPage _todoPage = new TodoPage();
-        public EditPage _editPage = new EditPage();
+        public HomePage _homePage = new ();
+        public SettingsPage _settingsPage = new ();
+        public TodoPage _todoPage = new ();
+        public EditPage _editPage = new ();
 
         public MainWindow()
         {
@@ -26,22 +28,10 @@ namespace DateTimer.WPF
             // 设置背景样式
             switch (SettingsPage._appSetting.BackDrop)
             {
-                case "Mica":
-                    iNKORE.UI.WPF.Modern.Controls.Helpers.
-                    WindowHelper.SetSystemBackdropType(this, iNKORE.UI.WPF.Modern.Helpers.Styles.BackdropType.Mica);
-                    break;
-                case "MicaAlt":
-                    iNKORE.UI.WPF.Modern.Controls.Helpers.
-                    WindowHelper.SetSystemBackdropType(this, iNKORE.UI.WPF.Modern.Helpers.Styles.BackdropType.Tabbed);
-                    break;
-                case "Acrylic":
-                    iNKORE.UI.WPF.Modern.Controls.Helpers.
-                    WindowHelper.SetSystemBackdropType(this, iNKORE.UI.WPF.Modern.Helpers.Styles.BackdropType.Acrylic11);
-                    break;
-                case "None":
-                    iNKORE.UI.WPF.Modern.Controls.Helpers.
-                    WindowHelper.SetSystemBackdropType(this, iNKORE.UI.WPF.Modern.Helpers.Styles.BackdropType.None);
-                    break;
+                case "Mica": WindowHelper.SetSystemBackdropType(this, BackdropType.Mica); break;
+                case "MicaAlt": WindowHelper.SetSystemBackdropType(this, BackdropType.Tabbed); break;
+                case "Acrylic": WindowHelper.SetSystemBackdropType(this, BackdropType.Acrylic11); break;
+                case "None": WindowHelper.SetSystemBackdropType(this, BackdropType.None); break;
             }
         }
 
@@ -52,6 +42,7 @@ namespace DateTimer.WPF
                 ThemeManager.Current.AccentColor = SystemParameters.WindowGlassColor;
         }
 
+        // 切换页面
         private void NavigationItemChanged(NavigationView s, NavigationViewItemInvokedEventArgs e)
         {
             if (e.InvokedItemContainer == null) return;
@@ -80,9 +71,9 @@ namespace DateTimer.WPF
         private async void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             e.Cancel = true;
-            ContentDialog closeDialog = new ContentDialog
+            ContentDialog closeDialog = new()
             {
-                Title = "确定关闭程序?",
+                Title = "确定关闭应用?",
                 Content = "按\"是\"关闭\n按\"否\"将窗口隐藏到托盘",
                 PrimaryButtonText = "是",
                 SecondaryButtonText = "否",

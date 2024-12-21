@@ -5,7 +5,7 @@
   "TargetName": null,
   "EnableTargetWeekday": false,
   "EnableMainWindowShow": true,
-  "BackDrop": "Mica",
+  "BackDrop": "None",
   "TimeTablePath": null,
   "EnableAdvancedNotice": false,
   "AdvancedMinutes": 10

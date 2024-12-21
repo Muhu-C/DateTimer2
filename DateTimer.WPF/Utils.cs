@@ -1,10 +1,8 @@
 ﻿using DateTimer.WPF.View;
-using Microsoft.Win32;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using System.Linq;
 using System.Management;
@@ -23,8 +21,7 @@ namespace DateTimer.WPF
             /// <param name="Path">存放位置</param>
             public static void WriteFile(string Text, string Path)
             {
-                using (StreamWriter sw = new StreamWriter(Path, false, Encoding.UTF8))
-                    sw.Write(Text);
+                using StreamWriter sw = new (Path, false, Encoding.UTF8); sw.Write(Text);
             }
 
             /// <summary> 用流读取文件 </summary>
@@ -32,40 +29,8 @@ namespace DateTimer.WPF
             /// <returns></returns>
             public static string ReadFile(string Path)
             {
-                using (StreamReader sr = new StreamReader(Path))
-                    return sr.ReadToEnd();
-            }
-
-            /// <summary> 将 json 字符串格式化 </summary>
-            /// <param name="oldjson">单行 json 字符串</param>
-            /// <returns>格式化后的 json 字符串</returns>
-            public static string Json_Optimization(string oldjson)
-            {
-                int l = 0, k = 0;
-                bool isInString = false;
-                string newjson = string.Empty;
-                foreach (char c in oldjson)
-                {
-                    if (c == '\"') isInString = !isInString;
-                    newjson += c;
-                    if (c == '{' && !isInString)
-                    {
-                        l++; newjson += '\n';
-                        for (int i = 1; i <= l; i++) newjson += "    ";
-                    }
-                    else if (oldjson.Length > k + 1 && oldjson[k + 1] == '}' && !isInString)
-                    {
-                        l--; newjson += '\n';
-                        for (int i = 1; i <= l; i++) newjson += "    ";
-                    }
-                    else if (c == ',' && !isInString)
-                    {
-                        newjson += '\n';
-                        for (int i = 1; i <= l; i++) newjson += "    ";
-                    }
-                    k++;
-                }
-                return newjson;
+                using StreamReader sr = new (Path);
+                return sr.ReadToEnd();
             }
         }
 
@@ -81,11 +46,7 @@ namespace DateTimer.WPF
 
             public static string NumToWeekday(string num)
             {
-                string numStr = "12345670";
-                string chineseStr = "一二三四五六日日";
-                int numIndex = numStr.IndexOf(num);
-                if (numIndex > -1)
-                    return chineseStr.Substring(numIndex, 1);
+                if ("12345670".IndexOf(num) > -1) return "一二三四五六日日".Substring("12345670".IndexOf(num), 1);
                 return string.Empty;
             }
 
@@ -154,7 +115,7 @@ namespace DateTimer.WPF
                 return JsonConvert.DeserializeObject<TimeTableFile>(FileProcess.ReadFile(Path));
             }
 
-            public static bool isTableShowable(List<Table> tables)
+            public static bool IsTableShowable(List<Table> tables)
             {
                 foreach (Table table in tables)
                 {
@@ -295,7 +256,7 @@ namespace DateTimer.WPF
                 "考", "看", "有", "听", "到",
                 "写", "去", "存", "取", "读",
                 "吃", "喝", "编", "找", "跳",
-                "跑", "走", "肝", "退", "进",
+                "跑", "走", "退", "进", "来",
                 "赶", "放", "开", "关", "能",
                 "会", "拿", "丢", "做", "说",
                 "开始", "结束", "停止", "复习", "预习", "到达"
@@ -332,9 +293,8 @@ namespace DateTimer.WPF
         /// <returns>Windows 版本字符串</returns>
         public static string GetWinVer()
         {
-            string Version = $"{Environment.OSVersion.Version.Major}.{Environment.OSVersion.Version.Minor}";
             string WinVer;
-            switch (Version)
+            switch ($"{Environment.OSVersion.Version.Major}.{Environment.OSVersion.Version.Minor}")
             {
                 case "6.0":
                     WinVer = $"Windows Vista Build {Environment.OSVersion.Version.Build}"; break;
@@ -349,7 +309,7 @@ namespace DateTimer.WPF
                     else WinVer = $"Windows 10 Build {Environment.OSVersion.Version.Build}"; 
                     break;
                 default:
-                    WinVer = $"Windows NT {Version} Build {Environment.OSVersion.Version.Build}"; break;
+                    WinVer = $"Windows NT {Environment.OSVersion.Version.Major}.{Environment.OSVersion.Version.Minor} Build {Environment.OSVersion.Version.Build}"; break;
             }
             return WinVer;
         }
@@ -384,8 +344,7 @@ namespace DateTimer.WPF
 
         public static double GetRAMSize()
         {
-            Process process = Process.GetCurrentProcess();
-            return 1.0000*process.PrivateMemorySize64 / 1024 / 1024;
+            return 1.0000*Process.GetCurrentProcess().PrivateMemorySize64 / 1024 / 1024;
         }
 
         public static int GetTotalRAM()
