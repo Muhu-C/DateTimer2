@@ -12,7 +12,7 @@
         FontFamily="{StaticResource DefaFont}"
         ui:WindowHelper.UseModernWindowStyle="True"
         ui:WindowHelper.SystemBackdropType="Mica"
-        Title="DateTimer 2" MinHeight="450" MinWidth="700" MaxHeight="450" MaxWidth="700">
+        Title="木沪时间表 2" MinHeight="450" MinWidth="700" MaxHeight="450" MaxWidth="700">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
@@ -45,7 +45,7 @@
                         <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.CalendarSolid}" FontSize="16"/>
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
-                <ui:NavigationViewItem IsEnabled="False" Tag="DateTimer.WPF.View.TodoPage" Content="待办">
+                <ui:NavigationViewItem Tag="DateTimer.WPF.View.TodoPage" Content="待办">
                     <ui:NavigationViewItem.Icon>
                         <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.PageSolid}" FontSize="16"/>
                     </ui:NavigationViewItem.Icon>
