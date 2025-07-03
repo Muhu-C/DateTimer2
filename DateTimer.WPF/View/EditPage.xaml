@@ -19,17 +19,21 @@
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="120"/>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="60"/>
                 <ColumnDefinition Width="65"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="文件位置" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <ScrollViewer Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalAlignment="Center">
+            <TextBlock FontSize="14" Text="时间表文件位置" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+            <ScrollViewer Margin="15,0,0,0" Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalAlignment="Center">
                 <TextBlock VerticalAlignment="Center" x:Name="PosText"/>
             </ScrollViewer>
-            <Button Content="选择" Name="ChooseTable" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Click="ChooseTable_Click"/>
-            <Button Content="新建" Name="CreateTable" Grid.Column="3" HorizontalAlignment="Left" Click="CreateTable_Click"/>
+            <Button FontSize="14" Content="选择" Name="ChooseTable" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Click="ChooseTable_Click"/>
+            <Button Name="CreateTable" ToolTip="新建时间表" Grid.Column="3" HorizontalAlignment="Left" Click="CreateTable_Click">
+                <Button.Content>
+                    <ui:FontIcon FontSize="16" Icon="{x:Static ui:SegoeFluentIcons.Add}" />
+                </Button.Content>
+            </Button>
         </Grid>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -46,7 +50,7 @@
                 <Border Background="{DynamicResource {x:Static ui:ThemeKeys.ExpanderHeaderBackgroundKey}}" 
                  BorderBrush="{DynamicResource {x:Static ui:ThemeKeys.ExpanderHeaderBorderBrushKey}}"
                  BorderThickness="{DynamicResource {x:Static ui:ThemeKeys.ExpanderHeaderBorderThicknessKey}}"
-                 CornerRadius="4" Padding="10,6,10,10" Margin="0,0,10,0">
+                 CornerRadius="4" Name="UpperControlPanel" Padding="10,6,10,10" Margin="0,0,10,0">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="76"/>
@@ -59,17 +63,17 @@
                         </Grid.RowDefinitions>
                         <TextBlock FontSize="14" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Text="时间表"/>
                         <TextBlock FontSize="14" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Text="选中时间段"/>
-                        <TextBlock Grid.Row="1" Grid.Column="1" Margin="10,0,0,0" Grid.ColumnSpan="2" HorizontalAlignment="Left" VerticalAlignment="Center" d:Text="7:00 ~ 8:30" Name="TPSelSpan"/>
+                        <TextBlock FontSize="14" Grid.Row="1" Grid.Column="1" Margin="10,0,0,0" Grid.ColumnSpan="2" HorizontalAlignment="Left" VerticalAlignment="Center" d:Text="7:00 ~ 8:30" Name="TPSelSpan"/>
                         <ComboBox FontSize="12" HorizontalAlignment="Left" Width="120" Name="TimeSel" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" SelectionChanged="TimeSel_SelectionChanged"/>
                         <StackPanel Grid.Row="0" HorizontalAlignment="Right" Orientation="Horizontal" Grid.Column="2">
                             <Button ToolTip="新建日期" Name="AddDay" Click="AddDay_Click">
-                                <ui:FontIcon FontSize="12" Icon="{x:Static ui:SegoeFluentIcons.Add}"/>
+                                <ui:FontIcon FontSize="14" Icon="{x:Static ui:SegoeFluentIcons.Add}"/>
                             </Button>
                             <Button ToolTip="编辑选中日期" Name="EditDay" Margin="5,0,0,0" Click="EditDay_Click">
-                                <ui:FontIcon FontSize="12" Icon="{x:Static ui:SegoeFluentIcons.Edit}"/>
+                                <ui:FontIcon FontSize="14" Icon="{x:Static ui:SegoeFluentIcons.Edit}"/>
                             </Button>
                             <Button ToolTip="删除选中日期" Name="DelDay" Margin="5,0,0,0" Foreground="Red" Click="DelDay_Click">
-                                <ui:FontIcon FontSize="12" Icon="{x:Static ui:SegoeFluentIcons.Delete}"/>
+                                <ui:FontIcon FontSize="14" Icon="{x:Static ui:SegoeFluentIcons.Delete}"/>
                             </Button>
                         </StackPanel>
                     </Grid>
@@ -78,11 +82,11 @@
                 <Border Grid.Row="1" Background="{DynamicResource {x:Static ui:ThemeKeys.ExpanderHeaderBackgroundKey}}" 
                  BorderBrush="{DynamicResource {x:Static ui:ThemeKeys.ExpanderHeaderBorderBrushKey}}"
                  BorderThickness="{DynamicResource {x:Static ui:ThemeKeys.ExpanderHeaderBorderThicknessKey}}"
-                 CornerRadius="4" Padding="5,10,10,10" Margin="0,0,10,0" Name="ControlPanel">
+                 CornerRadius="4" Padding="5,5,10,10" Margin="0,0,10,0" Name="ControlPanel">
                     <StackPanel>
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="38"/>
+                                <ColumnDefinition Width="80"/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
@@ -91,12 +95,12 @@
                                 <RowDefinition Height="38"/>
                                 <RowDefinition Height="38"/>
                             </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" FontSize="13" HorizontalAlignment="Center" VerticalAlignment="Center" Text="开始" Grid.Column="0"/>
+                            <TextBlock Grid.Row="0" FontSize="13" HorizontalAlignment="Left" Margin="5,0,0,0"  VerticalAlignment="Center" Text="开始时间" Grid.Column="0"/>
                             <ui:TimePicker Grid.Row="0" Grid.Column="1" FontSize="13" SelectedTimeFormat="Long"  Name="TPStart" VerticalAlignment="Center" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" SelectedDateTimeChanged="TPStart_TextChanged"/>
-                            <TextBlock Grid.Row="1" Grid.Column="0" FontSize="13" HorizontalAlignment="Center" VerticalAlignment="Center" Text="结束"/>
+                            <TextBlock Grid.Row="1" Grid.Column="0" FontSize="13" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Text="结束时间"/>
                             <ui:TimePicker Grid.Row="1" Grid.Column="1" FontSize="13" Name="TPEnd" VerticalAlignment="Center" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" SelectedDateTimeChanged="TPEnd_TextChanged"/>
-                            <TextBlock FontSize="13" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Text="事件"/>
-                            <TextBlock FontSize="13" Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" Text="提醒"/>
+                            <TextBlock FontSize="13" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Text="事件"/>
+                            <TextBlock FontSize="13" Grid.Column="0" Grid.Row="3" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Text="提醒"/>
                             <TextBox FontSize="13" Grid.Column="1" Grid.Row="2"  HorizontalAlignment="Stretch" VerticalAlignment="Center" VerticalContentAlignment="Center" Name="TPElement" d:Text="114514" TextChanged="TPElement_TextChanged"/>
                             <TextBox FontSize="13" Grid.Column="1" Grid.Row="3"  HorizontalAlignment="Stretch" VerticalAlignment="Center" VerticalContentAlignment="Center" Name="TPNotice" d:Text="1919810" TextChanged="TPNotice_TextChanged"/>
                         </Grid>
@@ -105,11 +109,37 @@
             </Grid>
         </Grid>
         <Grid Grid.Row="2">
-            <StackPanel Margin="10" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                <Button Name="TPDel" Margin="5,0,0,0" Foreground="Red" Content="删除时间段" Click="TPDel_Click"/>
-                <Button Name="TPNew" Margin="5,0,0,0" Content="新建时间段" Click="TPNew_Click"/>
-                <Button Name="TableSave" Margin="5,0,5,0" Content="保存" Click="TableSave_Click"/>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" Margin="10,0,0,0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <Button Name="TPDel" Height="40" Margin="5,0,0,0" Foreground="Red" Click="TPDel_Click">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <ui:FontIcon FontSize="16" Icon="{x:Static ui:SegoeFluentIcons.Delete}"/>
+                            <TextBlock Text="删除时间段" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+                <Button Name="TPNew" Height="40" Margin="5,0,0,0" Click="TPNew_Click">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <ui:FontIcon FontSize="16" Icon="{x:Static ui:SegoeFluentIcons.Add}"/>
+                            <TextBlock Text="添加时间段" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+                
             </StackPanel>
+            <Button Grid.Column="1" Height="40" HorizontalAlignment="Right" Name="TableSave" Margin="5,0,15,0" Click="TableSave_Click">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <ui:FontIcon FontSize="16" Icon="{x:Static ui:SegoeFluentIcons.Save}"/>
+                        <TextBlock Text="保存" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
         </Grid>
     </Grid>
 </Page>

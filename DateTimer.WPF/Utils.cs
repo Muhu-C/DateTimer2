@@ -125,15 +125,33 @@ namespace DateTimer.WPF
                 FileProcess.WriteFile(JsonConvert.SerializeObject(file, Formatting.Indented), Path);
             }
 
-            public static bool IsTableShowable(List<Table> tables)
+            public static int IsTableInverted(List<Table> tables)
             {
+                int ind = -1;
                 foreach (Table table in tables)
                 {
+                    ind++;
                     TimeSpan start = TimeSpan.Parse(table.Start);
                     TimeSpan end = TimeSpan.Parse(table.End);
-                    if (start >= end) return false;
+                    if (start >= end) return ind;
                 }
-                return true;
+                return -1;
+            }
+
+            public static List<int> IsTableSorted(List<Table> tables)
+            {
+                List<int> inds = new();
+                int ind = -1;
+                TimeSpan last = TimeSpan.Zero;
+                foreach (Table table in tables)
+                {
+                    ind++;
+                    TimeSpan start = TimeSpan.Parse(table.Start);
+                    if (start < last) inds.Add(ind);
+                    TimeSpan end = TimeSpan.Parse(table.End);
+                    last = end;
+                }
+                return inds;
             }
 
             /// <summary> 获取当前所在时间段 </summary>

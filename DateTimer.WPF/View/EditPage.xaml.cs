@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using static DateTimer.WPF.Utils;
 using static DateTimer.WPF.Utils.TimeTable;
 using MsgBox = iNKORE.UI.WPF.Modern.Controls.MessageBox;
 
@@ -14,11 +15,13 @@ namespace DateTimer.WPF.View
     /// </summary>
     public partial class EditPage : Page
     {
-        private static string timetable_file;                // 选择时间表位置
+        private static string timetable_file;               // 选择时间表位置
         public static List<Timetables> timetables = new (); // 当前编辑的时间表
+        private static bool isInternalChange = false;              // 是否是内部修改
         public EditPage()
         {
             InitializeComponent();
+            UpperControlPanel.Visibility = Visibility.Collapsed;
             ControlPanel.Visibility = Visibility.Collapsed;
             TPDel.Visibility = Visibility.Collapsed;
             TPNew.Visibility = Visibility.Collapsed;
@@ -28,6 +31,8 @@ namespace DateTimer.WPF.View
 
             AddDay.Visibility = Visibility.Collapsed;
             TableSave.Visibility = Visibility.Collapsed;
+
+            PosText.Text = "未选择时间表";
         }
 
         #region 文件操作
@@ -40,9 +45,9 @@ namespace DateTimer.WPF.View
             };
             if ((bool)saveFileDialog.ShowDialog())
             {
-                if(saveFileDialog.SafeFileName == "Settings.json")
+                if (saveFileDialog.SafeFileName == "Settings.json")
                 {
-                    MsgBox.Show("请勿创建设置文件", "错误");
+                    MsgBox.Show("请勿创建设置文件", "提示");
                     return;
                 }
                 WriteTimeTables(new() { Timetables = new() }, saveFileDialog.FileName);
@@ -55,26 +60,23 @@ namespace DateTimer.WPF.View
                 SelDayTimeList.Items.Clear();
                 TimeSel.Items.Clear();
 
-                try
+                GetTimetables(saveFileDialog.FileName); // 尝试读取时间表
+                timetable_file = saveFileDialog.FileName;
+                timetables = GetTimetables(timetable_file).Timetables;
+                if (timetables != null)
                 {
-                    GetTimetables(saveFileDialog.FileName); // 尝试读取时间表
-                    timetable_file = saveFileDialog.FileName;
-                    timetables = GetTimetables(timetable_file).Timetables;
-                    if (timetables != null)
+                    foreach (var timetable in timetables)
                     {
-                        foreach (var timetable in timetables)
-                        {
-                            if (timetable.Date != null)
-                                TimeSel.Items.Add(timetable.Date);
-                            else if (timetable.Date == null && timetable.Weekday != null)
-                                TimeSel.Items.Add(timetable.Weekday);
-                            else TimeSel.Items.Add("无");
-                        }
+                        if (timetable.Date != null)
+                            TimeSel.Items.Add(timetable.Date);
+                        else if (timetable.Date == null && timetable.Weekday != null)
+                            TimeSel.Items.Add(timetable.Weekday);
+                        else TimeSel.Items.Add("无");
                     }
-                    AddDay.Visibility = Visibility.Visible;
-                    PosText.Text = saveFileDialog.FileName;
                 }
-                catch { MsgBox.Show("时间表结构不正确", "错误"); TableSave.Visibility = Visibility.Collapsed; return; }
+                UpperControlPanel.Visibility = Visibility.Visible;
+                AddDay.Visibility = Visibility.Visible;
+                PosText.Text = saveFileDialog.FileName;
             }
         }
 
@@ -89,7 +91,7 @@ namespace DateTimer.WPF.View
             {
                 if(ofd.SafeFileName == "Settings.json")
                 {
-                    MsgBox.Show("请勿选择设置文件", "错误");
+                    MsgBox.Show("请勿选择设置文件", "提示");
                     return;
                 }
 
@@ -117,10 +119,11 @@ namespace DateTimer.WPF.View
                             else TimeSel.Items.Add("无");
                         }
                     }
+                    UpperControlPanel.Visibility = Visibility.Visible;
                     AddDay.Visibility = Visibility.Visible;
                     PosText.Text = ofd.FileName;
                 }
-                catch { MsgBox.Show("时间表结构不正确", "错误"); TableSave.Visibility = Visibility.Collapsed; return; }
+                catch { MsgBox.Show("时间表文件读取失败! \n请检查时间表json文件是否无误\n或新建一个时间表文件", "错误"); TableSave.Visibility = Visibility.Collapsed; return; }
             }
         }
         #endregion
@@ -168,12 +171,14 @@ namespace DateTimer.WPF.View
             TPDel.Visibility = Visibility.Visible;
             TPNew.Visibility = Visibility.Visible;
 
+            isInternalChange = true; // 设置为内部修改，防止触发 TextChanged 事件
             TPStart.SelectedDateTime = DateTime.Parse(timetables[TimeSel.SelectedIndex].Tables[SelDayTimeList.SelectedIndex].Start);
             TPEnd.SelectedDateTime = DateTime.Parse(timetables[TimeSel.SelectedIndex].Tables[SelDayTimeList.SelectedIndex].End);
             TPElement.Text = timetables[TimeSel.SelectedIndex].Tables[SelDayTimeList.SelectedIndex].Name;
             TPNotice.Text = timetables[TimeSel.SelectedIndex].Tables[SelDayTimeList.SelectedIndex].Notice;
             TPSelSpan.Text = $"{timetables[TimeSel.SelectedIndex].Tables[SelDayTimeList.SelectedIndex].Start} ~ " +
                 $"{timetables[TimeSel.SelectedIndex].Tables[SelDayTimeList.SelectedIndex].End}";
+            isInternalChange = false; // 重置为非内部修改
         }
 
         /// <summary>
@@ -227,30 +232,28 @@ namespace DateTimer.WPF.View
 
         private void TPStart_TextChanged(object sender, RoutedPropertyChangedEventArgs<DateTime?> e)
         {
+            if (isInternalChange) return; // 如果是内部修改，则不进行处理
             timetables[TimeSel.SelectedIndex].Tables[SelDayTimeList.SelectedIndex].Start = $"{TPStart.SelectedDateTime:HH:mm}";
-            int previousSelectedIndex = SelDayTimeList.SelectedIndex;
-            SelDayTimeList.Items.Clear();
-            TPSelSpan.Text = "";
-            foreach (Table table in timetables[TimeSel.SelectedIndex].Tables)
-                SelDayTimeList.Items.Add($"{table.Start} ~ {table.End}");
-            SelDayTimeList.SelectedIndex = previousSelectedIndex;
+            int sel = SelDayTimeList.SelectedIndex;
+            SelDayTimeList.Items[SelDayTimeList.SelectedIndex] = $"{TPStart.SelectedDateTime:HH:mm} ~ {timetables[TimeSel.SelectedIndex].Tables[SelDayTimeList.SelectedIndex].End}";
+            SelDayTimeList.SelectedIndex = sel; // 保持选中状态
         }
         private void TPEnd_TextChanged(object sender, RoutedPropertyChangedEventArgs<DateTime?> e)
         {
+            if (isInternalChange) return;
             timetables[TimeSel.SelectedIndex].Tables[SelDayTimeList.SelectedIndex].End = $"{TPEnd.SelectedDateTime:HH:mm}";
-            int previousSelectedIndex = SelDayTimeList.SelectedIndex;
-            SelDayTimeList.Items.Clear();
-            TPSelSpan.Text = "";
-            foreach (Table table in timetables[TimeSel.SelectedIndex].Tables)
-                SelDayTimeList.Items.Add($"{table.Start} ~ {table.End}");
-            SelDayTimeList.SelectedIndex = previousSelectedIndex;
+            int sel = SelDayTimeList.SelectedIndex;
+            SelDayTimeList.Items[SelDayTimeList.SelectedIndex] = $"{timetables[TimeSel.SelectedIndex].Tables[SelDayTimeList.SelectedIndex].Start} ~ {TPEnd.SelectedDateTime:HH:mm}";
+            SelDayTimeList.SelectedIndex = sel; // 保持选中状态
         }
         private void TPElement_TextChanged(object sender, TextChangedEventArgs e)
         {
+            if (isInternalChange) return;
             timetables[TimeSel.SelectedIndex].Tables[SelDayTimeList.SelectedIndex].Name = TPElement.Text;
         }
         private void TPNotice_TextChanged(object sender, TextChangedEventArgs e)
         {
+            if (isInternalChange) return;
             timetables[TimeSel.SelectedIndex].Tables[SelDayTimeList.SelectedIndex].Notice = TPNotice.Text;
         }
 
@@ -261,6 +264,19 @@ namespace DateTimer.WPF.View
         /// <param name="e"></param>
         private void TableSave_Click(object sender, RoutedEventArgs e)
         {
+            int ind = 0;
+            foreach (Timetables timeTable in timetables)
+            {
+                ind++;
+                if (IsTableSorted(timeTable.Tables).Count > 0)
+                {
+                    string str = $"在第 {ind} 个时间表内, \n以下时间段的 开始时间 与前一个时间段冲突\n第";
+                    foreach (int i in IsTableSorted(timeTable.Tables))
+                        str += $" {i + 1}";
+                    MsgBox.Show(str + "个时间段", "时间表文件配置错误", MessageBoxButton.OK);
+                    return;
+                }
+            }
             if (MsgBox.Show("是否保存时间表？", "提示", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 WriteTimeTables(new TimeTableFile() { Timetables = timetables }, timetable_file);

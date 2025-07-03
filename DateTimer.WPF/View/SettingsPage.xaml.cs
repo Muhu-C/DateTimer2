@@ -120,6 +120,11 @@ namespace DateTimer.WPF.View
             };
             if ((bool)openFileDialog.ShowDialog())
             {
+                if (openFileDialog.SafeFileName == "Settings.json")
+                {
+                    MsgBox.Show("请勿选择设置文件! ", "提示");
+                    return;
+                }
                 string FileName;
                 if (openFileDialog.FileName == App.DefTimetablePath)
                 {

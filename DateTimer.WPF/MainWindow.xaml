@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DateTimer.WPF"
+        xmlns:cc="clr-namespace:DateTimer.WPF.View.CustomComponents"
         xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
         mc:Ignorable="d"
         Closing="Window_Closing"
@@ -18,8 +19,8 @@
             <RowDefinition Height="40"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        
-        <Grid Grid.Row="0" Height="40" VerticalAlignment="Top">
+        <cc:SplashScreen Grid.RowSpan="2" d:Visibility="Collapsed" x:Name="SplashScreenGrid"/>
+        <Grid x:Name="TitleBarGrid" Visibility="Hidden" d:Visibility="Visible" Grid.Row="0" Height="40" VerticalAlignment="Top">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="40"/>
                 <ColumnDefinition/>
@@ -28,12 +29,12 @@
                      Source="Data/icon.png" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <StackPanel Grid.Column="1" Orientation="Horizontal">
                 <TextBlock Text="木沪时间表 2" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                <TextBlock Text="Alpha" Foreground="Orange" VerticalAlignment="Center" Margin="0,0,10,0"/><!--测试版-->
+                <!--<TextBlock Text="" Foreground="Orange" VerticalAlignment="Center" Margin="0,0,10,0"/>测试版-->
                 <TextBlock Text="控制台" Foreground="#00DDAA" VerticalAlignment="Center"/>
             </StackPanel>
         </Grid>
 
-        <ui:NavigationView Name="Navigation" ItemInvoked="NavigationItemChanged" Grid.Row="1" IsPaneOpen="False" IsBackButtonVisible="Collapsed">
+        <ui:NavigationView Name="Navigation" Visibility="Hidden" d:Visibility="Visible" ItemInvoked="NavigationItemChanged" Grid.Row="1" IsPaneOpen="False" IsBackButtonVisible="Collapsed">
             <ui:NavigationView.MenuItems>
                 <ui:NavigationViewItem Tag="DateTimer.WPF.View.HomePage" Content="主页" IsSelected="True">
                     <ui:NavigationViewItem.Icon>
@@ -45,7 +46,7 @@
                         <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.CalendarSolid}" FontSize="16"/>
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
-                <ui:NavigationViewItem Tag="DateTimer.WPF.View.TodoPage" Content="待办">
+                <ui:NavigationViewItem Tag="DateTimer.WPF.View.TodoPage" IsEnabled="False" Content="待办（功能正在开发中）">
                     <ui:NavigationViewItem.Icon>
                         <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.PageSolid}" FontSize="16"/>
                     </ui:NavigationViewItem.Icon>

@@ -18,7 +18,7 @@ namespace DateTimer.WPF
     public partial class App : Application
     {
         #region 定义变量和常量
-        public readonly static string BetaVersion = "Alpha 3";
+        public readonly static string BetaVersion = "";
         public static CustomNotice _noticeWindow;                                                       // 时间表提示
         public static TaskbarIcon _taskbaricon;                                                         // 托盘图标
         public static TimerWindow _timerWindow;                                                         // 时间表窗口
@@ -51,7 +51,7 @@ namespace DateTimer.WPF
             _mutex = new Mutex(true, Assembly.GetExecutingAssembly().GetName().Name, out var createNew);
             if (!createNew)
             {
-                MsgBox.Show("已有此应用在运行！", "提示", MessageBoxButton.OK);
+                MsgBox.Show("此应用正在运行！", "提示", MessageBoxButton.OK);
                 Current.Shutdown();
             }
             base.OnStartup(e);

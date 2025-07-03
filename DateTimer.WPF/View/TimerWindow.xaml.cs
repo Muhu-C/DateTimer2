@@ -8,6 +8,7 @@ using System.Windows;
 using static DateTimer.WPF.Utils.TimeTable;
 using iNKORE.UI.WPF.Modern.Helpers.Styles;
 using iNKORE.UI.WPF.Modern.Controls.Helpers;
+using MsgBox = iNKORE.UI.WPF.Modern.Controls.MessageBox;
 
 namespace DateTimer.WPF.View
 {
@@ -60,7 +61,7 @@ namespace DateTimer.WPF.View
             try { GetTimetables(current_timetable_path); }
             catch
             {
-                App._taskbaricon.ShowBalloonTip("无法配置时间表", "请检查 json 结构是否正确",
+                App._taskbaricon.ShowBalloonTip("时间表文件读取失败!", " 请检查时间表json文件是否无误\n或者新建一个时间表文件",
                     Hardcodet.Wpf.TaskbarNotification.BalloonIcon.Error);
                 return;
             }
@@ -71,14 +72,14 @@ namespace DateTimer.WPF.View
             if (_timetables == null)
             {
                 _source.Clear();
-                _source.Add(new TableSource { Title = "今日无时间计划" });
+                _source.Add(new TableSource { Title = "今天没有时间计划" });
             }
             else
             {
                 _source.Clear();
                 if (_timetables.Tables.Count == 0)
                 {
-                    _source.Add(new TableSource { Title = "未配置今日时间" });
+                    _source.Add(new TableSource { Title = "今天的时间计划为空" });
                     return;
                 }
                 foreach (Table table in _timetables.Tables)
@@ -92,15 +93,25 @@ namespace DateTimer.WPF.View
         // 检查时间表并分类进入 GetTime() 函数
         public void Check()
         {
+            Console.WriteLine("awdadawdawdawdawdawdadwwdawd");
             if (_timetables == null)
             {
                 GetTime(false);
                 return;
             }
-            if (!IsTableShowable(_timetables.Tables))
+            if (IsTableInverted(_timetables.Tables) != -1)
             {
-                App._taskbaricon.ShowBalloonTip("无法配置时间表", "请检查时间段配置是否正确",
+                App._taskbaricon.ShowBalloonTip("时间表文件配置错误!", $"位置: 第 {IsTableInverted(_timetables.Tables) + 1} 个时间段\n时间段的开始时间晚于结束时间",
                     Hardcodet.Wpf.TaskbarNotification.BalloonIcon.Error);
+                GetTime(false);
+                return;
+            }
+            if (IsTableSorted(_timetables.Tables).Count > 0)
+            {
+                string str = "以下时间段的 开始时间 与前一个时间段冲突\n第";
+                foreach (int i in IsTableSorted(_timetables.Tables))
+                    str += $" {i + 1}";
+                MsgBox.Show(str + "个时间段", "时间表文件配置错误", MessageBoxButton.OK);
                 GetTime(false);
                 return;
             }

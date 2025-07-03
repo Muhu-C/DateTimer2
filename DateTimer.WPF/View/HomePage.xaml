@@ -34,19 +34,14 @@
                     <TextBlock Text="公告" FontSize="16" Margin="0,0,0,10"/>
                     <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
                         <TextBlock TextWrapping="Wrap" Name="AnnounceText" Margin="10,0,0,0" 
-                                   Text="新版 木沪时间表 应用&#13;即将在 2025 年制作完成! 
-                                   &#13;&#13;Lorem ipsum dolor sit amet,
-                                   &#13;consectetur adipisicing elit,
-                                   &#13;sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                                   &#13;Ut enim ad minim veniam,
-                                   &#13;quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."/>
+                                   Text="新版 木沪时间表 应用&#13;正在火热制作中!" />
                     </ScrollViewer>
                 </Grid>
                 <StackPanel Grid.Column="1" Margin="10,0,0,0">
                     <TextBlock Text="当前时间" FontWeight="Bold"/>
-                    <TextBlock Margin="10,5,0,10" Name="CurTimeText" Text="2024/08/31"/>
+                    <TextBlock Margin="10,5,0,10" Name="CurTimeText" Text="2025/08/31"/>
                     <TextBlock Name="TarNameText" Text="目标时间" FontWeight="Bold"/>
-                    <TextBlock Margin="10,5,0,10" Name="TarTimeText" Text="2024/09/01"/>
+                    <TextBlock Margin="10,5,0,10" Name="TarTimeText" Text="2025/09/01"/>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="最近消息" VerticalAlignment="Center" FontWeight="Bold"/>
                         <Button Padding="5" Margin="5,0,0,0" Click="ClearNotice">
@@ -58,7 +53,6 @@
                     <ScrollViewer Height="64" Margin="10,5,0,0">
                         <TextBlock Name="NoticesText" d:Text="提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提" TextWrapping="Wrap"/>
                     </ScrollViewer>
-                    <Button Padding="2" HorizontalAlignment="Center" Margin="10" Background="#FFAAAAFF" Content="测试按钮" Click="TestButton_Click"/>
                 </StackPanel>
             </Grid>
         </Border>

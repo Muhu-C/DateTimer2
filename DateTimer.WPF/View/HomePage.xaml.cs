@@ -72,11 +72,6 @@ namespace DateTimer.WPF.View
             }
         }
 
-        private void TestButton_Click(object sender, RoutedEventArgs e)
-        {
-            App._noticeWindow.Init("Test", "Test");
-        }
-
         private void ClearNotice(object sender, RoutedEventArgs e)
         {
             NoticesText.Text = string.Empty;

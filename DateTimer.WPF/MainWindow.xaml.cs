@@ -1,11 +1,13 @@
-﻿using iNKORE.UI.WPF.Modern.Controls;
-using System;
-using System.Windows;
-using DateTimer.WPF.View;
-using Microsoft.Win32;
+﻿using DateTimer.WPF.View;
 using iNKORE.UI.WPF.Modern;
-using iNKORE.UI.WPF.Modern.Helpers.Styles;
+using iNKORE.UI.WPF.Modern.Controls;
 using iNKORE.UI.WPF.Modern.Controls.Helpers;
+using iNKORE.UI.WPF.Modern.Helpers.Styles;
+using Microsoft.Win32;
+using System;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Media.Animation;
 
 namespace DateTimer.WPF
 {
@@ -33,6 +35,19 @@ namespace DateTimer.WPF
                 case "Acrylic": WindowHelper.SetSystemBackdropType(this, BackdropType.Acrylic11); break;
                 case "None": WindowHelper.SetSystemBackdropType(this, BackdropType.None); break;
             }
+            InitUI();
+        }
+        public async void InitUI()
+        {
+            await Task.Delay(200);
+            TitleBarGrid.Visibility = Visibility.Visible;
+            Navigation.Visibility = Visibility.Visible;
+
+            var animation = new DoubleAnimation(1, 0, TimeSpan.FromSeconds(0.25));
+            animation.Completed += (s, e) => SplashScreenGrid.Visibility = Visibility.Collapsed;
+            SplashScreenGrid.BeginAnimation(UIElement.OpacityProperty, animation);
+            await Task.Delay(1000);
+            SplashScreenGrid.Visibility = Visibility.Collapsed;
         }
 
         // 设置主题色

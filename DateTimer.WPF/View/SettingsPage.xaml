@@ -17,8 +17,8 @@
         <Border Background="{DynamicResource {x:Static ui:ThemeKeys.ExpanderHeaderBackgroundKey}}" 
          BorderBrush="{DynamicResource {x:Static ui:ThemeKeys.ExpanderHeaderBorderBrushKey}}"
          BorderThickness="{DynamicResource {x:Static ui:ThemeKeys.ExpanderHeaderBorderThicknessKey}}"
-         CornerRadius="4" Padding="15" Height="72">
-            <Grid>
+         CornerRadius="4" Padding="15,5,15,5" Height="72">
+            <Grid VerticalAlignment="Center">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition/>
@@ -28,12 +28,13 @@
                 <ui:FontIcon Margin="0,0,10,0" Icon="{x:Static ui:SegoeFluentIcons.FolderOpen}"/>
                 <StackPanel Grid.Column="1">
                     <TextBlock FontSize="16" Text="时间表位置"/>
+                    <TextBlock TextWrapping="Wrap" FontSize="12" Text="更改时间表窗口中显示的时间表文件"/>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock TextWrapping="Wrap" FontSize="12" Text="更改时间表窗口中显示的时间表文件 当前时间表: "/>
+                        <TextBlock Text="当前时间表: " FontSize="12"/>
                         <TextBlock TextWrapping="Wrap" FontSize="12" Name="TablePosTb"/>
                     </StackPanel>
                 </StackPanel>
-                <Button Grid.Column="2" Name="ChangeTableButton" Click="ChangeTableButton_Click">
+                <Button Margin="0,0,5,0" Grid.Column="2" Name="ChangeTableButton" Click="ChangeTableButton_Click">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock VerticalAlignment="Center" FontSize="13" Text="更改"/>
                         <ui:FontIcon Margin="3,0,0,0" Icon="{x:Static ui:SegoeFluentIcons.OpenInNewWindow}"/>
@@ -104,7 +105,7 @@
                     <ui:FontIcon Margin="0,0,10,0" Icon="{x:Static ui:SegoeFluentIcons.Ringer}"/>
                     <StackPanel VerticalAlignment="Center" Grid.Column="1">
                         <TextBlock FontSize="16" Text="提前提醒"/>
-                        <TextBlock FontSize="12" Text="某一时段开始前指定时间提醒"/>
+                        <TextBlock FontSize="12" Text="时间段开始前指定时间提醒"/>
                     </StackPanel>
                     <ui:ToggleSwitch Toggled="ANToggle_Toggled" Name="ANToggle" Grid.Column="2"/>
                 </Grid>
@@ -154,7 +155,7 @@
                 <ui:FontIcon Margin="0,0,10,0" Icon="{x:Static ui:SegoeFluentIcons.OEM}"/>
                 <StackPanel Grid.Column="1">
                     <TextBlock FontSize="16" Text="主题"/>
-                    <TextBlock FontSize="12" Text="设置应用的主题风格"/>
+                    <TextBlock FontSize="12" Text="设置应用的主题"/>
                 </StackPanel>
                 <ComboBox Grid.Column="2" Name="ThemeSelector" SelectionChanged="ThemeSelector_SelectionChanged">
                     <ComboBoxItem Content="系统设置"/>
@@ -217,7 +218,7 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock TextWrapping="Wrap" Grid.Column="0" Text="DateTimer "/>
                         <TextBlock TextWrapping="Wrap" Grid.Column="1" Text="2.0.0.0" Name="VersionText"/>
-                        <TextBlock TextWrapping="Wrap" Grid.Column="2" Text="Beta" Margin="5,0,0,0" Foreground="Orange" Name="BetaText"/>
+                        <TextBlock TextWrapping="Wrap" Grid.Column="2" Text="Beta" Margin="5,0,0,0" Foreground="Green" Name="BetaText"/>
                     </Grid>
                     <Grid Margin="0,0,0,10">
                         <Grid.ColumnDefinitions>
