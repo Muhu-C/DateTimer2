@@ -12,6 +12,7 @@
         ResizeMode="NoResize"
         Closing="Window_Closing"
         Background="Transparent"
+        FontFamily="{StaticResource DefaultFont}"
         Title="" Height="150" Width="330">
     <WindowChrome.WindowChrome>
         <WindowChrome GlassFrameThickness="-1" />

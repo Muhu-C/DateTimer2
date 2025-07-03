@@ -8,7 +8,7 @@
       xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
       Height="356" d:Width="560"
       d:Background="#F0F0F0"
-      FontFamily="{StaticResource DefaFont}"
+      FontFamily="{StaticResource DefaultFont}"
       Title="TodoPage">
 
     <Grid>

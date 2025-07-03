@@ -1,0 +1,58 @@
+﻿<ui:ContentDialog x:Class="DateTimer.WPF.View.CustomComponents.EditTimetableDay"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DateTimer.WPF.View.CustomComponents"
+        mc:Ignorable="d"
+        xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
+        FontFamily="{StaticResource DefaultFont}"
+        PrimaryButtonText="确定"
+        PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
+        DefaultButton="Primary"
+        SecondaryButtonText="取消"
+        d:Title="编辑时间表" d:Height="450" d:Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/><!--日期编辑-->
+            <RowDefinition/><!--星期日编辑-->
+            <RowDefinition/><!---->
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="128"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="日期" VerticalAlignment="Center" Grid.Column="0" FontSize="14"/>
+            <DatePicker Name="SelDate" HorizontalAlignment="Stretch" Grid.Column="1"/>
+        </Grid>
+        <StackPanel Orientation="Vertical" Grid.Row="1">
+            <Grid Height="40">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="星期日" VerticalAlignment="Center" FontSize="14"/>
+                <CheckBox Grid.Column="1" HorizontalAlignment="Right" x:Name="SelAll" Checked="SelAll_Checked" Unchecked="SelAll_Unchecked" Indeterminate="SelAll_Indeterminate" Margin="15,0,0,0" Content="全选" IsThreeState="True"/>
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <CheckBox Checked="Sel_Checked" Unchecked="Sel_Unchecked" Name="Sel1" Grid.Column="0" Content="周一"/>
+                <CheckBox Checked="Sel_Checked" Unchecked="Sel_Unchecked" Name="Sel2" Grid.Column="1" Content="周二"/>
+                <CheckBox Checked="Sel_Checked" Unchecked="Sel_Unchecked" Name="Sel3" Grid.Column="2" Content="周三"/>
+                <CheckBox Checked="Sel_Checked" Unchecked="Sel_Unchecked" Name="Sel4" Grid.Column="3" Content="周四"/>
+                <CheckBox Checked="Sel_Checked" Unchecked="Sel_Unchecked" Name="Sel5" Grid.Column="4" Content="周五"/>
+                <CheckBox Checked="Sel_Checked" Unchecked="Sel_Unchecked" Name="Sel6" Grid.Column="5" Content="周六"/>
+                <CheckBox Checked="Sel_Checked" Unchecked="Sel_Unchecked" Name="Sel7" Grid.Column="6" Content="周日"/>
+            </Grid>
+        </StackPanel>
+    </Grid>
+</ui:ContentDialog>

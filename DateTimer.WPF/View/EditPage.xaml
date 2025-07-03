@@ -6,9 +6,9 @@
       xmlns:local="clr-namespace:DateTimer.WPF.View"
       mc:Ignorable="d" 
       xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
-      Height="356" d:Width="650"
+      Height="356" d:Width="645"
       d:Background="#F0F0F0"
-      FontFamily="{StaticResource DefaFont}"
+      FontFamily="{StaticResource DefaultFont}"
       Title="EditPage">
 
     <Grid>
@@ -21,13 +21,15 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="100"/>
                 <ColumnDefinition/>
-                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="60"/>
+                <ColumnDefinition Width="65"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="时间表位置" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <TextBlock Text="文件位置" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             <ScrollViewer Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalAlignment="Center">
                 <TextBlock VerticalAlignment="Center" x:Name="PosText"/>
             </ScrollViewer>
             <Button Content="选择" Name="ChooseTable" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Click="ChooseTable_Click"/>
+            <Button Content="新建" Name="CreateTable" Grid.Column="3" HorizontalAlignment="Left" Click="CreateTable_Click"/>
         </Grid>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -37,8 +39,8 @@
             <ui:ListView Margin="6" Name="SelDayTimeList" Grid.Column="0" SelectionChanged="SelDayTimeList_SelectionChanged"/>
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="80"/>
-                    <RowDefinition Height="180"/>
+                    <RowDefinition Height="90"/>
+                    <RowDefinition Height="170"/>
                 </Grid.RowDefinitions>
                 <!--日期控制板-->
                 <Border Background="{DynamicResource {x:Static ui:ThemeKeys.ExpanderHeaderBackgroundKey}}" 
@@ -52,21 +54,21 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="32"/>
-                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="36"/>
+                            <RowDefinition Height="34"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Left" VerticalAlignment="Center" d:Text="7:00 ~ 8:30" Name="TPSelSpan"/>
-                        <TextBlock FontSize="14" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Text="日期"/>
+                        <TextBlock FontSize="14" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Text="时间表"/>
                         <TextBlock FontSize="14" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Text="选中时间段"/>
-                        <ComboBox FontSize="12" HorizontalAlignment="Center" Width="120" Name="TimeSel" Grid.Row="0" Grid.Column="1" SelectionChanged="TimeSel_SelectionChanged"/>
+                        <TextBlock Grid.Row="1" Grid.Column="1" Margin="10,0,0,0" Grid.ColumnSpan="2" HorizontalAlignment="Left" VerticalAlignment="Center" d:Text="7:00 ~ 8:30" Name="TPSelSpan"/>
+                        <ComboBox FontSize="12" HorizontalAlignment="Left" Width="120" Name="TimeSel" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" SelectionChanged="TimeSel_SelectionChanged"/>
                         <StackPanel Grid.Row="0" HorizontalAlignment="Right" Orientation="Horizontal" Grid.Column="2">
-                            <Button ToolTip="新建日期" Name="AddDay">
+                            <Button ToolTip="新建日期" Name="AddDay" Click="AddDay_Click">
                                 <ui:FontIcon FontSize="12" Icon="{x:Static ui:SegoeFluentIcons.Add}"/>
                             </Button>
-                            <Button ToolTip="编辑选中日期" Name="EditDay" Margin="5,0,0,0">
+                            <Button ToolTip="编辑选中日期" Name="EditDay" Margin="5,0,0,0" Click="EditDay_Click">
                                 <ui:FontIcon FontSize="12" Icon="{x:Static ui:SegoeFluentIcons.Edit}"/>
                             </Button>
-                            <Button ToolTip="删除选中日期" Name="DelDay" Margin="5,0,0,0" Foreground="Red">
+                            <Button ToolTip="删除选中日期" Name="DelDay" Margin="5,0,0,0" Foreground="Red" Click="DelDay_Click">
                                 <ui:FontIcon FontSize="12" Icon="{x:Static ui:SegoeFluentIcons.Delete}"/>
                             </Button>
                         </StackPanel>
@@ -76,7 +78,7 @@
                 <Border Grid.Row="1" Background="{DynamicResource {x:Static ui:ThemeKeys.ExpanderHeaderBackgroundKey}}" 
                  BorderBrush="{DynamicResource {x:Static ui:ThemeKeys.ExpanderHeaderBorderBrushKey}}"
                  BorderThickness="{DynamicResource {x:Static ui:ThemeKeys.ExpanderHeaderBorderThicknessKey}}"
-                 CornerRadius="4" Padding="10" Margin="0,0,10,0" Name="ControlPanel">
+                 CornerRadius="4" Padding="5,10,10,10" Margin="0,0,10,0" Name="ControlPanel">
                     <StackPanel>
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -89,22 +91,14 @@
                                 <RowDefinition Height="38"/>
                                 <RowDefinition Height="38"/>
                             </Grid.RowDefinitions>
-                            <Grid Grid.Row="0" Grid.ColumnSpan="2">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="38"/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition Width="38"/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock FontSize="13" HorizontalAlignment="Center" VerticalAlignment="Center" Text="开始" Grid.Column="0"/>
-                                <TextBox FontSize="13" Name="TPStart" VerticalAlignment="Center" HorizontalAlignment="Left" VerticalContentAlignment="Center" Grid.Column="1" Width="110"/>
-                                <TextBlock FontSize="13" HorizontalAlignment="Center" VerticalAlignment="Center" Text="结束" Grid.Column="2"/>
-                                <TextBox FontSize="13" Name="TPEnd" VerticalAlignment="Center" HorizontalAlignment="Left" VerticalContentAlignment="Center" Grid.Column="3" Width="110"/>
-                            </Grid>
-                            <TextBlock FontSize="13" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="事件"/>
-                            <TextBlock FontSize="13" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Text="提醒"/>
-                            <TextBox FontSize="13" Grid.Column="1" Grid.Row="1"  HorizontalAlignment="Stretch" VerticalAlignment="Center" VerticalContentAlignment="Center" Name="TPElement" d:Text="114514"/>
-                            <TextBox FontSize="13" Grid.Column="1" Grid.Row="2"  HorizontalAlignment="Stretch" VerticalAlignment="Center" VerticalContentAlignment="Center" Name="TPNotice" d:Text="1919810"/>
+                            <TextBlock Grid.Row="0" FontSize="13" HorizontalAlignment="Center" VerticalAlignment="Center" Text="开始" Grid.Column="0"/>
+                            <ui:TimePicker Grid.Row="0" Grid.Column="1" FontSize="13" SelectedTimeFormat="Long"  Name="TPStart" VerticalAlignment="Center" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" SelectedDateTimeChanged="TPStart_TextChanged"/>
+                            <TextBlock Grid.Row="1" Grid.Column="0" FontSize="13" HorizontalAlignment="Center" VerticalAlignment="Center" Text="结束"/>
+                            <ui:TimePicker Grid.Row="1" Grid.Column="1" FontSize="13" Name="TPEnd" VerticalAlignment="Center" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" SelectedDateTimeChanged="TPEnd_TextChanged"/>
+                            <TextBlock FontSize="13" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Text="事件"/>
+                            <TextBlock FontSize="13" Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" Text="提醒"/>
+                            <TextBox FontSize="13" Grid.Column="1" Grid.Row="2"  HorizontalAlignment="Stretch" VerticalAlignment="Center" VerticalContentAlignment="Center" Name="TPElement" d:Text="114514" TextChanged="TPElement_TextChanged"/>
+                            <TextBox FontSize="13" Grid.Column="1" Grid.Row="3"  HorizontalAlignment="Stretch" VerticalAlignment="Center" VerticalContentAlignment="Center" Name="TPNotice" d:Text="1919810" TextChanged="TPNotice_TextChanged"/>
                         </Grid>
                     </StackPanel>
                 </Border>
@@ -112,9 +106,9 @@
         </Grid>
         <Grid Grid.Row="2">
             <StackPanel Margin="10" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                <Button Name="TPDel" Margin="5,0,0,0" Foreground="Red" Content="删除时间段"/>
-                <Button Name="TPNew" Margin="5,0,0,0" Content="新建时间段"/>
-                <Button Name="TableSave" Margin="5,0,5,0" Content="保存"/>
+                <Button Name="TPDel" Margin="5,0,0,0" Foreground="Red" Content="删除时间段" Click="TPDel_Click"/>
+                <Button Name="TPNew" Margin="5,0,0,0" Content="新建时间段" Click="TPNew_Click"/>
+                <Button Name="TableSave" Margin="5,0,5,0" Content="保存" Click="TableSave_Click"/>
             </StackPanel>
         </Grid>
     </Grid>

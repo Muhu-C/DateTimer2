@@ -2,7 +2,7 @@
   "Timetables": [
     {
       "Date": null,
-      "Weekday": "1/2/3/4/5/6/7",
+      "Weekday": "1/3/5",
       "Tables": [
         {
           "Name": "时间表样式",
@@ -13,19 +13,7 @@
       ]
     },
     {
-      "Date": "2024/12/21",
-      "Weekday": null,
-      "Tables": [
-        {
-          "Name": "时间表样式",
-          "Start": "07:00",
-          "End": "22:30",
-          "Notice": "默认时间表"
-        }
-      ]
-    },
-    {
-      "Date": "2024/12/07",
+      "Date": "2025/07/03",
       "Weekday": null,
       "Tables": [
         {
@@ -38,7 +26,7 @@
           "Name": "自由活动",
           "Start": "07:40",
           "End": "08:40",
-          "Notice": null
+          "Notice": "时间表示例"
         },
         {
           "Name": "早饭",

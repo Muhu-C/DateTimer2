@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:DateTimer.WPF.View"
         ui:WindowHelper.UseModernWindowStyle="True"
         mc:Ignorable="d"
-        FontFamily="{StaticResource DefaFont}"
+        FontFamily="{StaticResource DefaultFont}"
         ui:TitleBar.ExtendViewIntoTitleBar="True"
         ui:TitleBar.Height="40"
         Closing="Window_Closing"

@@ -20,6 +20,7 @@ namespace DateTimer.WPF.View
         private string current_timetable_path;            // 当前使用的时间表 -- 与 SettingsPage._appSetting.TimeTablePath 略有不同
         public Timetables _timetables;                    // 当日时间表
         public static bool _isRunning = false;            // 窗口命令是否在 GetTime() 循环中
+        public static bool _isCancelled = false; // 未被使用。
         public List<int> undone = new ();                 // 未到达时间段列表，按照 _timetables.Tables 下标，其中 值 2 为未提醒，值 1 为未到达
 
         public TimerWindow()
@@ -103,13 +104,12 @@ namespace DateTimer.WPF.View
                 GetTime(false);
                 return;
             }
+            undone = GetTodayUndone(_timetables.Tables);
             if (_isRunning)
             {
                 Console.WriteLine("窗口命令在 GetTime() 循环中");
                 return;
             }
-
-            undone = GetTodayUndone(_timetables.Tables);
             GetTime(true);
         }
 
@@ -121,7 +121,7 @@ namespace DateTimer.WPF.View
             await Task.Run(async () =>
             {
                 int SpanSeconds = 0;
-                while (true)
+                while (!_isCancelled)
                 {
                     if (current_timetable_path != SettingsPage._appSetting.TimeTablePath) break;  // 判断时间表位置更改
 

@@ -18,11 +18,11 @@ namespace DateTimer.WPF
     public partial class App : Application
     {
         #region 定义变量和常量
-        public readonly static string BetaVersion = "Alpha 00002";
+        public readonly static string BetaVersion = "Alpha 3";
         public static CustomNotice _noticeWindow;                                                       // 时间表提示
         public static TaskbarIcon _taskbaricon;                                                         // 托盘图标
-        public static Mutex _mutex;                                                                     // 程序启动监测
         public static TimerWindow _timerWindow;                                                         // 时间表窗口
+        public static Mutex _mutex;                                                                     // 启动监测
         public readonly static string AppSettingPath = System.IO.Path.
             Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Config", "Settings.json");          // 设置文件
         public readonly static string DefTimetablePath = System.IO.Path.
@@ -66,6 +66,7 @@ namespace DateTimer.WPF
                 ThemeManager.Current.ApplicationTheme = ApplicationTheme.Dark; // 设置主题
             else if (SettingsPage._appSetting.Theme == "Light")
                 ThemeManager.Current.ApplicationTheme = ApplicationTheme.Light;
+
             // 窗口初始化
             _taskbaricon = (TaskbarIcon)FindResource("Taskbar");
             _noticeWindow = new CustomNotice();

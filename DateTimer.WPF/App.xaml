@@ -10,7 +10,7 @@
                 <ui:ThemeResources/>
                 <ui:XamlControlsResources/>
             </ResourceDictionary.MergedDictionaries>
-            <FontFamily x:Key="DefaFont">/DateTimer.WPF;Component/Data/Fonts/#Segoe UI</FontFamily>
+            <FontFamily x:Key="DefaultFont">/DateTimer.WPF;Component/Data/Fonts/#Segoe UI</FontFamily>
             <tb:TaskbarIcon x:Key="Taskbar" IconSource="/DateTimer.WPF;Component/Data/icon.ico">
                 <tb:TaskbarIcon.DataContext>
                     <local:NotifyIconViewModel />

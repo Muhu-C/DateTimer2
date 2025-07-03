@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:DateTimer.WPF.View"
       xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
       mc:Ignorable="d" 
-      FontFamily="{StaticResource DefaFont}"
+      FontFamily="{StaticResource DefaultFont}"
       Height="356" d:Width="650"
       d:Background="#F0F0F0"
       Title="HomePage">
@@ -56,13 +56,13 @@
                         </Button>
                     </StackPanel>
                     <ScrollViewer Height="64" Margin="10,5,0,0">
-                        <TextBlock  Name="NoticesText" d:Text="提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提" TextWrapping="Wrap"/>
+                        <TextBlock Name="NoticesText" d:Text="提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提示提" TextWrapping="Wrap"/>
                     </ScrollViewer>
-                    <Button Padding="5" HorizontalAlignment="Center" Margin="10" Background="#FFAAAAFF" Content="测试按钮" Click="TestButton_Click"/>
+                    <Button Padding="2" HorizontalAlignment="Center" Margin="10" Background="#FFAAAAFF" Content="测试按钮" Click="TestButton_Click"/>
                 </StackPanel>
             </Grid>
         </Border>
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="20">
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="20,0,20,20">
             <Button Name="ShowTimer" Background="{DynamicResource {x:Static ui:ThemeKeys.ToggleButtonBackgroundCheckedKey}}" Content="显示时间表" Height="40" Margin="0,0,10,0" Click="ShowTimer_Click"/>
             <Button Name="GotoSetting" Width="40" Height="40" Click="GotoSetting_Click">
                 <ui:FontIcon FontSize="16" Icon="{x:Static ui:SegoeFluentIcons.Settings}"/>

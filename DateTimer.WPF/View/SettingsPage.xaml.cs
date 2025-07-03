@@ -91,8 +91,7 @@ namespace DateTimer.WPF.View
 
         // 加载设置
         public static void LoadSettings()
-            =>  _appSetting = // 反序列化 Settings.json
-                JsonConvert.DeserializeObject<AppSetting>(Utils.FileProcess.ReadFile(App.AppSettingPath));
+            =>  _appSetting = JsonConvert.DeserializeObject<AppSetting>(Utils.FileProcess.ReadFile(App.AppSettingPath));
         #endregion
 
         // 启动时显示控制台
@@ -101,6 +100,13 @@ namespace DateTimer.WPF.View
             if (isInit) return;
             _appSetting.EnableMainWindowShow = EMToggle.IsOn;
             WriteCurSetting();
+        }
+
+        // 刷新时间表
+        private void RefreshTableButton_Click(object sender, RoutedEventArgs e)
+        {
+            App._timerWindow.ReloadTable();
+            App._timerWindow.Check();
         }
 
         // 更改时间表位置
@@ -123,15 +129,18 @@ namespace DateTimer.WPF.View
                     return;
                 }
                 if (openFileDialog.FileName.Contains(AppDomain.CurrentDomain.BaseDirectory))
+                {
                     FileName = openFileDialog.FileName.Substring
-                        (AppDomain.CurrentDomain.BaseDirectory.Length - 1, 
+                        (AppDomain.CurrentDomain.BaseDirectory.Length - 1,
                         openFileDialog.FileName.Length - AppDomain.CurrentDomain.BaseDirectory.Length + 1);
+                    _appSetting.TimeTablePath = openFileDialog.FileName;
+                }
                 else
                 {
                     File.Copy(openFileDialog.FileName, App.CopiedTimetablePath, true);
                     FileName = App.CopiedTimetablePath;
+                    _appSetting.TimeTablePath = FileName;
                 }
-                _appSetting.TimeTablePath = FileName;
                 WriteCurSetting();
                 ReloadPage();
             }

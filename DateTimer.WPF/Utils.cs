@@ -115,6 +115,16 @@ namespace DateTimer.WPF
                 return JsonConvert.DeserializeObject<TimeTableFile>(FileProcess.ReadFile(Path));
             }
 
+            /// <summary>
+            /// 将时间表 TimeTableFile 格式转为 json 并写入文件
+            /// </summary>
+            /// <param name="file"></param>
+            /// <param name="Path"></param>
+            public static void WriteTimeTables(TimeTableFile file, string Path)
+            {
+                FileProcess.WriteFile(JsonConvert.SerializeObject(file, Formatting.Indented), Path);
+            }
+
             public static bool IsTableShowable(List<Table> tables)
             {
                 foreach (Table table in tables)
@@ -127,7 +137,7 @@ namespace DateTimer.WPF
             }
 
             /// <summary> 获取当前所在时间段 </summary>
-            /// <param name="table"></param>
+            /// <param name="tables"> 时间段列表 </param>
             /// <returns>当前时间在时间段的下标</returns>
             public static List<int> GetCurZone(List<Table> tables)
             {
@@ -163,7 +173,7 @@ namespace DateTimer.WPF
 
             /// <summary> 获取未完成列表 </summary>
             /// <param name="tables">时间表</param>
-            /// <returns>int 值列表 1为未到时间 2为在五分钟外</returns>
+            /// <returns>int 值列表 2为未到时间 0为已到达 </returns>
             public static List<int> GetTodayUndone(List<Table> tables)
             {
                 List<int> result = new();
