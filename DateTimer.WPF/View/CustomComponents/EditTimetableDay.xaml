@@ -11,6 +11,7 @@
         PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
         DefaultButton="Primary"
         SecondaryButtonText="取消"
+        Opened="ContentDialog_Opened"
         d:Title="编辑时间表" d:Height="450" d:Width="800">
     <Grid>
         <Grid.RowDefinitions>
@@ -22,9 +23,15 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="128"/>
+                <ColumnDefinition Width="40"/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="日期" VerticalAlignment="Center" Grid.Column="0" FontSize="14"/>
-            <DatePicker Name="SelDate" HorizontalAlignment="Stretch" Grid.Column="1"/>
+            <DatePicker Name="SelDate" HorizontalAlignment="Stretch" Grid.Column="1" SelectedDateChanged="SelDate_SelectedDateChanged"/>
+            <Button Name="ClearDateBtn" ToolTip="清除日期" HorizontalAlignment="Center" Padding="5" Width="32" Height="32" Grid.Column="2" Click="ClearDateBtn_Click">
+                <Button.Content>
+                    <ui:FontIcon FontSize="16" Icon="{x:Static ui:SegoeFluentIcons.Clear}" />
+                </Button.Content>
+            </Button>
         </Grid>
         <StackPanel Orientation="Vertical" Grid.Row="1">
             <Grid Height="40">

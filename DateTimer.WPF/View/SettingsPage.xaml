@@ -230,7 +230,7 @@
                         <TextBlock TextWrapping="Wrap" Grid.Column="0" Text="语言" Margin="0,0,10,0"/>
                         <TextBlock TextWrapping="Wrap" Grid.Column="1" Foreground="Green" Text="C#"/>
                         <TextBlock TextWrapping="Wrap" Grid.Column="2" Text="环境" Margin="50,0,10,0"/>
-                        <TextBlock TextWrapping="Wrap" Grid.Column="3" Text=".NET Framework 4.7.2" Foreground="#0088FF"/>
+                        <TextBlock TextWrapping="Wrap" Grid.Column="3" Text=".NET 8.0" Foreground="#0088FF"/>
                     </Grid>
                     <Grid Margin="0,0,0,10">
                         <Grid.ColumnDefinitions>

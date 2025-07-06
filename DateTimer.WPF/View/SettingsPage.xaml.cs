@@ -105,8 +105,15 @@ namespace DateTimer.WPF.View
         // 刷新时间表
         private void RefreshTableButton_Click(object sender, RoutedEventArgs e)
         {
-            App._timerWindow.ReloadTable();
-            App._timerWindow.Check();
+            DisableRefresh();
+            App._timerWindow.ReloadTable(true);
+        }
+
+        private async void DisableRefresh()
+        {
+            RefreshTableButton.IsEnabled = false;
+            await Task.Delay(5000);
+            RefreshTableButton.IsEnabled = true;
         }
 
         // 更改时间表位置
@@ -148,6 +155,7 @@ namespace DateTimer.WPF.View
                 }
                 WriteCurSetting();
                 ReloadPage();
+                App._timerWindow.ReloadTable();
             }
         }
 
@@ -211,24 +219,28 @@ namespace DateTimer.WPF.View
                 NewBackdrop = "Mica";
                 WindowHelper.SetSystemBackdropType(Application.Current.MainWindow, BackdropType.Mica);
                 WindowHelper.SetSystemBackdropType(App._timerWindow, BackdropType.Mica);
+                MsgBox.DefaultBackdropType = BackdropType.Mica;
             }
             else if (BackdropSelector.SelectedIndex == 2) // 亚克力
             {
                 NewBackdrop = "Acrylic";
                 WindowHelper.SetSystemBackdropType(Application.Current.MainWindow, BackdropType.Acrylic11);
                 WindowHelper.SetSystemBackdropType(App._timerWindow, BackdropType.Acrylic11);
+                MsgBox.DefaultBackdropType = BackdropType.Acrylic11;
             }
             else if (BackdropSelector.SelectedIndex == 3) // 云母 Alt
             {
                 NewBackdrop = "MicaAlt";
                 WindowHelper.SetSystemBackdropType(Application.Current.MainWindow, BackdropType.Tabbed);
                 WindowHelper.SetSystemBackdropType(App._timerWindow, BackdropType.Tabbed);
+                MsgBox.DefaultBackdropType = BackdropType.Tabbed;
             }
             else // 无
             {
                 NewBackdrop = "None";
                 WindowHelper.SetSystemBackdropType(Application.Current.MainWindow, BackdropType.None);
                 WindowHelper.SetSystemBackdropType(App._timerWindow, BackdropType.None);
+                MsgBox.DefaultBackdropType = BackdropType.None;
             }
             _appSetting.BackDrop = NewBackdrop;
             WriteCurSetting();
@@ -248,16 +260,10 @@ namespace DateTimer.WPF.View
                     $"\n应用内存占用: {SystemInfo.GetRAMSize()} MB / {SystemInfo.GetTotalRAM()} MB" +
                     $"\n环境: {SystemInfo.GetEnvVer()}";
             });
-            ContentDialog contentDialog = new()
-            {
-                Title = "系统报告",
-                Content = ReportStr,
-                PrimaryButtonText = "复制",
-                SecondaryButtonText = "取消"
-            };
-            if (await contentDialog.ShowAsync() == ContentDialogResult.Primary) Clipboard.SetText(ReportStr);
+           
+            if (MsgBox.Show(ReportStr + "\n是否复制到剪贴板? ", "系统报告", MessageBoxButton.OKCancel, MessageBoxImage.Information) == MessageBoxResult.OK)
+                Clipboard.SetText(ReportStr);
             ReportStr = string.Empty;
-            contentDialog = null;
         }
 
 
@@ -340,6 +346,7 @@ namespace DateTimer.WPF.View
                 value = 60;
             _appSetting.AdvancedMinutes = value;
             AdvanceNb.Value = value;
+            App._timerWindow.ReloadTable();
             WriteCurSetting();
         }
     }

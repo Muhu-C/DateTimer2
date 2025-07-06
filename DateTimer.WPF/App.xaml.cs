@@ -1,14 +1,14 @@
-﻿using System;
+﻿using DateTimer.WPF.View;
+using DateTimer.WPF.View.CustomComponents;
+using Hardcodet.Wpf.TaskbarNotification;
+using iNKORE.UI.WPF.Modern;
+using System;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Windows;
-using MsgBox = iNKORE.UI.WPF.Modern.Controls.MessageBox;
-using DateTimer.WPF.View;
-using iNKORE.UI.WPF.Modern;
-using Hardcodet.Wpf.TaskbarNotification;
 using System.Windows.Input;
-using System.Linq;
-using DateTimer.WPF.View.CustomComponents;
+using MsgBox = iNKORE.UI.WPF.Modern.Controls.MessageBox;
 
 namespace DateTimer.WPF
 {
@@ -19,6 +19,7 @@ namespace DateTimer.WPF
     {
         #region 定义变量和常量
         public readonly static string BetaVersion = "";
+        public static MainWindow mw;
         public static CustomNotice _noticeWindow;                                                       // 时间表提示
         public static TaskbarIcon _taskbaricon;                                                         // 托盘图标
         public static TimerWindow _timerWindow;                                                         // 时间表窗口
@@ -71,7 +72,7 @@ namespace DateTimer.WPF
             _taskbaricon = (TaskbarIcon)FindResource("Taskbar");
             _noticeWindow = new CustomNotice();
             _timerWindow = new TimerWindow();
-            MainWindow mw = new();
+            mw = new();
             Current.MainWindow = mw;
 
             // 窗口设置应用
@@ -80,6 +81,7 @@ namespace DateTimer.WPF
             {
                 _timerWindow.Show();
                 _taskbaricon.ShowBalloonTip("控制台已隐藏", "可通过系统托盘图标显示", BalloonIcon.Info);
+                mw._homePage.NoticesText.Text += $"控制台已隐藏，可通过系统托盘图标显示 - {DateTime.Now.Hour}:{DateTime.Now.Minute:00}:{DateTime.Now.Second:00}\n";
             }
         }
 

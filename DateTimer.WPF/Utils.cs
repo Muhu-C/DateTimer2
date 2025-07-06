@@ -21,7 +21,7 @@ namespace DateTimer.WPF
             /// <param name="Path">存放位置</param>
             public static void WriteFile(string Text, string Path)
             {
-                using StreamWriter sw = new (Path, false, Encoding.UTF8); sw.Write(Text);
+                using StreamWriter sw = new(Path, false, Encoding.UTF8); sw.Write(Text);
             }
 
             /// <summary> 用流读取文件 </summary>
@@ -29,7 +29,7 @@ namespace DateTimer.WPF
             /// <returns></returns>
             public static string ReadFile(string Path)
             {
-                using StreamReader sr = new (Path);
+                using StreamReader sr = new(Path);
                 return sr.ReadToEnd();
             }
         }
@@ -43,6 +43,12 @@ namespace DateTimer.WPF
             {
                 return $"{time.Hours:00}:{time.Minutes:00}";
             }
+
+            public static Dictionary<string, string> weekMap = new Dictionary<string, string>
+            {
+                { "1", "周一" }, { "2", "周二" }, { "3", "周三" }, { "4", "周四" },
+                { "5", "周五" }, { "6", "周六" }, { "7", "周日" }, { "0", "周日" }
+            };
 
             public static string NumToWeekday(string num)
             {
@@ -125,6 +131,11 @@ namespace DateTimer.WPF
                 FileProcess.WriteFile(JsonConvert.SerializeObject(file, Formatting.Indented), Path);
             }
 
+            /// <summary>
+            /// 判断时间表时间段是否错误
+            /// </summary>
+            /// <param name="tables"></param>
+            /// <returns></returns>
             public static int IsTableInverted(List<Table> tables)
             {
                 int ind = -1;
@@ -138,6 +149,11 @@ namespace DateTimer.WPF
                 return -1;
             }
 
+            /// <summary>
+            /// 判断时间表时间段间是否有冲突
+            /// </summary>
+            /// <param name="tables"></param>
+            /// <returns></returns>
             public static List<int> IsTableSorted(List<Table> tables)
             {
                 List<int> inds = new();
@@ -157,19 +173,18 @@ namespace DateTimer.WPF
             /// <summary> 获取当前所在时间段 </summary>
             /// <param name="tables"> 时间段列表 </param>
             /// <returns>当前时间在时间段的下标</returns>
-            public static List<int> GetCurZone(List<Table> tables)
+            public static int GetCurZone(List<Table> tables)
             {
-                List<int> indexes = new();
                 int i = 0;
                 foreach (Table table in tables)
                 {
                     TimeSpan start = TimeSpan.Parse(table.Start);
                     TimeSpan end = TimeSpan.Parse(table.End);
                     TimeSpan now = DateTime.Now.TimeOfDay;
-                    if (now > start && now < end) indexes.Add(i);
+                    if (now > start && now < end) return i;
                     i++;
                 }
-                return indexes;
+                return -1; // 没有在任何时间段内
             }
 
             /// <summary> 判断是否到点 </summary>
@@ -189,18 +204,31 @@ namespace DateTimer.WPF
                 return -1;
             }
 
+            public enum TimeStatus
+            {
+                NotArrived,
+                Notified,
+                Arrived,
+                None
+            }
+
             /// <summary> 获取未完成列表 </summary>
             /// <param name="tables">时间表</param>
-            /// <returns>int 值列表 2为未到时间 0为已到达 </returns>
-            public static List<int> GetTodayUndone(List<Table> tables)
+            /// <param name="advanceMinutes">提前提醒分钟数</param>
+            /// <returns>TimeStatus 列表</returns>
+            public static List<TimeStatus> GetTodayUndone(List<Table> tables, int advanceMinutes)
             {
-                List<int> result = new();
-                foreach (Table table in tables)
+                var result = new List<TimeStatus>();
+                var now = DateTime.Now.TimeOfDay;
+                foreach (var table in tables)
                 {
-                    TimeSpan start = TimeSpan.Parse(table.Start);
-                    TimeSpan now = DateTime.Now.TimeOfDay;
-                    if ((int)start.TotalMinutes >= (int)now.TotalMinutes) result.Add(2);
-                    else result.Add(0);
+                    var start = TimeSpan.Parse(table.Start);
+                    if (now >= start)
+                        result.Add(TimeStatus.Arrived);
+                    else if (now >= start - TimeSpan.FromMinutes(advanceMinutes))
+                        result.Add(TimeStatus.Notified); // 进入提前提醒区间
+                    else
+                        result.Add(TimeStatus.NotArrived);
                 }
                 return result;
             }
@@ -213,12 +241,78 @@ namespace DateTimer.WPF
                 if (timetables == null || timetables.Count == 0) return null;
                 int weekday = Convert.ToInt16(DateTime.Today.DayOfWeek); // 0 为周日
 
+                // 优先查找今天的时间表
                 foreach (Timetables t in timetables)
-                    if ((t.Date != null && DateTime.Parse(t.Date) == DateTime.Today) ||
-                        (t.Date == null && t.Weekday != null && TimeConverter.TWeekdays2DWeekdays(t.Weekday).Contains(weekday.ToString())))
+                    if (t.Date != null && DateTime.Parse(t.Date) == DateTime.Today)
+                        return t;
+                // 如果没有今天的时间表，则查找今天的星期日的时间表
+                foreach (Timetables t in timetables)
+                    if (t.Weekday != null && TimeConverter.TWeekdays2DWeekdays(t.Weekday).Contains(weekday.ToString()))
                         return t;
                 return null;
             }
+
+            #endregion
+
+            #region 显示
+
+            public enum DayDisplayMode
+            {
+                Weekday,
+                Date,
+                None
+            }
+            
+            public static DayDisplayMode GetDayDisplayMode(Timetables timetables)
+            {
+                // 优先显示日期
+                if (timetables.Date != null)
+                    return DayDisplayMode.Date;
+                else if(timetables.Weekday != null) return DayDisplayMode.Weekday;
+                else return DayDisplayMode.None;
+            }
+
+            public static bool isOutdated(Timetables timetables)
+            {
+                if (timetables.Date != null)
+                    return DateTime.Parse(timetables.Date) < DateTime.Today;
+                else return false;
+            }
+
+            public static string DisplaySingleTimetable(Timetables timetables)
+            {
+                if (GetDayDisplayMode(timetables) == DayDisplayMode.Date)
+                    return DateTime.Parse(timetables.Date).ToString("yyyy年M月d日");
+                else if (GetDayDisplayMode(timetables) == DayDisplayMode.Weekday)
+                {
+                    // 区间合并
+                    Dictionary<string, string> weekMap = TimeConverter.weekMap;
+                    List<int> weekdays = timetables.Weekday.Split('/')
+                        .Select(w => int.TryParse(w, out int n) ? n : -1)
+                        .Where(n => n >= 1 && n <= 7)
+                        .OrderBy(n => n)
+                        .ToList();
+
+                    var result = new List<string>();
+                    int i = 0;
+                    while (i < weekdays.Count)
+                    {
+                        int start = weekdays[i];
+                        int end = start;
+                        while (i + 1 < weekdays.Count && weekdays[i + 1] == end + 1)
+                        {
+                            end = weekdays[i + 1];
+                            i++;
+                        }
+                        if (start == end) result.Add(weekMap[start.ToString()]);
+                        else result.Add($"{weekMap[start.ToString()]} ~ {weekMap[end.ToString()]}");
+                        i++;
+                    }
+                    return string.Join("、", result);
+                }
+                else return "未配置日期";
+            }
+
             #endregion
         }
 
@@ -334,7 +428,7 @@ namespace DateTimer.WPF
                     WinVer = $"Windows 8.1 Build {Environment.OSVersion.Version.Build}"; break;
                 case "10.0":
                     if (Environment.OSVersion.Version.Build >= 22000) WinVer = $"Windows 11 Build {Environment.OSVersion.Version.Build}";
-                    else WinVer = $"Windows 10 Build {Environment.OSVersion.Version.Build}"; 
+                    else WinVer = $"Windows 10 Build {Environment.OSVersion.Version.Build}";
                     break;
                 default:
                     WinVer = $"Windows NT {Environment.OSVersion.Version.Major}.{Environment.OSVersion.Version.Minor} Build {Environment.OSVersion.Version.Build}"; break;
@@ -372,7 +466,7 @@ namespace DateTimer.WPF
 
         public static double GetRAMSize()
         {
-            return 1.0000*Process.GetCurrentProcess().PrivateMemorySize64 / 1024 / 1024;
+            return 1.0000 * Process.GetCurrentProcess().PrivateMemorySize64 / 1024 / 1024;
         }
 
         public static int GetTotalRAM()

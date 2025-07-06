@@ -38,22 +38,25 @@
          BorderBrush="{DynamicResource {x:Static ui:ThemeKeys.ExpanderHeaderBorderBrushKey}}"
          BorderThickness="{DynamicResource {x:Static ui:ThemeKeys.ExpanderHeaderBorderThicknessKey}}"
          CornerRadius="4" Padding="0" Margin="8" Grid.Row="2">
-            <ListView x:Name="TimetableView">
-                <ListView.ItemTemplate>
-                    <DataTemplate DataType="local:TableSource">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="100"/>
-                                <ColumnDefinition Width="120"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="{Binding Time}"/>
-                            <TextBlock Grid.Column="1" Text="{Binding Title}"/>
-                            <TextBlock Grid.Column="2" Text="{Binding Notice}"/>
-                        </Grid>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+            <Grid>
+                <TextBlock Name="TableNoticeText" d:Text="今天没有时间计划" Margin="10,5,10,5" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" d:Visibility="Visible" Visibility="Collapsed"/>
+                <ListView x:Name="TimetableView" SelectionChanged="TimetableView_SelectionChanged">
+                    <ListView.ItemTemplate>
+                        <DataTemplate DataType="local:TableSource">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="120"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="{Binding Time}"/>
+                                <TextBlock Grid.Column="1" Text="{Binding Title}"/>
+                                <TextBlock Grid.Column="2" Text="{Binding Notice}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
         </Border>
     </Grid>
 </Window>

@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using static DateTimer.WPF.Utils;
+using System.Windows.Media;
 using static DateTimer.WPF.Utils.TimeTable;
 using MsgBox = iNKORE.UI.WPF.Modern.Controls.MessageBox;
 
@@ -63,17 +63,6 @@ namespace DateTimer.WPF.View
                 GetTimetables(saveFileDialog.FileName); // 尝试读取时间表
                 timetable_file = saveFileDialog.FileName;
                 timetables = GetTimetables(timetable_file).Timetables;
-                if (timetables != null)
-                {
-                    foreach (var timetable in timetables)
-                    {
-                        if (timetable.Date != null)
-                            TimeSel.Items.Add(timetable.Date);
-                        else if (timetable.Date == null && timetable.Weekday != null)
-                            TimeSel.Items.Add(timetable.Weekday);
-                        else TimeSel.Items.Add("无");
-                    }
-                }
                 UpperControlPanel.Visibility = Visibility.Visible;
                 AddDay.Visibility = Visibility.Visible;
                 PosText.Text = saveFileDialog.FileName;
@@ -109,21 +98,28 @@ namespace DateTimer.WPF.View
                     timetable_file = ofd.FileName;
                     timetables = GetTimetables(timetable_file).Timetables;
                     if (timetables != null)
-                    {
                         foreach (var timetable in timetables)
                         {
-                            if (timetable.Date != null)
-                                TimeSel.Items.Add(timetable.Date);
-                            else if (timetable.Date == null && timetable.Weekday != null)
-                                TimeSel.Items.Add(timetable.Weekday);
-                            else TimeSel.Items.Add("无");
+                            if (isOutdated(timetable))
+                                TimeSel.Items.Add(new TextBlock
+                                {
+                                    Foreground = Brushes.Orange,
+                                    Text = DisplaySingleTimetable(timetable),
+                                    ToolTip = new TextBlock { Foreground = Brushes.Orange, Text = "该时间表已过期！" }
+                                });
+                            else
+                                TimeSel.Items.Add(DisplaySingleTimetable(timetable));
                         }
-                    }
                     UpperControlPanel.Visibility = Visibility.Visible;
                     AddDay.Visibility = Visibility.Visible;
                     PosText.Text = ofd.FileName;
                 }
-                catch { MsgBox.Show("时间表文件读取失败! \n请检查时间表json文件是否无误\n或新建一个时间表文件", "错误"); TableSave.Visibility = Visibility.Collapsed; return; }
+                catch 
+                {
+                    MsgBox.Show("时间表文件读取失败! \n请检查时间表json文件是否无误\n或新建一个时间表文件", "错误");
+                    TableSave.Visibility = Visibility.Collapsed;
+                    return;
+                }
             }
         }
         #endregion
@@ -177,7 +173,8 @@ namespace DateTimer.WPF.View
             TPElement.Text = timetables[TimeSel.SelectedIndex].Tables[SelDayTimeList.SelectedIndex].Name;
             TPNotice.Text = timetables[TimeSel.SelectedIndex].Tables[SelDayTimeList.SelectedIndex].Notice;
             TPSelSpan.Text = $"{timetables[TimeSel.SelectedIndex].Tables[SelDayTimeList.SelectedIndex].Start} ~ " +
-                $"{timetables[TimeSel.SelectedIndex].Tables[SelDayTimeList.SelectedIndex].End}";
+                $"{timetables[TimeSel.SelectedIndex].Tables[SelDayTimeList.SelectedIndex].End}" + 
+                $" (第 {SelDayTimeList.SelectedIndex + 1} 个)";
             isInternalChange = false; // 重置为非内部修改
         }
 
@@ -265,22 +262,21 @@ namespace DateTimer.WPF.View
         private void TableSave_Click(object sender, RoutedEventArgs e)
         {
             int ind = 0;
-            foreach (Timetables timeTable in timetables)
+            var errorStrList = new List<string>();
+            foreach (var timeTable in timetables)
             {
                 ind++;
-                if (IsTableSorted(timeTable.Tables).Count > 0)
-                {
-                    string str = $"在第 {ind} 个时间表内, \n以下时间段的 开始时间 与前一个时间段冲突\n第";
-                    foreach (int i in IsTableSorted(timeTable.Tables))
-                        str += $" {i + 1}";
-                    MsgBox.Show(str + "个时间段", "时间表文件配置错误", MessageBoxButton.OK);
-                    return;
-                }
+                var sortedConflicts = IsTableSorted(timeTable.Tables);
+                if (sortedConflicts.Count > 0)
+                    errorStrList.Add($"在第 {ind} 个时间表内, \n{string.Join("，", sortedConflicts.ConvertAll(i => $"第{i + 1}个"))} 时间段的 开始时间 与前一个时间段冲突");
+                int invertedIndex = IsTableInverted(timeTable.Tables);
+                if (invertedIndex != -1)
+                    errorStrList.Add($"在第 {ind} 个时间表内, \n第 {invertedIndex + 1} 个时间段的 开始时间 与 结束时间 冲突");
             }
-            if (MsgBox.Show("是否保存时间表？", "提示", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-            {
+            if (errorStrList.Count > 0)
+                MsgBox.Show(string.Join("\n\n", errorStrList), "时间表保存失败！", MessageBoxButton.OK);
+            else if (MsgBox.Show("是否保存时间表？", "提示", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 WriteTimeTables(new TimeTableFile() { Timetables = timetables }, timetable_file);
-            }
         }
 
         private void AddDay_Click(object sender, RoutedEventArgs e)
@@ -302,16 +298,18 @@ namespace DateTimer.WPF.View
                 timetables.Remove(timetables[TimeSel.SelectedIndex]);
                 TimeSel.Items.Clear();
                 if (timetables != null)
-                {
                     foreach (var timetable in timetables)
                     {
-                        if (timetable.Date != null)
-                            TimeSel.Items.Add(timetable.Date);
-                        else if (timetable.Date == null && timetable.Weekday != null)
-                            TimeSel.Items.Add(timetable.Weekday);
-                        else TimeSel.Items.Add("无");
+                        if (isOutdated(timetable))
+                            TimeSel.Items.Add(new TextBlock
+                            {
+                                Foreground = Brushes.Orange,
+                                Text = DisplaySingleTimetable(timetable),
+                                ToolTip = new TextBlock { Foreground = Brushes.Orange, Text = "该时间表已过期！" }
+                            });
+                        else
+                            TimeSel.Items.Add(DisplaySingleTimetable(timetable));
                     }
-                }
             }
         }
     }

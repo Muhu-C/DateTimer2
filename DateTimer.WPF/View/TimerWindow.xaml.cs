@@ -1,13 +1,14 @@
 ﻿using iNKORE.UI.WPF.Modern;
+using iNKORE.UI.WPF.Modern.Controls.Helpers;
+using iNKORE.UI.WPF.Modern.Helpers.Styles;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using static DateTimer.WPF.Utils.TimeTable;
-using iNKORE.UI.WPF.Modern.Helpers.Styles;
-using iNKORE.UI.WPF.Modern.Controls.Helpers;
 using MsgBox = iNKORE.UI.WPF.Modern.Controls.MessageBox;
 
 namespace DateTimer.WPF.View
@@ -17,12 +18,14 @@ namespace DateTimer.WPF.View
     /// </summary>
     public partial class TimerWindow : Window
     {
-        public ObservableCollection<TableSource> _source; // 时间表显示列表
-        private string current_timetable_path;            // 当前使用的时间表 -- 与 SettingsPage._appSetting.TimeTablePath 略有不同
-        public Timetables _timetables;                    // 当日时间表
-        public static bool _isRunning = false;            // 窗口命令是否在 GetTime() 循环中
-        public static bool _isCancelled = false; // 未被使用。
-        public List<int> undone = new ();                 // 未到达时间段列表，按照 _timetables.Tables 下标，其中 值 2 为未提醒，值 1 为未到达
+        public ObservableCollection<TableSource> _source;                 // 时间表显示列表
+        private string current_timetable_path;                            // 当前使用的时间表 -- 与 SettingsPage._appSetting.TimeTablePath 略有不同
+        public Timetables _timetables;                                    // 当日时间表
+        public static bool _isRunning = false;                            // 窗口命令是否在 GetTime() 循环中
+        public static CancellationTokenSource _canceltokensource = new(); // 取消 GetTime() 循环
+        public List<TimeStatus> undone = new();                           // 未到达时间段列表，按照 _timetables.Tables 下标，其中 值 2 为未提醒，值 1 为未到达
+        public static bool _isAutoSelect = false;                         // 是否是自动选择的时间段
+        public static int _autoSelectedIndex = -1;                        // 上一个自动选中的时间段
 
         public TimerWindow()
         {
@@ -47,80 +50,82 @@ namespace DateTimer.WPF.View
 
             // 开始执行
             ReloadTable();
-            Check();
         }
 
         // 缩放至合适高度
         private void Window_Loaded(object s, EventArgs e) => SizeToContent = SizeToContent.Height;
 
         // 加载 SettingsPage._appSetting.TimeTablePath 中的时间表
-        public async void ReloadTable()
+        public async void ReloadTable(bool effect = false)
         {
+            _canceltokensource.Cancel(); // 取消 GetTime() 循环
+            _canceltokensource = new CancellationTokenSource(); // 重新创建一个新的取消令牌
+
             // 检验时间表文件格式是否符合要求
             current_timetable_path = SettingsPage._appSetting.TimeTablePath;
             try { GetTimetables(current_timetable_path); }
             catch
             {
-                App._taskbaricon.ShowBalloonTip("时间表文件读取失败!", " 请检查时间表json文件是否无误\n或者新建一个时间表文件",
-                    Hardcodet.Wpf.TaskbarNotification.BalloonIcon.Error);
+                App._taskbaricon.ShowBalloonTip("时间表文件读取失败!", " 请检查时间表json文件是否无误\n或者新建一个时间表文件", Hardcodet.Wpf.TaskbarNotification.BalloonIcon.Error);
+                (App.Current.MainWindow as MainWindow)._homePage.NoticesText.Text += $"时间表文件读取失败！请检查时间表json文件是否无误或者新建一个时间表文件 - {DateTime.Now.Hour}:{DateTime.Now.Minute:00}:{DateTime.Now.Second:00}\n";
                 return;
             }
 
             // 读取并显示当天时间表
-            List<Timetables> File = GetTimetables(current_timetable_path).Timetables;
-            _timetables = GetTodayList(File);
+            _timetables = GetTodayList(GetTimetables(current_timetable_path).Timetables);
+            _source.Clear();
             if (_timetables == null)
             {
-                _source.Clear();
-                _source.Add(new TableSource { Title = "今天没有时间计划" });
+                TableNoticeText.Text = "今天没有时间计划";
+                TimetableView.Visibility = Visibility.Collapsed;
+                TableNoticeText.Visibility = Visibility.Visible;
+            }
+            else if (_timetables.Tables.Count == 0)
+            {
+                TableNoticeText.Text = "今天的时间计划为空";
+                TimetableView.Visibility = Visibility.Collapsed;
+                TableNoticeText.Visibility = Visibility.Visible;
             }
             else
             {
-                _source.Clear();
-                if (_timetables.Tables.Count == 0)
-                {
-                    _source.Add(new TableSource { Title = "今天的时间计划为空" });
-                    return;
-                }
+                TimetableView.Visibility = Visibility.Visible;
+                TableNoticeText.Visibility = Visibility.Collapsed;
                 foreach (Table table in _timetables.Tables)
                 {
                     _source.Add(Utils.TimerShow.Table2Entry(table));
-                    await Task.Delay(50);
+                    if (effect) await Task.Delay(50);
                 }
             }
+            Check();
         }
 
+        #region 要更改的内容 B
         // 检查时间表并分类进入 GetTime() 函数
         public void Check()
         {
-            Console.WriteLine("awdadawdawdawdawdawdadwwdawd");
-            if (_timetables == null)
+            Console.WriteLine("检查时间表");
+            if (_timetables == null) // 没有时间表
             {
                 GetTime(false);
                 return;
             }
-            if (IsTableInverted(_timetables.Tables) != -1)
+            if (IsTableInverted(_timetables.Tables) != -1) // 时间段颠倒
             {
                 App._taskbaricon.ShowBalloonTip("时间表文件配置错误!", $"位置: 第 {IsTableInverted(_timetables.Tables) + 1} 个时间段\n时间段的开始时间晚于结束时间",
                     Hardcodet.Wpf.TaskbarNotification.BalloonIcon.Error);
+                (App.Current.MainWindow as MainWindow)._homePage.NoticesText.Text += $"时间表文件配置错误！位置: 第{IsTableInverted(_timetables.Tables) + 1}个时间段\n时间段的开始时间晚于结束时间 - {DateTime.Now.Hour}:{DateTime.Now.Minute:00}:{DateTime.Now.Second:00}\n";
                 GetTime(false);
                 return;
             }
-            if (IsTableSorted(_timetables.Tables).Count > 0)
+            if (IsTableSorted(_timetables.Tables).Count > 0) // 时间段冲突
             {
-                string str = "以下时间段的 开始时间 与前一个时间段冲突\n第";
-                foreach (int i in IsTableSorted(_timetables.Tables))
-                    str += $" {i + 1}";
-                MsgBox.Show(str + "个时间段", "时间表文件配置错误", MessageBoxButton.OK);
+                List<int> conflictIndices = IsTableSorted(_timetables.Tables);
+                string str = $"以下时间段的 开始时间 与前一个时间段冲突\n第 {string.Join(", ", conflictIndices.ConvertAll(i => (i + 1).ToString()))} 个时间段";
+                MsgBox.Show(str, "时间表文件配置错误", MessageBoxButton.OK);
                 GetTime(false);
                 return;
             }
-            undone = GetTodayUndone(_timetables.Tables);
-            if (_isRunning)
-            {
-                Console.WriteLine("窗口命令在 GetTime() 循环中");
-                return;
-            }
+            undone = GetTodayUndone(_timetables.Tables, SettingsPage._appSetting.AdvancedMinutes);
             GetTime(true);
         }
 
@@ -129,79 +134,84 @@ namespace DateTimer.WPF.View
         public async void GetTime(bool ShowTable)
         {
             _isRunning = true;
-            await Task.Run(async () =>
+            CancellationToken token = _canceltokensource.Token; // 获取取消令牌
+            try
             {
-                int SpanSeconds = 0;
-                while (!_isCancelled)
+                Console.WriteLine($"GetTime({ShowTable}) 循环开始");
+                await Task.Run(async () =>
                 {
-                    if (current_timetable_path != SettingsPage._appSetting.TimeTablePath) break;  // 判断时间表位置更改
-
-                    string str = "目标";                                                          // 目标时间与倒计时
-                    if (SettingsPage._appSetting.EnableTarget)
+                    int SpanSeconds = 0;
+                    while (!token.IsCancellationRequested)
                     {
-                        if (SettingsPage._appSetting.TargetName != null) str = SettingsPage._appSetting.TargetName;
-                        if (SettingsPage._appSetting.TargetDate != null)
-                            await Dispatcher.InvokeAsync(() => 
-                            InfoText.Text = Utils.TimerShow.TimetableShowTargetTime
-                            (DateTime.Parse(SettingsPage._appSetting.TargetDate), str));
-                        else await Dispatcher.InvokeAsync(() => InfoText.Text = $"未配置{str}日期");
-                    }
-                    else
-                    {
-                        await Dispatcher.InvokeAsync(() =>
-                        InfoText.Text = $"今天是 {DateTime.Today.Month}月{DateTime.Today.Day}日 " +
-                        $"星期{Utils.TimeConverter.NumToWeekday(Convert.ToInt16(DateTime.Today.DayOfWeek).ToString())}");
-                    }
+                        if (current_timetable_path != SettingsPage._appSetting.TimeTablePath) break;  // 判断时间表位置更改
 
-                    if (!ShowTable)                                                               // 跳过后续步骤，进入下一循环
-                    {
-                        await Task.Delay(1000);
-                        continue;
-                    }
-
-                    List<int> CurZone = GetCurZone(_timetables.Tables);                           // 显示当前时间段
-                    if (CurZone.Count != 0)
-                        await Dispatcher.InvokeAsync(() => TimetableView.SelectedIndex = CurZone[0]);
-                    CurZone = null;
-
-                    int nowind = IsStart(_timetables.Tables, TimeSpan.Zero);                      // 到达时间提示
-                    if (nowind != -1 && undone[nowind] > 0)
-                    {
-                        undone[nowind] = 0;
-                        Dispatcher.Invoke(() =>
+                        string str = "目标";                                                          // 目标时间与倒计时
+                        string targetText;
+                        if (SettingsPage._appSetting.EnableTarget)
                         {
-                            App._noticeWindow.Init($"{_timetables.Tables[nowind].Name} 时间到了",
-                                $"提示: " + (_timetables.Tables[nowind].Notice ?? "无"),
-                                "Data/Media/alarm.wav");
-                        });
-                    }
+                            if (SettingsPage._appSetting.TargetName != null) str = SettingsPage._appSetting.TargetName;
+                            if (SettingsPage._appSetting.TargetDate != null)
+                                targetText = Utils.TimerShow.TimetableShowTargetTime
+                                (DateTime.Parse(SettingsPage._appSetting.TargetDate), str);
+                            else targetText = $"未配置{str}日期";
+                        }
+                        else targetText = $"今天是 {DateTime.Today.Month}月{DateTime.Today.Day}日 " +
+                                         $"星期{Utils.TimeConverter.NumToWeekday(Convert.ToInt16(DateTime.Today.DayOfWeek).ToString())}";
+                        await Dispatcher.InvokeAsync(() => InfoText.Text = targetText);
 
-                    if (SettingsPage._appSetting.EnableAdvancedNotice)                            // 到达时间提前提示
-                                                                                                  // 条件: _appSetting.EnableAdvancedNotice
-                    {
-                        int fminind = IsStart(_timetables.Tables, TimeSpan.FromMinutes(SettingsPage._appSetting.AdvancedMinutes));
-                        if (fminind != -1 && undone[fminind] == 2)
+                        if (!ShowTable)                                                               // 跳过后续步骤，进入下一循环
                         {
-                            if (nowind != -1 && SpanSeconds < 10) SpanSeconds++;
-                            else
+                            await Task.Delay(1000, token);
+                            continue;
+                        }
+
+                        _isAutoSelect = true;
+                        _autoSelectedIndex = GetCurZone(_timetables.Tables);
+                        await Dispatcher.InvokeAsync(() => { TimetableView.SelectedIndex = GetCurZone(_timetables.Tables); });
+                        _isAutoSelect = false;
+
+                        int nowind = IsStart(_timetables.Tables, TimeSpan.Zero);                      // 到达时间提示
+                        if (nowind != -1 && undone[nowind] == TimeStatus.Arrived)
+                        {
+                            undone[nowind] = TimeStatus.None;
+                            Dispatcher.Invoke(() =>
                             {
-                                SpanSeconds = 0;
-                                undone[fminind] = 1;
-                                Dispatcher.Invoke(() =>
+                                App._noticeWindow.Init($"{_timetables.Tables[nowind].Name} 时间到了",
+                                    $"提示: " + (_timetables.Tables[nowind].Notice ?? "无"),
+                                    "Data/Media/alarm.wav");
+                            });
+                        }
+
+                        if (SettingsPage._appSetting.EnableAdvancedNotice)                            // 提前提示（设置开启选项）
+                        {
+                            int fminind = IsStart(_timetables.Tables, TimeSpan.FromMinutes(SettingsPage._appSetting.AdvancedMinutes));
+                            if (fminind != -1 && undone[fminind] == TimeStatus.Notified)
+                            {
+                                if (nowind != -1 && SpanSeconds < 10) SpanSeconds++;
+                                else
                                 {
-                                    App._noticeWindow.Init($"{_timetables.Tables[fminind].Name} 时间",
-                                        $"将在 {SettingsPage._appSetting.AdvancedMinutes} 分钟后到达");
-                                });
+                                    Console.WriteLine("aaaaaaAAAaaaaaa");
+                                    SpanSeconds = 0;
+                                    undone[fminind] = TimeStatus.NotArrived;
+                                    Dispatcher.Invoke(() =>
+                                    {
+                                        App._noticeWindow.Init($"{_timetables.Tables[fminind].Name} 时间",
+                                            $"将在 {SettingsPage._appSetting.AdvancedMinutes} 分钟后到达");
+                                    });
+                                }
                             }
                         }
+                        await Task.Delay(1000, token);
                     }
-                    await Task.Delay(1000);
-                }
-            });
+                }, token);
+            }
+            catch (TaskCanceledException)
+            {
+                Console.WriteLine($"前一个 GetTime({ShowTable}) 循环已取消");
+            }
             _isRunning = false;
-            ReloadTable();
-            Check();
         }
+        #endregion
 
         #region 自定义事件
         // 设置主题色
@@ -216,6 +226,12 @@ namespace DateTimer.WPF.View
             e.Cancel = true;
             Hide();
             (Application.Current.MainWindow as MainWindow)._homePage.ShowTimer.Content = "显示时间表";
+        }
+
+        private void TimetableView_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (!_isAutoSelect)
+                TimetableView.SelectedIndex = _autoSelectedIndex;
         }
         #endregion
     }

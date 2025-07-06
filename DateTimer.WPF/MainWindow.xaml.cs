@@ -1,5 +1,6 @@
 ﻿using DateTimer.WPF.View;
 using iNKORE.UI.WPF.Modern;
+using iNKORE.UI.WPF.Modern.Common.IconKeys;
 using iNKORE.UI.WPF.Modern.Controls;
 using iNKORE.UI.WPF.Modern.Controls.Helpers;
 using iNKORE.UI.WPF.Modern.Helpers.Styles;
@@ -8,6 +9,7 @@ using System;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Animation;
+using MsgBox = iNKORE.UI.WPF.Modern.Controls.MessageBox;
 
 namespace DateTimer.WPF
 {
@@ -30,10 +32,22 @@ namespace DateTimer.WPF
             // 设置背景样式
             switch (SettingsPage._appSetting.BackDrop)
             {
-                case "Mica": WindowHelper.SetSystemBackdropType(this, BackdropType.Mica); break;
-                case "MicaAlt": WindowHelper.SetSystemBackdropType(this, BackdropType.Tabbed); break;
-                case "Acrylic": WindowHelper.SetSystemBackdropType(this, BackdropType.Acrylic11); break;
-                case "None": WindowHelper.SetSystemBackdropType(this, BackdropType.None); break;
+                case "Mica": 
+                    WindowHelper.SetSystemBackdropType(this, BackdropType.Mica);
+                    MsgBox.DefaultBackdropType = BackdropType.Mica;
+                    break;
+                case "MicaAlt":
+                    WindowHelper.SetSystemBackdropType(this, BackdropType.Tabbed);
+                    MsgBox.DefaultBackdropType = BackdropType.Tabbed;
+                    break;
+                case "Acrylic":
+                    WindowHelper.SetSystemBackdropType(this, BackdropType.Acrylic11);
+                    MsgBox.DefaultBackdropType = BackdropType.Acrylic11;
+                    break;
+                case "None":
+                    WindowHelper.SetSystemBackdropType(this, BackdropType.None);
+                    MsgBox.DefaultBackdropType = BackdropType.None;
+                    break;
             }
             InitUI();
         }
@@ -83,21 +97,12 @@ namespace DateTimer.WPF
             }
         }
 
-        private async void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            e.Cancel = true;
-            ContentDialog closeDialog = new()
-            {
-                Title = "确定关闭应用?",
-                Content = "按\"是\"关闭\n按\"否\"将窗口隐藏到托盘",
-                PrimaryButtonText = "是",
-                SecondaryButtonText = "否",
-                CloseButtonText = "取消",
-                DefaultButton = ContentDialogButton.Primary
-            };
-            var result = await closeDialog.ShowAsync();
-            if (result == ContentDialogResult.Primary) Application.Current.Shutdown();
-            else if (result == ContentDialogResult.Secondary) this.Hide();
+            e.Cancel = true; // 取消关闭事件
+            var result = MsgBox.Show("按\"是\"关闭应用\n按\"否\"隐藏到托盘", "是否关闭应用?", MessageBoxButton.YesNoCancel, SegoeFluentIcons.IncidentTriangle);
+            if (result == MessageBoxResult.Yes) Application.Current.Shutdown();
+            else if (result == MessageBoxResult.No) this.Hide();
         }
     }
 }
