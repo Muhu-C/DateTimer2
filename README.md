@@ -3,9 +3,9 @@
 -------  
 #### 本项目使用 GPL 3.0 License，完全开源免费，禁止倒卖！
 
-### 更新日志
+## 更新日志
 
-#### 2.0.0.0 更新说明（相比 DateTimer 1.2.0）  
+### 2.0.0.0 更新说明（相比 DateTimer 1.2.0）  
   
 - UI 控件：从 HandyControl 更换为 iNKORE.UI.WPF.Modern。用WinUI 3，使控制台与时间表窗口操作更便捷  
 - 功能更新：  
