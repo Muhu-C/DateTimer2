@@ -1,5 +1,5 @@
 # DateTimer 2
-![DateTimer2](https://socialify.git.ci/Muhu-C/DateTimer2/image?font=KoHo&language=1&logo=https%3A%2F%2Fblog.mc118cn.cn%2Fimg%2FDateTimer.svg&name=1&owner=1&pattern=Floating+Cogs&stargazers=1&theme=Dark)
+![DateTimer2](https://socialify.git.ci/Muhu-C/DateTimer2/image?font=KoHo&language=1&name=1&owner=1&pattern=Floating+Cogs&stargazers=1&theme=Dark)
 -------  
 #### 本项目使用 GPL 3.0 License，完全开源免费，禁止倒卖！
 
