@@ -34,7 +34,7 @@
                     <TextBlock Text="公告" FontSize="16" Margin="0,0,0,10"/>
                     <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
                         <TextBlock TextWrapping="Wrap" Name="AnnounceText" Margin="10,0,0,0" 
-                                   Text="新版 木沪时间表 应用&#13;正在火热制作中!" />
+                                   Text="暂无公告." />
                     </ScrollViewer>
                 </Grid>
                 <StackPanel Grid.Column="1" Margin="10,0,0,0">

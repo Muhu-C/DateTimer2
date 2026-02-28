@@ -31,7 +31,8 @@ namespace DateTimer.WPF.View
         {
             ReloadPage();
             VersionText.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            BetaText.Text = App.BetaVersion;
+            if(App.isBeta) BetaText.Text = App.BetaVersion;
+            else BetaText.Visibility = Visibility.Collapsed;
         }
 
         #region 基础操作
@@ -258,7 +259,8 @@ namespace DateTimer.WPF.View
                     $"\n系统位数: {SystemInfo.GetBit()}" +
                     $"\n处理器: {SystemInfo.GetCPUName()}" +
                     $"\n应用内存占用: {SystemInfo.GetRAMSize()} MB / {SystemInfo.GetTotalRAM()} MB" +
-                    $"\n环境: {SystemInfo.GetEnvVer()}";
+                    $"\n环境: {SystemInfo.GetEnvVer()}" + 
+                    $"\n木沪时间表版本: {Assembly.GetExecutingAssembly().GetName().Version} {(App.isBeta ? App.BetaVersion : "")}";
             });
            
             if (MsgBox.Show(ReportStr + "\n是否复制到剪贴板? ", "系统报告", MessageBoxButton.OKCancel, MessageBoxImage.Information) == MessageBoxResult.OK)

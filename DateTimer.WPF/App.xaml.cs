@@ -18,7 +18,8 @@ namespace DateTimer.WPF
     public partial class App : Application
     {
         #region 定义变量和常量
-        public readonly static string BetaVersion = "";
+        public readonly static bool isBeta = false;
+        public readonly static string BetaVersion = "Beta";
         public static MainWindow mw;
         public static CustomNotice _noticeWindow;                                                       // 时间表提示
         public static TaskbarIcon _taskbaricon;                                                         // 托盘图标

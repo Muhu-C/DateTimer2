@@ -11,10 +11,11 @@
     <UpdateInterval>7</UpdateInterval>
     <UpdateIntervalUnits>Days</UpdateIntervalUnits>
     <UpdatePeriodically>false</UpdatePeriodically>
+	<Copyright>© MC118CN 2024 ~ 2025</Copyright>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>2.0.2.%2a</ApplicationVersion>
+    <ApplicationVersion>2.0.2.1</ApplicationVersion>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -25,9 +26,9 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AssemblyOriginatorKeyFile />
     <SignAssembly>False</SignAssembly>
-	<Version>2.0.2.0</Version>
-	<FileVersion>2.0.2.0</FileVersion>
-	<AssemblyVersion>2.0.2.0</AssemblyVersion>
+	<Version>2.0.2.1</Version>
+	<FileVersion>2.0.2.1</FileVersion>
+	<AssemblyVersion>2.0.2.01</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>bin\Debug\win-all\</OutputPath>
