@@ -51,7 +51,7 @@
 
         <Expander ui:ControlHelper.CornerRadius="4" HorizontalAlignment="Stretch" Name="TargetExpander"
                   Background="{DynamicResource {x:Static ui:ThemeKeys.CardBackgroundFillColorSecondaryBrushKey}}"
-                  Style="{DynamicResource {x:Static ui:ThemeKeys.ExpanderCardStyleKey}}" IsExpanded="True">
+                  Style="{DynamicResource {x:Static ui:ThemeKeys.ExpanderCardStyleKey}}" IsExpanded="False">
             <Expander.Header>
                 <Grid Height="72">
                     <Grid.ColumnDefinitions>
@@ -64,7 +64,7 @@
                         <TextBlock FontSize="16" Text="倒计时显示"/>
                         <TextBlock FontSize="12" Text="在时间表窗口中显示倒计时"/>
                     </StackPanel>
-                    <ui:ToggleSwitch Name="ETToggle" Toggled="ETToggle_Toggled" Grid.Column="2"/>
+                    <ui:ToggleSwitch Name="ETToggle" OnContent="是" OffContent="否" Toggled="ETToggle_Toggled" Grid.Column="2"/>
                 </Grid>
             </Expander.Header>
             <Grid Name="TargetExpanderGrid">
@@ -87,14 +87,14 @@
                         <ColumnDefinition/>
                         <ColumnDefinition Width="80"/>
                     </Grid.ColumnDefinitions>
-                    <ui:ToggleSwitch Grid.Column="1" Name="TWToggle" Toggled="TWToggle_Toggled"/>
+                    <ui:ToggleSwitch Grid.Column="1" Name="TWToggle" OnContent="是" OffContent="否" Toggled="TWToggle_Toggled"/>
                 </Grid>
             </Grid>
         </Expander>
 
         <Expander ui:ControlHelper.CornerRadius="4" HorizontalAlignment="Stretch" Name="NoticeExpander"
           Background="{DynamicResource {x:Static ui:ThemeKeys.CardBackgroundFillColorSecondaryBrushKey}}"
-          Style="{DynamicResource {x:Static ui:ThemeKeys.ExpanderCardStyleKey}}" IsExpanded="True">
+          Style="{DynamicResource {x:Static ui:ThemeKeys.ExpanderCardStyleKey}}" IsExpanded="False">
             <Expander.Header>
                 <Grid Height="72">
                     <Grid.ColumnDefinitions>
@@ -107,7 +107,7 @@
                         <TextBlock FontSize="16" Text="提前提醒"/>
                         <TextBlock FontSize="12" Text="时间段开始前指定时间提醒"/>
                     </StackPanel>
-                    <ui:ToggleSwitch Toggled="ANToggle_Toggled" Name="ANToggle" Grid.Column="2"/>
+                    <ui:ToggleSwitch Toggled="ANToggle_Toggled" Name="ANToggle" OnContent="是" OffContent="否" Grid.Column="2"/>
                 </Grid>
             </Expander.Header>
             <Grid Name="NoticeExpanderGrid">
@@ -138,7 +138,7 @@
                     <TextBlock FontSize="16" Text="控制台显示"/>
                     <TextBlock FontSize="12" Text="应用开启时，是否显示控制台窗口"/>
                 </StackPanel>
-                <ui:ToggleSwitch Grid.Column="2" Name="EMToggle" Toggled="EMToggle_Toggled"/>
+                <ui:ToggleSwitch Grid.Column="2" Name="EMToggle" OnContent="是" OffContent="否" Toggled="EMToggle_Toggled"/>
             </Grid>
         </Border>
         
@@ -190,7 +190,7 @@
 
         <Expander ui:ControlHelper.CornerRadius="4" HorizontalAlignment="Stretch"
               Background="{DynamicResource {x:Static ui:ThemeKeys.CardBackgroundFillColorSecondaryBrushKey}}"
-              Style="{DynamicResource {x:Static ui:ThemeKeys.ExpanderCardStyleKey}}" IsExpanded="True">
+              Style="{DynamicResource {x:Static ui:ThemeKeys.ExpanderCardStyleKey}}" IsExpanded="False">
             <Expander.Header>
                 <Grid Height="72">
                     <Grid.ColumnDefinitions>

@@ -18,14 +18,19 @@ namespace DateTimer.WPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        public HomePage _homePage = new ();
-        public SettingsPage _settingsPage = new ();
-        public TodoPage _todoPage = new ();
-        public EditPage _editPage = new ();
+        // 延迟创建页面，避免在字段初始化阶段触发页面的 InitializeComponent
+        public HomePage _homePage = null;
+        public SettingsPage _settingsPage = null;
+        public TodoPage _todoPage = null;
+        public EditPage _editPage = null;
 
         public MainWindow()
         {
             InitializeComponent();
+
+            // 仅立即创建需要的页面（HomePage），其它按需创建
+            _homePage = new HomePage();
+
             ContentFrame.Navigate(_homePage);
             TitleText.Text = "主页";
             SystemEvents.UserPreferenceChanged += UserPreferenceChanged;
@@ -83,14 +88,17 @@ namespace DateTimer.WPF
                     TitleText.Text = "主页";
                     break;
                 case not null when pageType == typeof(SettingsPage):
+                    if (_settingsPage == null) _settingsPage = new SettingsPage();
                     ContentFrame.Navigate(_settingsPage);
                     TitleText.Text = "设置";
                     break;
                 case not null when pageType == typeof(TodoPage):
+                    if (_todoPage == null) _todoPage = new TodoPage();
                     ContentFrame.Navigate(_todoPage);
                     TitleText.Text = "待办";
                     break;
                 case not null when pageType == typeof(EditPage):
+                    if (_editPage == null) _editPage = new EditPage();
                     ContentFrame.Navigate(_editPage);
                     TitleText.Text = "编辑";
                     break;

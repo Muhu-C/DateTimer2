@@ -30,7 +30,9 @@ namespace DateTimer.WPF.View
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             ReloadPage();
-            VersionText.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            TargetExpander.IsExpanded = true;
+            NoticeExpander.IsExpanded = true;
+            VersionText.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString()[..5];
             if(App.isBeta) BetaText.Text = App.BetaVersion;
             else BetaText.Visibility = Visibility.Collapsed;
         }
