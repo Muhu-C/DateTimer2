@@ -19,8 +19,8 @@
             <RowDefinition Height="40"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <cc:SplashScreen Grid.RowSpan="2" d:Visibility="Collapsed" x:Name="SplashScreenGrid"/>
-        <Grid x:Name="TitleBarGrid" Visibility="Hidden" d:Visibility="Visible" Grid.Row="0" Height="40" VerticalAlignment="Top">
+        <cc:SplashScreen Grid.RowSpan="2" d:IsHidden="True" x:Name="SplashScreenGrid"/>
+        <Grid x:Name="TitleBarGrid" d:IsHidden="False" Visibility="Hidden" Grid.Row="0" Height="40" VerticalAlignment="Top">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="40"/>
                 <ColumnDefinition/>
@@ -34,7 +34,7 @@
             </StackPanel>
         </Grid>
 
-        <ui:NavigationView Name="Navigation" Visibility="Hidden" d:Visibility="Visible" ItemInvoked="NavigationItemChanged" Grid.Row="1" IsPaneOpen="False" IsBackButtonVisible="Collapsed">
+        <ui:NavigationView Name="Navigation" Visibility="Hidden" d:IsHidden="False" ItemInvoked="NavigationItemChanged" Grid.Row="1" IsPaneOpen="False" IsBackButtonVisible="Collapsed">
             <ui:NavigationView.MenuItems>
                 <ui:NavigationViewItem Tag="DateTimer.WPF.View.HomePage" Content="主页" IsSelected="True">
                     <ui:NavigationViewItem.Icon>

@@ -53,6 +53,7 @@ namespace DateTimer.WPF.View
 
         private void GotoSetting_Click(object sender, RoutedEventArgs e)
         {
+            if ((Application.Current.MainWindow as MainWindow)._settingsPage == null) (Application.Current.MainWindow as MainWindow)._settingsPage = new SettingsPage();
             (Application.Current.MainWindow as MainWindow).ContentFrame.Navigate((Application.Current.MainWindow as MainWindow)._settingsPage);
             (Application.Current.MainWindow as MainWindow).TitleText.Text = "设置";
             (Application.Current.MainWindow as MainWindow).Navigation.SelectedItem = (Application.Current.MainWindow as MainWindow).SettingButton;

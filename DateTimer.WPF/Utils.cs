@@ -338,7 +338,7 @@ namespace DateTimer.WPF
                         : $"{(target - DateTime.Today).TotalDays} 天后";
                 else
                     return SettingsPage._appSetting.EnableTargetWeekday ?
-                        $"{(target - DateTime.Today).TotalDays} 天后 周{TimeConverter.NumToWeekday(Convert.ToInt32(target.DayOfWeek).ToString())}"
+                        $"{(target - DateTime.Today).TotalDays} 天后 (周{TimeConverter.NumToWeekday(Convert.ToInt32(target.DayOfWeek).ToString())})"
                         : $"{(target - DateTime.Today).TotalDays} 天后";
             }
 

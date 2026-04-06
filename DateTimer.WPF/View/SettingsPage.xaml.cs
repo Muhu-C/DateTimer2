@@ -30,8 +30,11 @@ namespace DateTimer.WPF.View
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             ReloadPage();
-            VersionText.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            if(App.isBeta) BetaText.Text = App.BetaVersion;
+            TargetExpander.IsExpanded = true;
+            NoticeExpander.IsExpanded = true;
+            VersionText.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString()[..5];
+            CopyrightYearText.Text = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyCopyrightAttribute>().Copyright.Substring(9) + " All rights reserved.";
+            if (App.isBeta) BetaText.Text = App.BetaVersion;
             else BetaText.Visibility = Visibility.Collapsed;
         }
 
