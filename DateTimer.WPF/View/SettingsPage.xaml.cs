@@ -33,7 +33,8 @@ namespace DateTimer.WPF.View
             TargetExpander.IsExpanded = true;
             NoticeExpander.IsExpanded = true;
             VersionText.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString()[..5];
-            if(App.isBeta) BetaText.Text = App.BetaVersion;
+            CopyrightYearText.Text = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyCopyrightAttribute>().Copyright.Substring(9) + " All rights reserved.";
+            if (App.isBeta) BetaText.Text = App.BetaVersion;
             else BetaText.Visibility = Visibility.Collapsed;
         }
 

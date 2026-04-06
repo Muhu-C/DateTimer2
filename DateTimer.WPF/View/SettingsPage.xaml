@@ -78,8 +78,8 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <TextBlock Margin="0,0,0,10" Grid.Row="0" Grid.Column="0" FontSize="15" Text="目标时间" VerticalAlignment="Center"/>
-                <DatePicker SelectedDateChanged="TargetPick_SelectedDateChanged" Name="TargetPick" Margin="0,0,0,10" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="1" Grid.Column="0" FontSize="15" Text="目标名称" Margin="0,0,0,10" VerticalAlignment="Center"/>
+                <DatePicker SelectedDateChanged="TargetPick_SelectedDateChanged" Name="TargetPick" Margin="0,0,0,10" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Width="140"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" FontSize="15" Text="目标名称" Margin="0,0,0,10" VerticalAlignment="Center"/>
                 <TextBox TextChanged="TargetNameTb_TextChanged" Name="TargetNameTb" Grid.Row="1" Grid.Column="1" Margin="0,0,0,10" VerticalAlignment="Center" HorizontalAlignment="Right" MaxLength="8" Width="140"/>
                 <TextBlock Grid.Row="2" Grid.Column="0" FontSize="15" VerticalAlignment="Center" Text="显示目标星期日"/>
                 <Grid Grid.Row="2" Grid.Column="1">
@@ -250,7 +250,7 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock TextWrapping="Wrap" Grid.Column="0" Text="CopyRight © " VerticalAlignment="Center"/>
                         <ui:HyperlinkButton Grid.Column="1" NavigateUri="https://space.bilibili.com/1469137723" Content="MC118CN"/>
-                        <TextBlock TextWrapping="Wrap" Grid.Column="2" VerticalAlignment="Center" Text="2024 ~ 2025 All Rights Reserved."/>
+                        <TextBlock Name="CopyrightYearText" TextWrapping="Wrap" Grid.Column="2" VerticalAlignment="Center" Text="2024 ~ 2025 All Rights Reserved."/>
                     </Grid>
                     <TextBlock TextWrapping="Wrap" Text="本应用为开源程序，代码托管于 Github , 转载请标明出处！" />
                     <TextBlock TextWrapping="Wrap" Text="禁止倒卖本应用，未经授权而擅自复制或传播本程序者必究！"/>

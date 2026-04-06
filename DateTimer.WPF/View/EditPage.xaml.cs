@@ -268,10 +268,10 @@ namespace DateTimer.WPF.View
                 ind++;
                 var sortedConflicts = IsTableSorted(timeTable.Tables);
                 if (sortedConflicts.Count > 0)
-                    errorStrList.Add($"在第 {ind} 个时间表内, \n{string.Join("，", sortedConflicts.ConvertAll(i => $"第{i + 1}个"))} 时间段的 开始时间 与前一个时间段冲突");
+                    errorStrList.Add($"在第 {ind} 个时间表内, \n{string.Join("，", sortedConflicts.ConvertAll(i => $"第 {i + 1} 个"))}时间段的开始时间与前一个时间段冲突");
                 int invertedIndex = IsTableInverted(timeTable.Tables);
                 if (invertedIndex != -1)
-                    errorStrList.Add($"在第 {ind} 个时间表内, \n第 {invertedIndex + 1} 个时间段的 开始时间 与 结束时间 冲突");
+                    errorStrList.Add($"在第 {ind} 个时间表内, \n第 {invertedIndex + 1} 个时间段的开始时间与结束时间冲突");
             }
             if (errorStrList.Count > 0)
                 MsgBox.Show(string.Join("\n\n", errorStrList), "时间表保存失败！", MessageBoxButton.OK);
