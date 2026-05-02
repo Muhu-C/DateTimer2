@@ -40,7 +40,16 @@
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="4*"/>
             </Grid.ColumnDefinitions>
-            <ui:ListView Margin="6" Name="SelDayTimeList" Grid.Column="0" SelectionChanged="SelDayTimeList_SelectionChanged"/>
+            <ui:ListView Margin="6" Name="SelDayTimeList" Grid.Column="0" SelectionChanged="SelDayTimeList_SelectionChanged">
+                <ui:ListView.ContextMenu>
+                    <ContextMenu Name="SelDayTimeList_ContextMenu">
+                        <MenuItem Header="在选中时间段前插入" Name="SelDayTimeList_AddBefore" Click="SelDayTimeList_AddBefore_Click"/>
+                        <MenuItem Header="在选中时间段后插入" Name="SelDayTimeList_AddAfter" Click="SelDayTimeList_AddAfter_Click"/>
+                        <MenuItem Header="删除选中时间段" Name="SelDayTimeList_Delete" Click="SelDayTimeList_Delete_Click"/>
+                        <MenuItem Header="添加时间段" Name="SelDayTimeList_New" Click="SelDayTimeList_New_Click"/>
+                    </ContextMenu>
+                </ui:ListView.ContextMenu>
+            </ui:ListView>
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>

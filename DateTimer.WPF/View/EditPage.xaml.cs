@@ -28,6 +28,11 @@ namespace DateTimer.WPF.View
 
             EditDay.Visibility = Visibility.Collapsed;
             DelDay.Visibility = Visibility.Collapsed;
+            SelDayTimeList_ContextMenu.Visibility = Visibility.Collapsed;
+            SelDayTimeList_New.Visibility = Visibility.Collapsed;
+            SelDayTimeList_AddAfter.Visibility = Visibility.Collapsed;
+            SelDayTimeList_AddBefore.Visibility = Visibility.Collapsed;
+            SelDayTimeList_Delete.Visibility = Visibility.Collapsed;
 
             AddDay.Visibility = Visibility.Collapsed;
             TableSave.Visibility = Visibility.Collapsed;
@@ -137,6 +142,11 @@ namespace DateTimer.WPF.View
                 EditDay.Visibility = Visibility.Collapsed;
                 DelDay.Visibility = Visibility.Collapsed;
                 TPNew.Visibility = Visibility.Collapsed;
+                SelDayTimeList_ContextMenu.Visibility = Visibility.Collapsed;
+                SelDayTimeList_New.Visibility = Visibility.Collapsed;
+                SelDayTimeList_AddAfter.Visibility = Visibility.Collapsed;
+                SelDayTimeList_AddBefore.Visibility = Visibility.Collapsed;
+                SelDayTimeList_Delete.Visibility = Visibility.Collapsed;
                 return;
             }
             SelDayTimeList.Items.Clear();
@@ -148,6 +158,11 @@ namespace DateTimer.WPF.View
             EditDay.Visibility = Visibility.Visible;
             DelDay.Visibility = Visibility.Visible;
             TPNew.Visibility = Visibility.Visible;
+            SelDayTimeList_ContextMenu.Visibility = Visibility.Visible;
+            SelDayTimeList_New.Visibility = Visibility.Visible;
+            SelDayTimeList_AddAfter.Visibility = Visibility.Collapsed;
+            SelDayTimeList_AddBefore.Visibility = Visibility.Collapsed;
+            SelDayTimeList_Delete.Visibility = Visibility.Collapsed;
         }
 
         /// <summary>
@@ -161,11 +176,19 @@ namespace DateTimer.WPF.View
             {
                 ControlPanel.Visibility = Visibility.Collapsed;
                 TPDel.Visibility = Visibility.Collapsed;
+                SelDayTimeList_New.Visibility = Visibility.Visible;
+                SelDayTimeList_AddAfter.Visibility = Visibility.Collapsed;
+                SelDayTimeList_AddBefore.Visibility = Visibility.Collapsed;
+                SelDayTimeList_Delete.Visibility = Visibility.Collapsed;
                 return;
             }
             ControlPanel.Visibility = Visibility.Visible;
             TPDel.Visibility = Visibility.Visible;
             TPNew.Visibility = Visibility.Visible;
+            SelDayTimeList_New.Visibility = Visibility.Collapsed;
+            SelDayTimeList_AddAfter.Visibility = Visibility.Visible;
+            SelDayTimeList_AddBefore.Visibility = Visibility.Visible;
+            SelDayTimeList_Delete.Visibility = Visibility.Visible;
 
             isInternalChange = true; // 设置为内部修改，防止触发 TextChanged 事件
             TPStart.SelectedDateTime = DateTime.Parse(timetables[TimeSel.SelectedIndex].Tables[SelDayTimeList.SelectedIndex].Start);
@@ -226,6 +249,76 @@ namespace DateTimer.WPF.View
             EditDay.Visibility = Visibility.Visible;
             DelDay.Visibility = Visibility.Visible;
         }
+
+        #region 时间段右键菜单
+        /// <summary>
+        /// 新建时间段
+        /// </summary>
+        private void SelDayTimeList_New_Click(object sender, RoutedEventArgs e)
+        {
+            timetables[TimeSel.SelectedIndex].Tables.Insert(timetables[TimeSel.SelectedIndex].Tables.Count, new Table() { Start = "07:00", End = "22:00" });
+            SelDayTimeList.Items.Clear();
+            TPSelSpan.Text = "";
+            foreach (Table table in timetables[TimeSel.SelectedIndex].Tables)
+                SelDayTimeList.Items.Add($"{table.Start} ~ {table.End}");
+            SelDayTimeList.SelectedIndex = timetables[TimeSel.SelectedIndex].Tables.Count - 1;
+            EditDay.Visibility = Visibility.Visible;
+            DelDay.Visibility = Visibility.Visible;
+        }
+
+        private void SelDayTimeList_AddBefore_Click(object sender, RoutedEventArgs e)
+        {
+            int previousSelectedIndex;
+            timetables[TimeSel.SelectedIndex].Tables.Insert(SelDayTimeList.SelectedIndex, new Table() 
+            {
+                Start = SelDayTimeList.SelectedIndex > 0 ? timetables[TimeSel.SelectedIndex].Tables[SelDayTimeList.SelectedIndex - 1].End : "07:00",
+                End = SelDayTimeList.SelectedIndex <= timetables[TimeSel.SelectedIndex].Tables.Count - 1 ? timetables[TimeSel.SelectedIndex].Tables[SelDayTimeList.SelectedIndex].Start : "22:00"
+            });
+            previousSelectedIndex = SelDayTimeList.SelectedIndex;
+            SelDayTimeList.Items.Clear();
+            TPSelSpan.Text = "";
+            foreach (Table table in timetables[TimeSel.SelectedIndex].Tables)
+                SelDayTimeList.Items.Add($"{table.Start} ~ {table.End}");
+            SelDayTimeList.SelectedIndex = previousSelectedIndex;
+            EditDay.Visibility = Visibility.Visible;
+            DelDay.Visibility = Visibility.Visible;
+        }
+
+        private void SelDayTimeList_AddAfter_Click(object sender, RoutedEventArgs e)
+        {
+            int previousSelectedIndex;
+            timetables[TimeSel.SelectedIndex].Tables.Insert(SelDayTimeList.SelectedIndex + 1, new Table()
+            {
+                Start = SelDayTimeList.SelectedIndex >= 0 ? timetables[TimeSel.SelectedIndex].Tables[SelDayTimeList.SelectedIndex].End : "07:00",
+                End = SelDayTimeList.SelectedIndex < timetables[TimeSel.SelectedIndex].Tables.Count - 1 ? timetables[TimeSel.SelectedIndex].Tables[SelDayTimeList.SelectedIndex + 1].Start : "22:00"
+            });
+            previousSelectedIndex = SelDayTimeList.SelectedIndex + 1;
+            SelDayTimeList.Items.Clear();
+            TPSelSpan.Text = "";
+            foreach (Table table in timetables[TimeSel.SelectedIndex].Tables)
+                SelDayTimeList.Items.Add($"{table.Start} ~ {table.End}");
+            SelDayTimeList.SelectedIndex = previousSelectedIndex;
+            EditDay.Visibility = Visibility.Visible;
+            DelDay.Visibility = Visibility.Visible;
+        }
+
+        private void SelDayTimeList_Delete_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelDayTimeList.SelectedIndex < 0)
+            {
+                ControlPanel.Visibility = Visibility.Collapsed;
+                TPDel.Visibility = Visibility.Collapsed;
+                return;
+            }
+            timetables[TimeSel.SelectedIndex].Tables.Remove(timetables[TimeSel.SelectedIndex].Tables[SelDayTimeList.SelectedIndex]);
+            SelDayTimeList.Items.Clear();
+            TPSelSpan.Text = "";
+            foreach (Table table in timetables[TimeSel.SelectedIndex].Tables)
+                SelDayTimeList.Items.Add($"{table.Start} ~ {table.End}");
+            EditDay.Visibility = Visibility.Visible;
+            DelDay.Visibility = Visibility.Visible;
+        }
+        #endregion
 
         private void TPStart_TextChanged(object sender, RoutedPropertyChangedEventArgs<DateTime?> e)
         {
