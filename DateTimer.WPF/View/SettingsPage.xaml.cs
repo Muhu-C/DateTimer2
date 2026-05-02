@@ -263,7 +263,7 @@ namespace DateTimer.WPF.View
                     $"\n处理器: {SystemInfo.GetCPUName()}" +
                     $"\n应用内存占用: {SystemInfo.GetRAMSize()} MB / {SystemInfo.GetTotalRAM()} MB" +
                     $"\n环境: {SystemInfo.GetEnvVer()}" + 
-                    $"\n木沪时间表版本: {Assembly.GetExecutingAssembly().GetName().Version} {(App.isBeta ? App.BetaVersion : "")}";
+                    $"\n木沪时间表版本: {Assembly.GetExecutingAssembly().GetName().Version.ToString()[..5]} {(App.isBeta ? App.BetaVersion : "")}";
             });
            
             if (MsgBox.Show(ReportStr + "\n是否复制到剪贴板? ", "系统报告", MessageBoxButton.OKCancel, MessageBoxImage.Information) == MessageBoxResult.OK)

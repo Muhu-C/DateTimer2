@@ -255,7 +255,7 @@
                     <TextBlock TextWrapping="Wrap" Text="本应用为开源程序，代码托管于 Github , 转载请标明出处！" />
                     <TextBlock TextWrapping="Wrap" Text="禁止倒卖本应用，未经授权而擅自复制或传播本程序者必究！"/>
                     <TextBlock Margin="0,0,0,10" TextWrapping="Wrap" Text="若出现此现象，请告知 E-mail: muhu-c@outlook.com"/>
-                    <TextBlock Margin="0,0,0,10" Text="开源项目"/>
+                    <TextBlock Margin="0,0,0,10" Text="使用或借鉴的开源项目"/>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="3*"/>
@@ -264,11 +264,14 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <ui:HyperlinkButton Grid.Row="0" Grid.Column="0" Content="Microsoft C#" NavigateUri="https://github.com/dotnet/csharplang" />
                         <ui:HyperlinkButton Grid.Row="0" Grid.Column="1" Content="Windows Presentation Foundation" NavigateUri="https://github.com/dotnet/wpf" />
                         <ui:HyperlinkButton Grid.Row="1" Grid.Column="0" Content="Newtonoft.Json" NavigateUri="https://github.com/JamesNK/Newtonsoft.Json" />
-                        <ui:HyperlinkButton Grid.Row="1" Grid.Column="1" Content="iNKORE.UI.WPF.Modern" NavigateUri="https://github.com/iNKORE-NET/UI.WPF.Modern/" Cursor="Hand" />
+                        <ui:HyperlinkButton Grid.Row="1" Grid.Column="1" Content="iNKORE.UI.WPF.Modern" NavigateUri="https://github.com/iNKORE-NET/UI.WPF.Modern/"/>
+                        <ui:HyperlinkButton Grid.Row="2" Grid.Column="0" Content="MCServerLauncher.WPF" NavigateUri="https://github.com/MCSLTeam/MCServerLauncher-Future"/>
+                        <ui:HyperlinkButton Grid.Row="2" Grid.Column="1" Content="Hardcodet.NotifyIcon.Wpf" NavigateUri="https://github.com/hardcodet/wpf-notifyicon"/>
                     </Grid>
                 </StackPanel>
                 <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">

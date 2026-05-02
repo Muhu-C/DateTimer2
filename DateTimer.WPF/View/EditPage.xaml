@@ -101,8 +101,8 @@
                             <ui:TimePicker Grid.Row="1" Grid.Column="1" FontSize="13" Name="TPEnd" VerticalAlignment="Center" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" SelectedDateTimeChanged="TPEnd_TextChanged"/>
                             <TextBlock FontSize="13" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Left" Margin="5,10,0,8" VerticalAlignment="Center" Text="事件"/>
                             <TextBlock FontSize="13" Grid.Column="0" Grid.Row="3" HorizontalAlignment="Left" Margin="5,10,0,8" VerticalAlignment="Center" Text="提醒"/>
-                            <TextBox FontSize="13" Grid.Column="1" Grid.Row="2"  HorizontalAlignment="Stretch" VerticalAlignment="Center" VerticalContentAlignment="Center" Name="TPElement" d:Text="114514" TextChanged="TPElement_TextChanged"/>
-                            <TextBox FontSize="13" Grid.Column="1" Grid.Row="3"  HorizontalAlignment="Stretch" VerticalAlignment="Center" VerticalContentAlignment="Center" Name="TPNotice" d:Text="1919810" TextChanged="TPNotice_TextChanged"/>
+                            <TextBox FontSize="13" Grid.Column="1" Grid.Row="2"  HorizontalAlignment="Stretch" VerticalAlignment="Center" VerticalContentAlignment="Center" Name="TPElement" d:Text="事件" TextChanged="TPElement_TextChanged"/>
+                            <TextBox FontSize="13" Grid.Column="1" Grid.Row="3"  HorizontalAlignment="Stretch" VerticalAlignment="Center" VerticalContentAlignment="Center" Name="TPNotice" d:Text="提醒" TextChanged="TPNotice_TextChanged"/>
                         </Grid>
                     </StackPanel>
                 </Border>
