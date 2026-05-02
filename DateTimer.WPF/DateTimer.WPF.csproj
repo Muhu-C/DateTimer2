@@ -56,6 +56,9 @@
     <OutputPath>bin\Release\x86\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Data\Fonts\STXIHEI.TTF" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="2.0.1" />
     <PackageReference Include="iNKORE.UI.WPF" Version="1.2.8" />
     <PackageReference Include="iNKORE.UI.WPF.Modern" Version="0.10.2.1" />
@@ -68,7 +71,7 @@
     <None Update="Data\Config\Settings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <Resource Include="Data\Fonts\Segoe UI.ttf" />
+    <Resource Include="Data\Fonts\STXIHEI.TTF" />
     <None Update="Data\Config\Timetable_Default.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
