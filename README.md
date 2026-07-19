@@ -1,8 +1,17 @@
-# DateTimer 2
+# DateTimer 2 （已停更）
 ![DateTimer2](https://socialify.git.ci/Muhu-C/DateTimer2/image?font=KoHo&language=1&name=1&owner=1&pattern=Floating+Cogs&stargazers=1&theme=Dark)
 -------  
-#### 本项目使用 GPL 3.0 License，完全开源免费，禁止倒卖！
+## 本项目已于 2026 年 7 月 19 日暂时停止更新！  
+### 停止更新说明  
+由于以下原因，作者停止更新此软件：  
+- 高中和大学学业原因  
+- 长期生涯规划问题  
+- 已有其他开源软件实现此软件的功能  
   
+因此，本人将此软件归档处理，停止更新至 2028 年 8 月待议。  
+
+感谢所有使用此软件的支持者，本软件使用 GPL 3.0 协议，允许免费重写或转载（非完全重写要求注明原作者），使用 Visual Studio 2026 进行编辑！  
+
 ---
 
 ## 更新日志（从新到旧）
